@@ -14,6 +14,8 @@ abstract class Routes {
   static const SERVICE_BERKALA = _Paths.SERVICE_BERKALA;
   static const MASTER_PART = _Paths.MASTER_PART;
   static const DETAIL_KATEGORI = _Paths.DETAIL_KATEGORI;
+  static const ADD_MTC = _Paths.ADD_MTC;
+  static const ALL_MTC = _Paths.ALL_MTC;
 }
 
 abstract class _Paths {
@@ -27,4 +29,6 @@ abstract class _Paths {
   static const SERVICE_BERKALA = '/service-berkala';
   static const MASTER_PART = '/master-part';
   static const DETAIL_KATEGORI = '/detail-kategori';
+  static const ADD_MTC = '/add-mtc';
+  static const ALL_MTC = '/all-mtc';
 }

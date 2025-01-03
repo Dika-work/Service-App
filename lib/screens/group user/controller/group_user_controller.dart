@@ -10,6 +10,7 @@ class GroupUserController extends GetxController {
   final formKey = GlobalKey<FormState>();
 
   RxList<GroupUserModel> groupUserModel = <GroupUserModel>[].obs;
+  RxString selectedGroupId = ''.obs;
 
   RxnInt addOpsion = RxnInt();
   RxnInt editOpsion = RxnInt();

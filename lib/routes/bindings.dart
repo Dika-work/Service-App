@@ -1,13 +1,15 @@
 import 'package:get/get.dart';
-import 'package:service/screens/group%20user/controller/group_user_controller.dart';
-import 'package:service/screens/home/controller/home_kpool_controller.dart';
-import 'package:service/screens/home/controller/home_mekanik_controller.dart';
-import 'package:service/screens/home/controller/home_staff_controller.dart';
-import 'package:service/screens/home/controller/home_super_admin_controller.dart';
-import 'package:service/screens/login/controller/login_controller.dart';
-import 'package:service/screens/master%20user/controller/user_controller.dart';
 
+import '../screens/group user/controller/group_user_controller.dart';
+import '../screens/home/controller/home_kpool_controller.dart';
+import '../screens/home/controller/home_mekanik_controller.dart';
+import '../screens/home/controller/home_staff_controller.dart';
+import '../screens/home/controller/home_super_admin_controller.dart';
+import '../screens/login/controller/login_controller.dart';
 import '../screens/master part service/controller/part_controller.dart';
+import '../screens/master user/controller/user_controller.dart';
+import '../screens/service berkala/controller/all_mtc_controller.dart';
+import '../screens/service berkala/controller/mtc_controller.dart';
 import '../screens/service berkala/controller/service_berkala_controller.dart';
 
 class LoginBinding extends Bindings {
@@ -70,5 +72,19 @@ class MasterPartBinding extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut<PartController>(() => PartController());
+  }
+}
+
+class MtcBinding extends Bindings {
+  @override
+  void dependencies() {
+    Get.lazyPut<MtcController>(() => MtcController());
+  }
+}
+
+class AllMtcBinding extends Bindings {
+  @override
+  void dependencies() {
+    Get.lazyPut<AllMtcController>(() => AllMtcController());
   }
 }

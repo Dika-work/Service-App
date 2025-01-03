@@ -6,10 +6,15 @@ import '../model/detail_service_model.dart';
 
 class DetailServiceBerkalaSource extends DataGridSource {
   final List<DetailServiceModel> model;
+  final void Function(DetailServiceModel)? onEdit;
+  final void Function(DetailServiceModel)? onDelete;
+
   int startIndex = 0;
 
   DetailServiceBerkalaSource({
     required this.model,
+    required this.onEdit,
+    required this.onDelete,
   }) {
     _updateDataPager(model, startIndex);
   }
@@ -38,6 +43,52 @@ class DetailServiceBerkalaSource extends DataGridSource {
         );
       }),
     ];
+
+    // if (model.isNotEmpty) {
+    //   SizedBox(
+    //     height: 60,
+    //     width: 100,
+    //     child: ElevatedButton(
+    //       onPressed: () {
+    //         if (onEdit != null) {
+    //           onEdit!(model[rowIndex]);
+    //         }
+    //       },
+    //       style: ElevatedButton.styleFrom(
+    //         backgroundColor: AppColors.success,
+    //         padding: const EdgeInsets.all(8.0),
+    //       ),
+    //       child: const Icon(
+    //         Iconsax.edit,
+    //         color: Colors.white,
+    //       ),
+    //     ),
+    //   );
+    //   cells.add(Column(
+    //     mainAxisAlignment: MainAxisAlignment.center,
+    //     children: [
+    //       SizedBox(
+    //         height: 60,
+    //         width: 100,
+    //         child: ElevatedButton(
+    //           onPressed: () {
+    //             if (onDelete != null) {
+    //               onDelete!(model[rowIndex]);
+    //             }
+    //           },
+    //           style: ElevatedButton.styleFrom(
+    //             backgroundColor: AppColors.success,
+    //             padding: const EdgeInsets.all(8.0),
+    //           ),
+    //           child: const Icon(
+    //             Iconsax.trash,
+    //             color: Colors.white,
+    //           ),
+    //         ),
+    //       ),
+    //     ],
+    //   ));
+    // }
 
     return DataGridRowAdapter(
       color: isEvenRow ? Colors.white : Colors.grey[200],
@@ -76,7 +127,8 @@ class DetailServiceBerkalaSource extends DataGridSource {
           DataGridCell<int>(columnName: 'No', value: index),
           DataGridCell<String>(
               columnName: 'Deskripsi\nPengecekan',
-              value: data.namaItem), // Ganti dengan field yang sesuai
+              value: data.namaItem
+                  .toUpperCase()), // Ganti dengan field yang sesuai
           DataGridCell<String>(
               columnName: 'KM',
               value: data.kmTarget), // Ganti dengan field yang sesuai
@@ -88,10 +140,12 @@ class DetailServiceBerkalaSource extends DataGridSource {
               value: data.tahunTarget), // Ganti dengan field yang sesuai
           DataGridCell<String>(
               columnName: 'FISIK\n(CIRI KHUSUS)',
-              value: data.kondisiFisik), // Ganti dengan field yang sesuai
+              value: data.kondisiFisik
+                  .toUpperCase()), // Ganti dengan field yang sesuai
           DataGridCell<String>(
               columnName: 'QTY\nDI KENDARAAN',
-              value: data.quantity), // Ganti dengan field yang sesuai
+              value: data.quantity
+                  .toUpperCase()), // Ganti dengan field yang sesuai
         ];
 
         return DataGridRow(cells: cells);

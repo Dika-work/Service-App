@@ -56,6 +56,9 @@ class LoginController extends GetxController {
         final data = response.data['data'];
 
         localStorage.write('username', data['username']);
+        localStorage.write('add', data['add']);
+        localStorage.write('edit', data['edit']);
+        localStorage.write('delete', data['delete']);
         localStorage.write('type_user', data['type_user']);
 
         await localStorage.write('isLoggedIn', true);

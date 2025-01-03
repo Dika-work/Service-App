@@ -5,26 +5,19 @@ import 'package:get_storage/get_storage.dart';
 import 'package:service/routes/app_pages.dart';
 
 import '../../../utils/loadings/snackbar.dart';
-import '../../service berkala/model/service_model.dart';
+import '../../service berkala/model/mtc_model.dart';
 
 class HomeSuperAdminController extends GetxController {
   final localStorage = GetStorage();
   RxString username = ''.obs;
+  String canAdd = '';
+  String canEdit = '';
+  String canDelete = '';
   RxString typeUser = ''.obs;
   RxBool isLoading = false.obs;
   final formKey = GlobalKey<FormState>();
 
-  RxList<ServiceModel> serviceModel = <ServiceModel>[].obs;
-  final TextEditingController mekanikC = TextEditingController();
-  final TextEditingController kpoolC = TextEditingController();
-  final TextEditingController noPolisiC = TextEditingController();
-  final TextEditingController lastKmServiceC = TextEditingController();
-  final TextEditingController nowKmServiceC = TextEditingController();
-  final TextEditingController nextKmServiceC = TextEditingController();
-  final TextEditingController jenisKenC = TextEditingController();
-  final TextEditingController typeKenC = TextEditingController();
-  final TextEditingController driverC = TextEditingController();
-  final TextEditingController noBuntutC = TextEditingController();
+  RxList<MtcModel> mtcModel = <MtcModel>[].obs;
 
   final diomultipart.Dio _dio = diomultipart.Dio(
     diomultipart.BaseOptions(
@@ -39,6 +32,9 @@ class HomeSuperAdminController extends GetxController {
     super.onInit();
     getData();
     username.value = localStorage.read('username') ?? '';
+    canAdd = localStorage.read('add') ?? '';
+    canEdit = localStorage.read('edit') ?? '';
+    canDelete = localStorage.read('delete') ?? '';
     typeUser.value = localStorage.read('type_user') ?? '';
   }
 
@@ -50,8 +46,8 @@ class HomeSuperAdminController extends GetxController {
 
       if (response.statusCode == 200) {
         final List<dynamic> data = response.data['data'];
-        serviceModel.value = data.map((e) => ServiceModel.fromJson(e)).toList();
-        print('ini response user : ${serviceModel.toList()}');
+        mtcModel.value = data.map((e) => MtcModel.fromJson(e)).toList();
+        print('ini response user : ${mtcModel.toList()}');
       }
     } on diomultipart.DioException catch (e) {
       SnackbarLoader.warningSnackBar(
@@ -61,57 +57,6 @@ class HomeSuperAdminController extends GetxController {
 
       print(
           'Error getAllUser: ${e.response?.data['message'] ?? 'Terjadi kesalahan'}');
-    } finally {
-      isLoading.value = false;
-    }
-  }
-
-  createService() async {
-    isLoading.value = true;
-
-    if (!formKey.currentState!.validate()) {
-      isLoading.value = false;
-      return;
-    }
-
-    try {
-      diomultipart.FormData formData = diomultipart.FormData.fromMap({
-        'mekanik': mekanikC.text.trim(),
-        'kpool': kpoolC.text.trim(),
-        'no_polisi': noPolisiC.text.trim(),
-        'last_service': lastKmServiceC.text.trim(),
-        'now_km': nowKmServiceC.text.trim(),
-        'next_service': nextKmServiceC.text.trim(),
-        'jenis_ken': jenisKenC.text.trim(),
-        'type_ken': typeKenC.text.trim(),
-        'driver': driverC.text.trim(),
-        'no_buntut': noBuntutC.text.trim(),
-      });
-
-      final response = await _dio.post('/service', data: formData);
-
-      if (response.statusCode == 201) {
-        Navigator.of(Get.overlayContext!).pop();
-        await getData();
-        mekanikC.clear();
-        kpoolC.clear();
-        noPolisiC.clear();
-        lastKmServiceC.clear();
-        nowKmServiceC.clear();
-        nextKmServiceC.clear();
-        jenisKenC.clear();
-        typeKenC.clear();
-        driverC.clear();
-        noBuntutC.clear();
-        SnackbarLoader.successSnackBar(
-            title: 'Berhasil', message: 'Data berhasil ditambahkan');
-      }
-    } catch (e) {
-      SnackbarLoader.errorSnackBar(
-        title: 'Error',
-        message: 'Terjadi kesalahan: $e',
-      );
-      print('ERROR CREATE SERVICE BERKALA : $e');
     } finally {
       isLoading.value = false;
     }
@@ -206,6 +151,9 @@ class HomeSuperAdminController extends GetxController {
 
   logout() {
     localStorage.remove('username');
+    localStorage.remove('add');
+    localStorage.remove('edit');
+    localStorage.remove('delete');
     localStorage.remove('type_user');
     localStorage.write('isLoggedIn', false);
     Get.offAllNamed(Routes.LOGIN);

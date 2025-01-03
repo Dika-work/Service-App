@@ -3,64 +3,19 @@ import 'package:get/get.dart';
 
 import '../../../constant/custom_size.dart';
 import '../../../utils/theme/app_colors.dart';
-import '../../home/controller/home_super_admin_controller.dart';
-import '../model/mtc_model.dart';
+import '../controller/mtc_controller.dart';
 
-class EditServiceBerkala extends StatefulWidget {
-  const EditServiceBerkala({super.key, required this.model});
-
-  final MtcModel model;
-
-  @override
-  State<EditServiceBerkala> createState() => _EditServiceBerkalaState();
-}
-
-class _EditServiceBerkalaState extends State<EditServiceBerkala> {
-  late TextEditingController mekanikC;
-  late TextEditingController kpoolC;
-  late TextEditingController noPolisiC;
-  late TextEditingController lastKmServiceC;
-  late TextEditingController nowKmServiceC;
-  late TextEditingController nextKmServiceC;
-  late TextEditingController jenisKenC;
-  late TextEditingController typeKenC;
-  late TextEditingController driverC;
-  late TextEditingController noBuntutC;
-
-  late HomeSuperAdminController controller;
-
-  @override
-  void initState() {
-    super.initState();
-    mekanikC = TextEditingController(text: widget.model.mekanik);
-    kpoolC = TextEditingController(text: widget.model.kpool);
-    noPolisiC = TextEditingController(text: widget.model.noPolisi);
-    lastKmServiceC = TextEditingController(text: widget.model.lastService);
-    nowKmServiceC = TextEditingController(text: widget.model.nowKm);
-    nextKmServiceC = TextEditingController(text: widget.model.nextService);
-    jenisKenC = TextEditingController(text: widget.model.jenisKen);
-    typeKenC = TextEditingController(text: widget.model.typeKen);
-    driverC = TextEditingController(text: widget.model.driver);
-    noBuntutC = TextEditingController(text: widget.model.noBuntut);
-
-    controller = Get.find<HomeSuperAdminController>();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
+class AddMtcView extends GetView<MtcController> {
+  const AddMtcView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final formKey = GlobalKey<FormState>();
-
     return Scaffold(
+      backgroundColor: AppColors.primaryExtraSoft,
       appBar: AppBar(
-        leading: IconButton(
-            onPressed: () => Get.back(), icon: const Icon(Icons.arrow_back)),
+        automaticallyImplyLeading: false,
         title: Text(
-          'Edit Service Berkala',
+          'Tambah Data MTC',
           style: Theme.of(context)
               .textTheme
               .titleMedium
@@ -68,20 +23,7 @@ class _EditServiceBerkalaState extends State<EditServiceBerkala> {
         ),
         actions: [
           GestureDetector(
-            onTap: () {
-              controller.updateService(
-                  idMtc: widget.model.id,
-                  mekanik: mekanikC.text,
-                  kpool: kpoolC.text,
-                  noPolisi: noPolisiC.text,
-                  lastService: lastKmServiceC.text,
-                  nowKm: nowKmServiceC.text,
-                  nextService: nextKmServiceC.text,
-                  jenisKen: jenisKenC.text,
-                  typeKen: typeKenC.text,
-                  driver: driverC.text,
-                  noBuntut: noBuntutC.text);
-            },
+            onTap: () => controller.createService(),
             child: Container(
               padding: const EdgeInsets.all(CustomSize.xs),
               margin: const EdgeInsets.fromLTRB(
@@ -92,14 +34,14 @@ class _EditServiceBerkalaState extends State<EditServiceBerkala> {
                 color: AppColors.buttonPrimary,
               ),
               child: Text(
-                'PERBAHARUI',
+                'TAMBAH',
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
                     color: Colors.white),
               ),
             ),
-          )
+          ),
         ],
       ),
       body: Container(
@@ -108,13 +50,14 @@ class _EditServiceBerkalaState extends State<EditServiceBerkala> {
         margin: const EdgeInsets.only(top: 10.0),
         color: Colors.white,
         child: Form(
-          key: formKey,
+          key: controller.formKey,
           child: ListView(
-            padding: const EdgeInsets.fromLTRB(
-                CustomSize.md, CustomSize.md, CustomSize.md, 0),
+            padding:
+                const EdgeInsets.fromLTRB(CustomSize.md, 10, CustomSize.md, 0),
+            physics: const BouncingScrollPhysics(),
             children: [
               TextFormField(
-                controller: mekanikC,
+                controller: controller.mekanikC,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return '* Mekanik tidak boleh kosong';
@@ -129,7 +72,7 @@ class _EditServiceBerkalaState extends State<EditServiceBerkala> {
               ),
               const SizedBox(height: CustomSize.sm),
               TextFormField(
-                controller: kpoolC,
+                controller: controller.kpoolC,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return '* Kep.Pool tidak boleh kosong';
@@ -144,7 +87,7 @@ class _EditServiceBerkalaState extends State<EditServiceBerkala> {
               ),
               const SizedBox(height: CustomSize.sm),
               TextFormField(
-                controller: noPolisiC,
+                controller: controller.noPolisiC,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return '* No Polisi tidak boleh kosong';
@@ -159,7 +102,7 @@ class _EditServiceBerkalaState extends State<EditServiceBerkala> {
               ),
               const SizedBox(height: CustomSize.sm),
               TextFormField(
-                controller: lastKmServiceC,
+                controller: controller.lastKmServiceC,
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -174,7 +117,7 @@ class _EditServiceBerkalaState extends State<EditServiceBerkala> {
               ),
               const SizedBox(height: CustomSize.sm),
               TextFormField(
-                controller: nowKmServiceC,
+                controller: controller.nowKmServiceC,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return '* Bagian ini tidak boleh kosong';
@@ -189,7 +132,7 @@ class _EditServiceBerkalaState extends State<EditServiceBerkala> {
               ),
               const SizedBox(height: CustomSize.sm),
               TextFormField(
-                controller: nextKmServiceC,
+                controller: controller.nextKmServiceC,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return '* Bagian ini tidak boleh kosong';
@@ -204,7 +147,7 @@ class _EditServiceBerkalaState extends State<EditServiceBerkala> {
               ),
               const SizedBox(height: CustomSize.sm),
               TextFormField(
-                controller: jenisKenC,
+                controller: controller.jenisKenC,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return '* Jenis Mobil harus diisi';
@@ -219,7 +162,7 @@ class _EditServiceBerkalaState extends State<EditServiceBerkala> {
               ),
               const SizedBox(height: CustomSize.sm),
               TextFormField(
-                controller: typeKenC,
+                controller: controller.typeKenC,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return '* Type Mobil harus diisi';
@@ -234,7 +177,7 @@ class _EditServiceBerkalaState extends State<EditServiceBerkala> {
               ),
               const SizedBox(height: CustomSize.sm),
               TextFormField(
-                controller: driverC,
+                controller: controller.driverC,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return '* Nama Driver harus diisi';
@@ -249,7 +192,7 @@ class _EditServiceBerkalaState extends State<EditServiceBerkala> {
               ),
               const SizedBox(height: CustomSize.sm),
               TextFormField(
-                controller: noBuntutC,
+                controller: controller.noBuntutC,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return '* Nomor buntut harus diisi';

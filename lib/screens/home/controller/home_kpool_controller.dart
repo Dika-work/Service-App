@@ -4,12 +4,14 @@ import 'package:dio/dio.dart' as diomultipart;
 import 'package:service/routes/app_pages.dart';
 
 import '../../../utils/loadings/snackbar.dart';
-import '../../service berkala/model/service_model.dart';
+import '../../service berkala/model/mtc_model.dart';
 
 class HomeKepalaPoolController extends GetxController {
   final localStorage = GetStorage();
   RxBool isLoading = false.obs;
-  RxList<ServiceModel> serviceModel = <ServiceModel>[].obs;
+  RxString username = ''.obs;
+  RxString typeUser = ''.obs;
+  RxList<MtcModel> mtcModel = <MtcModel>[].obs;
 
   final diomultipart.Dio _dio = diomultipart.Dio(
     diomultipart.BaseOptions(
@@ -23,6 +25,8 @@ class HomeKepalaPoolController extends GetxController {
   void onInit() {
     super.onInit();
     getData();
+    username.value = localStorage.read('username') ?? '';
+    typeUser.value = localStorage.read('type_user') ?? '';
   }
 
   getData() async {
@@ -33,8 +37,8 @@ class HomeKepalaPoolController extends GetxController {
 
       if (response.statusCode == 200) {
         final List<dynamic> data = response.data['data'];
-        serviceModel.value = data.map((e) => ServiceModel.fromJson(e)).toList();
-        print('ini response user : ${serviceModel.toList()}');
+        mtcModel.value = data.map((e) => MtcModel.fromJson(e)).toList();
+        print('ini response user : ${mtcModel.toList()}');
       }
     } on diomultipart.DioException catch (e) {
       SnackbarLoader.warningSnackBar(
@@ -49,8 +53,43 @@ class HomeKepalaPoolController extends GetxController {
     }
   }
 
+  changeStatus({required String id}) async {
+    isLoading.value = true;
+
+    try {
+      final data = {
+        'id_mtc': id,
+        'status': '1',
+      };
+      final response = await _dio.put('/change-status', data: data);
+
+      if (response.statusCode == 200) {
+        await getData();
+        SnackbarLoader.successSnackBar(
+          title: 'Sukses',
+          message: response.data['message'] ?? 'Status laporan berhasil diubah',
+        );
+      } else {
+        SnackbarLoader.errorSnackBar(
+          title: 'Error',
+          message: response.data['message'] ?? 'Terjadi kesalahan',
+        );
+      }
+    } catch (e) {
+      SnackbarLoader.errorSnackBar(
+        title: 'Error',
+        message: 'Terjadi kesalahan: $e',
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   logout() {
     localStorage.remove('username');
+    localStorage.remove('add');
+    localStorage.remove('edit');
+    localStorage.remove('delete');
     localStorage.remove('type_user');
     localStorage.write('isLoggedIn', false);
     Get.offAllNamed(Routes.LOGIN);

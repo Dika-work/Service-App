@@ -31,6 +31,8 @@ dependencies:
   cupertino_icons: ^1.0.8
   dio: ^5.7.0
   dropdown_button2: ^2.3.9
+  dropdown_search: ^6.0.1
+  flutter_speed_dial: ^7.0.0
   flutter:
     sdk: flutter
   flutter_localizations:
@@ -41,7 +43,6 @@ dependencies:
   intl: ^0.19.0
   shimmer: ^3.0.0
   syncfusion_flutter_datagrid: ^28.1.35
-  dropdown_search: ^6.0.1
 
 dev_dependencies:
   flutter_lints: ^4.0.0

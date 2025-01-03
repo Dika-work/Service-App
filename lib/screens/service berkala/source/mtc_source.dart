@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../constant/custom_size.dart';
 import '../../../utils/theme/app_colors.dart';
-import '../model/service_model.dart';
+import '../model/mtc_model.dart';
 
 class MtcSource extends DataGridSource {
-  final List<ServiceModel> model;
-  final void Function(ServiceModel)? onServis;
-  final void Function(ServiceModel)? onEdit;
-  final void Function(ServiceModel)? onDelete;
+  final List<MtcModel> model;
+  final void Function(MtcModel)? onServis;
+  final void Function(MtcModel)? onEdit;
+  final void Function(MtcModel)? onDelete;
   int startIndex = 0;
 
   MtcSource({
@@ -24,6 +25,7 @@ class MtcSource extends DataGridSource {
 
   List<DataGridRow> data = [];
   int index = 0;
+  final localStorage = GetStorage();
 
   @override
   List<DataGridRow> get rows => data;
@@ -32,6 +34,9 @@ class MtcSource extends DataGridSource {
   DataGridRowAdapter? buildRow(DataGridRow row) {
     int rowIndex = data.indexOf(row);
     bool isEvenRow = rowIndex % 2 == 0;
+    final canAdd = localStorage.read('add');
+    final canEdit = localStorage.read('edit');
+    final canDelete = localStorage.read('delete');
 
     // Create cells for the first 6 columns
     List<Widget> cells = [
@@ -49,80 +54,94 @@ class MtcSource extends DataGridSource {
     ];
 
     if (model.isNotEmpty) {
-      cells.add(Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(
-            height: 60,
-            width: 100,
-            child: ElevatedButton(
-              onPressed: () {
-                if (onServis != null) {
-                  onServis!(model[rowIndex]);
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.success,
-                padding: const EdgeInsets.all(8.0),
+      if (canAdd == '1') {
+        cells.add(Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (model[rowIndex].status == '0') const SizedBox.shrink(),
+            if (model[rowIndex].status == '1')
+              SizedBox(
+                height: 60,
+                width: 100,
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (onServis != null) {
+                      onServis!(model[rowIndex]);
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.success,
+                    padding: const EdgeInsets.all(8.0),
+                  ),
+                  child: const Icon(
+                    Iconsax.add,
+                    color: Colors.white,
+                  ),
+                ),
               ),
-              child: const Icon(
-                Iconsax.add,
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ],
-      ));
+            if (model[rowIndex].status == '2') const Icon(Icons.check)
+          ],
+        ));
+      }
 
-      cells.add(Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(
-            height: 60,
-            width: 100,
-            child: ElevatedButton(
-              onPressed: () {
-                if (onEdit != null) {
-                  onEdit!(model[rowIndex]);
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.success,
-                padding: const EdgeInsets.all(8.0),
+      if (canEdit == '1') {
+        cells.add(Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (model[rowIndex].status == '0')
+              SizedBox(
+                height: 60,
+                width: 100,
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (onEdit != null) {
+                      onEdit!(model[rowIndex]);
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.success,
+                    padding: const EdgeInsets.all(8.0),
+                  ),
+                  child: const Icon(
+                    Iconsax.edit,
+                    color: Colors.white,
+                  ),
+                ),
               ),
-              child: const Icon(
-                Iconsax.edit,
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ],
-      ));
+            if (model[rowIndex].status == '1') const SizedBox.shrink(),
+            if (model[rowIndex].status == '2') const Icon(Icons.check)
+          ],
+        ));
+      }
 
-      cells.add(Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(
-            height: 60,
-            width: 100,
-            child: ElevatedButton(
-              onPressed: () {
-                if (onDelete != null) {
-                  onDelete!(model[rowIndex]);
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.success,
-                padding: const EdgeInsets.all(8.0),
+      if (canDelete == '1') {
+        cells.add(Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (model[rowIndex].status == '0')
+              SizedBox(
+                height: 60,
+                width: 100,
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (onDelete != null) {
+                      onDelete!(model[rowIndex]);
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.success,
+                    padding: const EdgeInsets.all(8.0),
+                  ),
+                  child: const Icon(
+                    Iconsax.trash,
+                    color: Colors.white,
+                  ),
+                ),
               ),
-              child: const Icon(
-                Iconsax.trash,
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ],
-      ));
+            if (model[rowIndex].status == '1') const Icon(Icons.check)
+          ],
+        ));
+      }
     }
 
     return DataGridRowAdapter(
@@ -152,7 +171,7 @@ class MtcSource extends DataGridSource {
     );
   }
 
-  void _updateDataPager(List<ServiceModel> model, int startIndex) {
+  void _updateDataPager(List<MtcModel> model, int startIndex) {
     this.startIndex = startIndex;
     index = startIndex;
 

@@ -12,7 +12,7 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../utils/widget/dialogs.dart';
 import '../../../utils/widget/expandable_container.dart';
-import '../../service berkala/model/service_model.dart';
+import '../../service berkala/model/mtc_model.dart';
 import '../../service berkala/page/edit_service_berkala.dart';
 import '../../service berkala/source/mtc_source.dart';
 
@@ -33,26 +33,34 @@ class HomeSuperAdmin extends GetView<HomeSuperAdminController> {
               ?.copyWith(fontWeight: FontWeight.w400, color: Colors.black),
         ),
         actions: [
-          GestureDetector(
-            onTap: () {},
-            child: Container(
-              padding: const EdgeInsets.all(CustomSize.xs),
-              margin:
-                  const EdgeInsets.fromLTRB(0, CustomSize.sm, 0, CustomSize.sm),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(CustomSize.borderRadiusSm),
-                color: AppColors.buttonPrimary,
-              ),
-              child: Text(
-                'TAMBAH',
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
+          if (controller.canAdd == '1')
+            GestureDetector(
+              onTap: () async {
+                final result = await Get.toNamed(Routes.ADD_MTC);
+
+                if (result == true) {
+                  controller.getData();
+                }
+              },
+              child: Container(
+                padding: const EdgeInsets.all(CustomSize.xs),
+                margin: const EdgeInsets.fromLTRB(
+                    0, CustomSize.sm, 0, CustomSize.sm),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.circular(CustomSize.borderRadiusSm),
+                  color: AppColors.buttonPrimary,
+                ),
+                child: Text(
+                  'TAMBAH',
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
               ),
             ),
-          ),
           Builder(
             builder: (BuildContext context) {
               return IconButton(
@@ -246,7 +254,21 @@ class HomeSuperAdmin extends GetView<HomeSuperAdminController> {
                     ),
                   ],
                 ),
-              )
+              ),
+              ListTile(
+                onTap: () => Get.toNamed(Routes.ALL_MTC),
+                leading: const Icon(
+                  Iconsax.record,
+                  color: AppColors.black,
+                ),
+                title: Text(
+                  'Seluruh MTC',
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleSmall
+                      ?.copyWith(color: AppColors.black),
+                ),
+              ),
             ],
           ),
         ),
@@ -258,7 +280,7 @@ class HomeSuperAdmin extends GetView<HomeSuperAdminController> {
           margin: const EdgeInsets.only(top: 10.0),
           color: Colors.white,
           child: Obx(() {
-            if (controller.isLoading.value && controller.serviceModel.isEmpty) {
+            if (controller.isLoading.value && controller.mtcModel.isEmpty) {
               return Center(
                 child: Container(
                   width: 50,
@@ -278,15 +300,15 @@ class HomeSuperAdmin extends GetView<HomeSuperAdminController> {
               );
             } else {
               final dataSource = MtcSource(
-                  model: controller.serviceModel,
-                  onServis: (ServiceModel model) {
+                  model: controller.mtcModel,
+                  onServis: (MtcModel model) {
                     Get.toNamed(Routes.SERVICE_BERKALA);
                   },
-                  onEdit: (ServiceModel model) {
+                  onEdit: (MtcModel model) {
                     Get.to(() => EditServiceBerkala(model: model),
                         transition: Transition.fadeIn);
                   },
-                  onDelete: (ServiceModel model) {
+                  onDelete: (MtcModel model) {
                     CustomDialogs.deleteDialog(
                       context: context,
                       onConfirm: () => controller.deleteService(model.id),
@@ -471,7 +493,8 @@ class HomeSuperAdmin extends GetView<HomeSuperAdminController> {
                                   .bodyMedium
                                   ?.copyWith(fontWeight: FontWeight.bold),
                             ))),
-                    if (controller.serviceModel.isNotEmpty)
+                    if (controller.mtcModel.isNotEmpty &&
+                        controller.canAdd == '1')
                       GridColumn(
                           width: 120,
                           columnName: 'Service',
@@ -488,7 +511,8 @@ class HomeSuperAdmin extends GetView<HomeSuperAdminController> {
                                     .bodyMedium
                                     ?.copyWith(fontWeight: FontWeight.bold),
                               ))),
-                    if (controller.serviceModel.isNotEmpty)
+                    if (controller.mtcModel.isNotEmpty &&
+                        controller.canEdit == '1')
                       GridColumn(
                           width: 120,
                           columnName: 'Edit',
@@ -505,7 +529,8 @@ class HomeSuperAdmin extends GetView<HomeSuperAdminController> {
                                     .bodyMedium
                                     ?.copyWith(fontWeight: FontWeight.bold),
                               ))),
-                    if (controller.serviceModel.isNotEmpty)
+                    if (controller.mtcModel.isNotEmpty &&
+                        controller.canDelete == '1')
                       GridColumn(
                           width: 120,
                           columnName: 'Hapus',

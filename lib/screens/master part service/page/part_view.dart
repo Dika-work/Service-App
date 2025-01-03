@@ -41,7 +41,7 @@ class PartMaster extends GetView<PartController> {
                   onConfirm: () => controller.createPart(),
                   titleWidget: Center(
                     child: Text(
-                      'Tambah Part',
+                      'Tambah Kategori',
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.w400, color: Colors.black),
                     ),

@@ -9,7 +9,9 @@ import 'package:service/screens/login/page/login_view.dart';
 import '../screens/group user/page/group_user_view.dart';
 import '../screens/master part service/page/part_view.dart';
 import '../screens/master user/page/user_view.dart';
-import '../screens/service berkala/page/add_service_berkala.dart';
+import '../screens/service berkala/page/add_mtc.dart';
+import '../screens/service berkala/page/all_mtc.dart';
+import '../screens/service berkala/page/detail_service_berkala.dart';
 import '../screens/service berkala/page/master_detail_service_berkala.dart';
 
 part 'app_routes.dart';
@@ -24,6 +26,8 @@ class AppPages {
   static const HOME_STAFF = Routes.HOME_STAFF;
   static const MASTER_USER = Routes.MASTER_USER;
   static const SERVICE_BERKALA = Routes.SERVICE_BERKALA;
+  static const ADD_MTC = Routes.ADD_MTC;
+  static const ALL_MTC = Routes.ALL_MTC;
 
   static final routes = [
     GetPage(
@@ -63,7 +67,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.SERVICE_BERKALA,
-      page: () => const AddServiceBerkala(),
+      page: () => const DetailServiceBerkala(),
       transition: Transition.rightToLeft,
       binding: ServiceBerkalaBinding(),
     ),
@@ -76,6 +80,17 @@ class AppPages {
       name: _Paths.DETAIL_KATEGORI,
       page: () => const MasterDetailServiceBerkala(),
       binding: ServiceBerkalaBinding(),
+    ),
+    GetPage(
+      name: _Paths.ADD_MTC,
+      page: () => const AddMtcView(),
+      binding: MtcBinding(),
+    ),
+    GetPage(
+      name: _Paths.ALL_MTC,
+      page: () => const AllMtcView(),
+      binding: AllMtcBinding(),
+      transition: Transition.leftToRightWithFade,
     ),
   ];
 }

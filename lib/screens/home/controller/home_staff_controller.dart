@@ -16,6 +16,9 @@ class HomeStaffController extends GetxController {
 
   logout() {
     localStorage.remove('username');
+    localStorage.remove('add');
+    localStorage.remove('edit');
+    localStorage.remove('delete');
     localStorage.remove('type_user');
     localStorage.write('isLoggedIn', false);
     Get.offAllNamed(Routes.LOGIN);

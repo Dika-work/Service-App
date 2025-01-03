@@ -1,32 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../constant/custom_size.dart';
-import '../../../utils/theme/app_colors.dart';
 import '../model/mtc_model.dart';
 
-class KpoolServiceSource extends DataGridSource {
+class AllMtcSource extends DataGridSource {
   final List<MtcModel> model;
-  final void Function(MtcModel)? onAcc;
   int startIndex = 0;
 
-  KpoolServiceSource({
+  AllMtcSource({
     required this.model,
-    required this.onAcc,
   }) {
     _updateDataPager(model, startIndex);
   }
 
   List<DataGridRow> data = [];
   int index = 0;
+  final localStorage = GetStorage();
 
   @override
   List<DataGridRow> get rows => data;
 
+  Color _getRowColor(String status) {
+    switch (status) {
+      case '0':
+        return Colors.pink[400]!; // Merah muda
+      case '1':
+        return Colors.lightBlue[400]!; // Biru muda
+      case '2':
+        return Colors.lightGreen[400]!; // Hijau muda
+      default:
+        return Colors.white; // Warna default jika status tidak dikenali
+    }
+  }
+
   @override
   DataGridRowAdapter? buildRow(DataGridRow row) {
     int rowIndex = data.indexOf(row);
-    bool isEvenRow = rowIndex % 2 == 0;
+    String status = model[rowIndex].status; // Ambil status dari model
+    Color rowColor = _getRowColor(status); // Dapatkan warna berdasarkan status
 
     // Create cells for the first 6 columns
     List<Widget> cells = [
@@ -43,35 +56,8 @@ class KpoolServiceSource extends DataGridSource {
       }),
     ];
 
-    if (model.isNotEmpty) {
-      cells.add(Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(
-            height: 60,
-            width: 100,
-            child: ElevatedButton(
-              onPressed: () {
-                if (onAcc != null) {
-                  onAcc!(model[rowIndex]);
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.success,
-                padding: const EdgeInsets.all(8.0),
-              ),
-              child: const Icon(
-                Icons.check,
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ],
-      ));
-    }
-
     return DataGridRowAdapter(
-      color: isEvenRow ? Colors.white : Colors.grey[200],
+      color: rowColor,
       cells: cells,
     );
   }

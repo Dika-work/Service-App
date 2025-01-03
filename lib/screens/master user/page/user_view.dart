@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:service/utils/widget/dropdown.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../constant/custom_size.dart';
 import '../../../utils/theme/app_colors.dart';
 import '../../../utils/widget/dialogs.dart';
+import '../../group user/controller/group_user_controller.dart';
+import '../../group user/model/group_user_model.dart';
 import '../controller/user_controller.dart';
 import '../model/user_model.dart';
 import '../source/user_source.dart';
@@ -16,6 +17,9 @@ class MasterUser extends GetView<MasterUserController> {
 
   @override
   Widget build(BuildContext context) {
+    final GroupUserController groupUserController =
+        Get.put(GroupUserController());
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -32,12 +36,18 @@ class MasterUser extends GetView<MasterUserController> {
             onTap: () {
               CustomDialogs.defaultDialog(
                   context: context,
-                  onConfirm: () => controller.createNewUser(),
+                  onConfirm: () async {
+                    controller.createNewUser(
+                        groupUserController.selectedGroupId.value,
+                        groupUserController.selectedGroupId.value);
+
+                    groupUserController.selectedGroupId.value = '';
+                  },
                   onCancel: () {
                     controller.usernameC.clear();
                     controller.passwordC.clear();
                     controller.confirmPasswordC.clear();
-                    controller.selectedTypeUser.value = 'Mekanik';
+                    groupUserController.selectedGroupId.value = '';
                     Navigator.of(Get.overlayContext!).pop();
                   },
                   contentWidget: SingleChildScrollView(
@@ -155,16 +165,65 @@ class MasterUser extends GetView<MasterUserController> {
                               ),
                             )),
                         const SizedBox(height: CustomSize.spaceBtwInputFields),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
+                        Container(
+                          margin: const EdgeInsets.symmetric(
                               horizontal: CustomSize.sm),
-                          child: Obx(() => DropDownWidget(
-                                value: controller.selectedTypeUser.value,
-                                items: controller.typeUserOptions,
-                                onChanged: (String? newValue) {
-                                  controller.selectedTypeUser.value = newValue!;
-                                },
-                              )),
+                          padding: const EdgeInsets.only(
+                              left: CustomSize.sm, right: 12),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(
+                                CustomSize.inputFieldRadius),
+                            border: Border.all(
+                                width: 1, color: AppColors.borderPrimary),
+                          ),
+                          child: Obx(() {
+                            // Menampilkan indikator loading jika data sedang dimuat
+                            if (groupUserController.isLoading.value) {
+                              return const CircularProgressIndicator();
+                            }
+
+                            // Menampilkan pesan jika tidak ada data
+                            if (groupUserController.groupUserModel.isEmpty) {
+                              return const Text('No group users available');
+                            }
+
+                            return DropdownButton<String>(
+                              value: groupUserController
+                                      .selectedGroupId.value.isEmpty
+                                  ? null
+                                  : groupUserController.selectedGroupId.value,
+                              underline: const SizedBox.shrink(),
+                              hint: Text(
+                                'Select Group User',
+                                style: const TextStyle().copyWith(
+                                    fontSize: CustomSize.fontSizeSm,
+                                    color: AppColors.textPrimary,
+                                    fontFamily: 'Urbanist'),
+                              ),
+                              isExpanded: true,
+                              onChanged: (String? newValue) {
+                                groupUserController.selectedGroupId.value =
+                                    newValue!;
+                                print(
+                                    'Selected group_id: ${groupUserController.selectedGroupId.value}'); // Print group_id
+                              },
+                              items: groupUserController.groupUserModel
+                                  .map<DropdownMenuItem<String>>(
+                                      (GroupUserModel groupUser) {
+                                return DropdownMenuItem<String>(
+                                  value: groupUser
+                                      .id, // Asumsikan GroupUserModel memiliki properti 'id'
+                                  child: Text(
+                                    groupUser.typeUser.toUpperCase(),
+                                    style: const TextStyle().copyWith(
+                                        fontSize: CustomSize.fontSizeSm,
+                                        color: AppColors.textPrimary,
+                                        fontFamily: 'Urbanist'),
+                                  ), // Asumsikan GroupUserModel memiliki properti 'name'
+                                );
+                              }).toList(),
+                            );
+                          }),
                         ),
                       ],
                     ),

@@ -7,16 +7,17 @@ import '../../../utils/theme/app_colors.dart';
 import '../controller/service_berkala_controller.dart';
 import '../source/service_berkala_source.dart';
 
-class AddServiceBerkala extends GetView<ServiceBerkalaController> {
-  const AddServiceBerkala({super.key});
+class DetailServiceBerkala extends GetView<ServiceBerkalaController> {
+  const DetailServiceBerkala({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
+        centerTitle: true,
         title: Text(
-          'Service Berkala',
+          'YANG HARUS DI CEK',
           style: Theme.of(context)
               .textTheme
               .titleMedium

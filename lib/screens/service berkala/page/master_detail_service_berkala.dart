@@ -6,7 +6,8 @@ import '../../../constant/custom_size.dart';
 import '../../../utils/theme/app_colors.dart';
 import '../../../utils/widget/dialogs.dart';
 import '../controller/service_berkala_controller.dart';
-import '../source/detail_service_berkala.dart';
+import '../model/detail_service_model.dart';
+import '../source/detail_service_berkala_source.dart';
 
 class MasterDetailServiceBerkala extends GetView<ServiceBerkalaController> {
   const MasterDetailServiceBerkala({super.key});
@@ -36,7 +37,7 @@ class MasterDetailServiceBerkala extends GetView<ServiceBerkalaController> {
                   onConfirm: () => controller.createDetailService(),
                   titleWidget: Center(
                     child: Text(
-                      'Tambah Part',
+                      'Tambah Detail Kategori',
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.w400, color: Colors.black),
                     ),
@@ -185,14 +186,17 @@ class MasterDetailServiceBerkala extends GetView<ServiceBerkalaController> {
             ),
           );
         } else {
-          final dataSource =
-              DetailServiceBerkalaSource(model: controller.detailServiceModel);
+          final dataSource = DetailServiceBerkalaSource(
+              model: controller.detailServiceModel,
+              onEdit: (DetailServiceModel model) {},
+              onDelete: (DetailServiceModel model) {});
 
           return RefreshIndicator(
               onRefresh: () async {},
               child: SfDataGrid(
                 source: dataSource,
                 rowHeight: 65,
+                frozenColumnsCount: 1,
                 gridLinesVisibility: GridLinesVisibility.both,
                 headerGridLinesVisibility: GridLinesVisibility.both,
                 columnWidthMode: ColumnWidthMode.auto,
@@ -332,6 +336,40 @@ class MasterDetailServiceBerkala extends GetView<ServiceBerkalaController> {
                                 .bodyMedium
                                 ?.copyWith(fontWeight: FontWeight.bold),
                           ))),
+                  // if (controller.detailServiceModel.isNotEmpty)
+                  //   GridColumn(
+                  //       width: 120,
+                  //       columnName: 'Edit',
+                  //       label: Container(
+                  //           alignment: Alignment.center,
+                  //           decoration: BoxDecoration(
+                  //             border: Border.all(color: Colors.grey),
+                  //             color: Colors.lightBlue.shade100,
+                  //           ),
+                  //           child: Text(
+                  //             'Edit',
+                  //             style: Theme.of(context)
+                  //                 .textTheme
+                  //                 .bodyMedium
+                  //                 ?.copyWith(fontWeight: FontWeight.bold),
+                  //           ))),
+                  // if (controller.detailServiceModel.isNotEmpty)
+                  //   GridColumn(
+                  //       width: 120,
+                  //       columnName: 'Hapus',
+                  //       label: Container(
+                  //           alignment: Alignment.center,
+                  //           decoration: BoxDecoration(
+                  //             border: Border.all(color: Colors.grey),
+                  //             color: Colors.lightBlue.shade100,
+                  //           ),
+                  //           child: Text(
+                  //             'Hapus',
+                  //             style: Theme.of(context)
+                  //                 .textTheme
+                  //                 .bodyMedium
+                  //                 ?.copyWith(fontWeight: FontWeight.bold),
+                  //           ))),
                 ],
               ));
         }

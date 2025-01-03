@@ -1,4 +1,4 @@
-class ServiceModel {
+class MtcModel {
   String id;
   String mekanik;
   String kpool;
@@ -12,7 +12,7 @@ class ServiceModel {
   String noBuntut;
   String status;
 
-  ServiceModel({
+  MtcModel({
     required this.id,
     required this.mekanik,
     required this.kpool,
@@ -27,8 +27,8 @@ class ServiceModel {
     required this.status,
   });
 
-  factory ServiceModel.fromJson(Map<String, dynamic> json) {
-    return ServiceModel(
+  factory MtcModel.fromJson(Map<String, dynamic> json) {
+    return MtcModel(
       id: json['id_mtc'],
       mekanik: json['mekanik'],
       kpool: json['kpool'],

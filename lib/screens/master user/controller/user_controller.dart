@@ -15,14 +15,14 @@ class MasterUserController extends GetxController {
   final TextEditingController usernameC = TextEditingController();
   final TextEditingController passwordC = TextEditingController();
   final TextEditingController confirmPasswordC = TextEditingController();
-  RxString selectedTypeUser = 'Mekanik'.obs;
+  // RxString selectedTypeUser = 'Mekanik'.obs;
 
-  final List<String> typeUserOptions = [
-    'Super Admin',
-    'Kpool',
-    'Mekanik',
-    'Staff',
-  ];
+  // final List<String> typeUserOptions = [
+  //   'Super Admin',
+  //   'Kpool',
+  //   'Mekanik',
+  //   'Staff',
+  // ];
 
   final diomultipart.Dio _dio = diomultipart.Dio(
     diomultipart.BaseOptions(
@@ -62,11 +62,18 @@ class MasterUserController extends GetxController {
     }
   }
 
-  createNewUser() async {
+  createNewUser(String groupIdUser, String selectedGroupId) async {
     isLoading.value = true;
 
     if (!formKey.currentState!.validate()) {
       isLoading.value = false;
+      return;
+    }
+
+    if (selectedGroupId == '') {
+      isLoading.value = false;
+      SnackbarLoader.errorSnackBar(
+          title: 'Oops', message: 'Kategori user harus di isi');
       return;
     }
 
@@ -80,7 +87,7 @@ class MasterUserController extends GetxController {
     try {
       diomultipart.FormData formData = diomultipart.FormData.fromMap({
         'username': usernameC.text.trim(),
-        'group_id': selectedTypeUser.value.toLowerCase(),
+        'group_id': groupIdUser,
         'password': passwordC.text.trim(),
       });
 
@@ -95,7 +102,6 @@ class MasterUserController extends GetxController {
         usernameC.clear();
         passwordC.clear();
         confirmPasswordC.clear();
-        selectedTypeUser.value = 'Mekanik';
 
         await getAllUser();
         Navigator.of(Get.overlayContext!).pop();
@@ -152,7 +158,6 @@ class MasterUserController extends GetxController {
 
         // Bersihkan input form
         passwordC.clear();
-        selectedTypeUser.value = 'Mekanik';
 
         // Refresh daftar user
         await getAllUser();

@@ -1,12 +1,17 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:service/routes/app_pages.dart';
 import 'package:service/screens/home/controller/home_kpool_controller.dart';
 import 'package:service/utils/widget/dialogs.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../constant/custom_size.dart';
 import '../../../utils/theme/app_colors.dart';
-import '../../service berkala/model/service_model.dart';
+import '../../service berkala/model/mtc_model.dart';
 import '../../service berkala/source/kpool_service_source.dart';
 
 class HomeKepalaPoolView extends GetView<HomeKepalaPoolController> {
@@ -30,7 +35,7 @@ class HomeKepalaPoolView extends GetView<HomeKepalaPoolController> {
               child: Container(
                 padding: const EdgeInsets.all(CustomSize.xs),
                 margin: const EdgeInsets.fromLTRB(
-                    0, CustomSize.sm, CustomSize.sm, CustomSize.sm),
+                    0, CustomSize.sm, 0, CustomSize.sm),
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   borderRadius:
@@ -45,8 +50,123 @@ class HomeKepalaPoolView extends GetView<HomeKepalaPoolController> {
                       color: Colors.white),
                 ),
               ),
-            )
+            ),
+            Builder(
+              builder: (BuildContext context) {
+                return IconButton(
+                  onPressed: () => Scaffold.of(context).openDrawer(),
+                  icon: const Icon(Iconsax.firstline),
+                );
+              },
+            ),
           ],
+        ),
+        drawer: Drawer(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Stack(
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      height: CustomSize.imageCarouselHeight,
+                      padding: const EdgeInsets.only(top: CustomSize.lg),
+                      decoration: const BoxDecoration(
+                        color: AppColors.light,
+                        image: DecorationImage(
+                            image: AssetImage('assets/images/ship.jpg'),
+                            fit: BoxFit.cover),
+                      ),
+                    ),
+                    Positioned.fill(
+                        child: ClipRect(
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 1.0, sigmaY: 2.0),
+                        child: Stack(
+                          children: [
+                            Align(
+                              alignment: Alignment.center,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    controller.username.value.toUpperCase(),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineMedium
+                                        ?.copyWith(color: AppColors.white),
+                                  ),
+                                  Text(
+                                    controller.typeUser.value,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium
+                                        ?.copyWith(
+                                            fontWeight: FontWeight.w400,
+                                            color: Colors.white),
+                                  )
+                                ],
+                              ),
+                            ),
+                            Positioned(
+                              bottom: 6,
+                              left: 5,
+                              right: 5,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Shimmer.fromColors(
+                                    baseColor: Colors.grey[500]!,
+                                    highlightColor: Colors.white,
+                                    child: Text(
+                                      'Langgeng Pranamas Sentosa',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium
+                                          ?.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                    ),
+                                  ),
+                                  Builder(
+                                    builder: (BuildContext context) {
+                                      return GestureDetector(
+                                        onTap: () =>
+                                            Scaffold.of(context).closeDrawer(),
+                                        child: const Icon(
+                                          Iconsax.back_square,
+                                          size: CustomSize.iconMd,
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    )),
+                  ],
+                ),
+                ListTile(
+                  onTap: () => Get.toNamed(Routes.ALL_MTC),
+                  leading: const Icon(
+                    Iconsax.record,
+                    color: AppColors.black,
+                  ),
+                  title: Text(
+                    'Seluruh MTC',
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleSmall
+                        ?.copyWith(color: AppColors.black),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
         body: Container(
           width: Get.width,
@@ -55,8 +175,7 @@ class HomeKepalaPoolView extends GetView<HomeKepalaPoolController> {
           color: Colors.white,
           child: Obx(
             () {
-              if (controller.isLoading.value &&
-                  controller.serviceModel.isEmpty) {
+              if (controller.isLoading.value && controller.mtcModel.isEmpty) {
                 return Center(
                   child: Container(
                     width: 50,
@@ -76,12 +195,12 @@ class HomeKepalaPoolView extends GetView<HomeKepalaPoolController> {
                 );
               } else {
                 final dataSource = KpoolServiceSource(
-                    model: controller.serviceModel,
-                    onAcc: (ServiceModel model) {
+                    model: controller.mtcModel,
+                    onAcc: (MtcModel model) {
                       CustomDialogs.defaultDialog(
                           context: context,
                           onConfirm: () {
-                            print('INI AKAN MENGUBAH STATUS MENJADI 1');
+                            controller.changeStatus(id: model.id);
                             Navigator.of(context).pop();
                           },
                           titleWidget: const Text('Konfirmasi'),
@@ -90,7 +209,9 @@ class HomeKepalaPoolView extends GetView<HomeKepalaPoolController> {
                     });
 
                 return RefreshIndicator(
-                  onRefresh: () async {},
+                  onRefresh: () async {
+                    await controller.getData();
+                  },
                   child: SfDataGrid(
                       source: dataSource,
                       frozenColumnsCount: 2,
@@ -265,7 +386,7 @@ class HomeKepalaPoolView extends GetView<HomeKepalaPoolController> {
                                       .bodyMedium
                                       ?.copyWith(fontWeight: FontWeight.bold),
                                 ))),
-                        if (controller.serviceModel.isNotEmpty)
+                        if (controller.mtcModel.isNotEmpty)
                           GridColumn(
                               width: 120,
                               columnName: 'Accept',
