@@ -24,25 +24,73 @@ class ServiceBerkalaSource extends DataGridSource {
   DataGridRowAdapter? buildRow(DataGridRow row) {
     int rowIndex = data.indexOf(row);
     bool isEvenRow = rowIndex % 2 == 0;
-
-    // Create cells for the first columns
-    List<Widget> cells = [
-      ...row.getCells().map<Widget>((e) {
-        return Container(
-          alignment: Alignment.center,
-          child: Text(
-            e.value.toString(),
-            textAlign: TextAlign.justify,
-            style: const TextStyle(fontSize: CustomSize.fontSizeXm),
-          ),
-        );
-      }),
-    ];
+    DetailServiceModel currentModel = model[rowIndex];
 
     return DataGridRowAdapter(
       color: isEvenRow ? Colors.white : Colors.grey[200],
-      cells: cells,
+      cells: [
+        ...row.getCells().sublist(0, 7).map<Widget>((e) {
+          return Container(
+            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            child: Text(
+              e.value.toString(),
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: CustomSize.fontSizeXm),
+            ),
+          );
+        }),
+        // Radio button for Cek
+        Container(
+          alignment: Alignment.center,
+          child: Radio<String>(
+            value: '1',
+            groupValue: currentModel.selectedOption,
+            onChanged: (value) {
+              _updateSelectedOption(rowIndex, value!);
+            },
+          ),
+        ),
+        // Radio button for Repair
+        Container(
+          alignment: Alignment.center,
+          child: Radio<String>(
+            value: '2',
+            groupValue: currentModel.selectedOption,
+            onChanged: (value) {
+              _updateSelectedOption(rowIndex, value!);
+            },
+          ),
+        ),
+        // Radio button for Ganti
+        Container(
+          alignment: Alignment.center,
+          child: Radio<String>(
+            value: '3',
+            groupValue: currentModel.selectedOption,
+            onChanged: (value) {
+              _updateSelectedOption(rowIndex, value!);
+            },
+          ),
+        ),
+        ...row.getCells().sublist(10).map<Widget>((e) {
+          return Container(
+            alignment: Alignment.center,
+            child: Text(
+              e.value.toString(),
+              textAlign: TextAlign.justify,
+              style: const TextStyle(fontSize: CustomSize.fontSizeXm),
+            ),
+          );
+        }),
+      ],
     );
+  }
+
+  void _updateSelectedOption(int rowIndex, String selectedOption) {
+    model[rowIndex].selectedOption = selectedOption;
+    print('Row $rowIndex updated: selectedValue = $selectedOption');
+    notifyListeners(); // Memperbarui tampilan DataGrid
   }
 
   List<DataGridRow> _generateEmptyRows(int count) {
@@ -60,6 +108,11 @@ class ServiceBerkalaSource extends DataGridSource {
           DataGridCell<String>(columnName: 'Cek', value: '-'),
           DataGridCell<String>(columnName: 'Repair', value: '-'),
           DataGridCell<String>(columnName: 'Ganti', value: '-'),
+          DataGridCell<String>(columnName: 'KM Real', value: '-'),
+          DataGridCell<String>(columnName: 'WAKTU\n(BULAN)', value: '-'),
+          DataGridCell<String>(columnName: 'FISIK REAL', value: '-'),
+          DataGridCell<String>(columnName: 'QTY Real', value: '-'),
+          DataGridCell<String>(columnName: 'KETERANGAN', value: '-'),
         ]);
       },
     );
@@ -79,34 +132,26 @@ class ServiceBerkalaSource extends DataGridSource {
           DataGridCell<int>(columnName: 'No', value: index),
           DataGridCell<String>(
               columnName: 'Deskripsi\nPengecekan',
-              value: data.namaItem
-                  .toUpperCase()), // Ganti dengan field yang sesuai
+              value: data.namaItem.toUpperCase()),
+          DataGridCell<String>(columnName: 'KM', value: data.kmTarget),
           DataGridCell<String>(
-              columnName: 'KM',
-              value: data.kmTarget), // Ganti dengan field yang sesuai
+              columnName: 'TARGET\n(BULAN)', value: data.bulanTarget),
           DataGridCell<String>(
-              columnName: 'TARGET\n(BULAN)',
-              value: data.bulanTarget), // Ganti dengan field yang sesuai
-          DataGridCell<String>(
-              columnName: 'TARGET\n(TAHUN)',
-              value: data.tahunTarget), // Ganti dengan field yang sesuai
+              columnName: 'TARGET\n(TAHUN)', value: data.tahunTarget),
           DataGridCell<String>(
               columnName: 'FISIK\n(CIRI KHUSUS)',
-              value: data.kondisiFisik
-                  .toUpperCase()), // Ganti dengan field yang sesuai
+              value: data.kondisiFisik.toUpperCase()),
           DataGridCell<String>(
               columnName: 'QTY\nDI KENDARAAN',
-              value: data.quantity
-                  .toUpperCase()), // Ganti dengan field yang sesuai
-          const DataGridCell<String>(
-              columnName: 'Cek',
-              value: 'data.cek'), // Ganti dengan field yang sesuai
-          const DataGridCell<String>(
-              columnName: 'Repair',
-              value: 'data.repair'), // Ganti dengan field yang sesuai
-          const DataGridCell<String>(
-              columnName: 'Ganti',
-              value: 'data.ganti'), // Ganti dengan field yang sesuai
+              value: data.quantity.toUpperCase()),
+          const DataGridCell<String>(columnName: 'Cek', value: '1'),
+          const DataGridCell<String>(columnName: 'Repair', value: '2'),
+          const DataGridCell<String>(columnName: 'Ganti', value: '3'),
+          const DataGridCell<String>(columnName: 'KM Real', value: ''),
+          const DataGridCell<String>(columnName: 'WAKTU\n(BULAN)', value: ''),
+          const DataGridCell<String>(columnName: 'FISIK REAL', value: ''),
+          const DataGridCell<String>(columnName: 'QTY Real', value: ''),
+          const DataGridCell<String>(columnName: 'KETERANGAN', value: ''),
         ];
 
         return DataGridRow(cells: cells);

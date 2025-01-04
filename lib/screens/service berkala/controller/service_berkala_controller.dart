@@ -178,4 +178,54 @@ class ServiceBerkalaController extends GetxController {
       isLoading.value = false;
     }
   }
+
+//   createTransaksiService() async {
+//   isLoading.value = true;
+
+//   try {
+//     // Siapkan data transaksi
+//     List<Map<String, dynamic>> transaksiData = detailServiceModel.map((item) {
+//       return {
+//         'id_kategori': item.idKategori,
+//         'id': item.id,
+//         'status_service': item.selectedOption,
+//         'nama_mekanik': ,
+//         'tgl_input': ,
+//         'km_real': ,
+//         'monthly_real': ,
+//         'physical_condition_real': ,
+//         'quantity_real': ,
+//         'keterangan': ,
+//       };
+//     }).toList();
+
+//     diomultipart.FormData formData = diomultipart.FormData.fromMap({
+//       'transaksi_data': transaksiData,
+//     });
+
+//     // Kirim data ke endpoint
+//     final response = await _dio.post('/create-transaksi', data: formData);
+
+//     if (response.statusCode == 201) {
+//       SnackbarLoader.successSnackBar(
+//         title: 'Sukses',
+//         message: 'Transaksi berhasil dibuat.',
+//       );
+//       await getData(); // Ambil data terbaru jika diperlukan
+//     } else {
+//       SnackbarLoader.errorSnackBar(
+//         title: 'Gagal',
+//         message: response.data['message'] ?? 'Terjadi kesalahan.',
+//       );
+//     }
+//   } catch (e) {
+//     SnackbarLoader.errorSnackBar(
+//       title: 'Error',
+//       message: 'Terjadi kesalahan: $e',
+//     );
+//     print('ERROR CREATE TRANSAKSI SERVICE: $e');
+//   } finally {
+//     isLoading.value = false;
+//   }
+// }
 }
