@@ -11,30 +11,7 @@ class PartController extends GetxController {
   RxList<PartModel> partModel = <PartModel>[].obs;
   final TextEditingController namaItemC = TextEditingController();
   final TextEditingController typeC = TextEditingController();
-  // final typeItem = 'Pelumas'.obs;
-
-  // final List<String> typeMap = [
-  //   'Pelumas',
-  //   'Filter',
-  //   'Mesin',
-  //   'Accesories',
-  //   'Kaki-Kaki',
-  //   'Radiator',
-  //   'Power Stearing',
-  //   'Wiper Kaca',
-  //   'Rem Tangan',
-  //   'Perseneling',
-  //   'Cylinder Head',
-  //   'Gardan',
-  //   'Cross Joint',
-  //   'Fantbelt',
-  //   'Joint Kopel Belakang',
-  //   'Lock Buntut',
-  //   'Piringan Lock Buntut',
-  //   'Kaki-Kaki Belakang',
-  //   'Selang Spiral (Merah-Kuning)',
-  //   'Ban(Tekanan Angin)'
-  // ];
+  RxString selectedKategoriName = ''.obs;
 
   final diomultipart.Dio _dio = diomultipart.Dio(
     diomultipart.BaseOptions(
@@ -112,7 +89,8 @@ class PartController extends GetxController {
   deletePart(String id) async {
     isLoading.value = true;
     try {
-      final response = await _dio.delete('/delete-part', data: {"id": id});
+      final response =
+          await _dio.delete('/delete-part', data: {"id_kategori": id});
 
       if (response.statusCode == 200) {
         await getData();
@@ -147,7 +125,7 @@ class PartController extends GetxController {
 
     try {
       final data = {
-        'id': id,
+        'id_kategori': id,
         'nama_item': namaItem,
         'type_item': typeItem,
       };

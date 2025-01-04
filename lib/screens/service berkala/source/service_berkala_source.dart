@@ -79,7 +79,8 @@ class ServiceBerkalaSource extends DataGridSource {
           DataGridCell<int>(columnName: 'No', value: index),
           DataGridCell<String>(
               columnName: 'Deskripsi\nPengecekan',
-              value: data.namaItem), // Ganti dengan field yang sesuai
+              value: data.namaItem
+                  .toUpperCase()), // Ganti dengan field yang sesuai
           DataGridCell<String>(
               columnName: 'KM',
               value: data.kmTarget), // Ganti dengan field yang sesuai
@@ -91,10 +92,12 @@ class ServiceBerkalaSource extends DataGridSource {
               value: data.tahunTarget), // Ganti dengan field yang sesuai
           DataGridCell<String>(
               columnName: 'FISIK\n(CIRI KHUSUS)',
-              value: data.kondisiFisik), // Ganti dengan field yang sesuai
+              value: data.kondisiFisik
+                  .toUpperCase()), // Ganti dengan field yang sesuai
           DataGridCell<String>(
               columnName: 'QTY\nDI KENDARAAN',
-              value: data.quantity), // Ganti dengan field yang sesuai
+              value: data.quantity
+                  .toUpperCase()), // Ganti dengan field yang sesuai
           const DataGridCell<String>(
               columnName: 'Cek',
               value: 'data.cek'), // Ganti dengan field yang sesuai

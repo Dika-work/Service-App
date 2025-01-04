@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../constant/custom_size.dart';
-import '../../../utils/widget/dropdown.dart';
 import '../controller/part_controller.dart';
 import '../model/part_model.dart';
 
@@ -17,32 +16,9 @@ class EditPartMaster extends StatefulWidget {
 
 class _EditPartMasterState extends State<EditPartMaster> {
   late TextEditingController namaItemC;
-  late String type;
+  late TextEditingController typeC;
 
   late PartController controller;
-
-  final List<String> typeMap = [
-    'Pelumas',
-    'Filter',
-    'Mesin',
-    'Accesories',
-    'Kaki-Kaki',
-    'Radiator',
-    'Power Stearing',
-    'Wiper Kaca',
-    'Rem Tangan',
-    'Perseneling',
-    'Cylinder Head',
-    'Gardan',
-    'Cross Joint',
-    'Fantbelt',
-    'Joint Kopel Belakang',
-    'Lock Buntut',
-    'Piringan Lock Buntut',
-    'Kaki-Kaki Belakang',
-    'Selang Spiral (Merah-Kuning)',
-    'Ban(Tekanan Angin)'
-  ];
 
   String capitalize(String value) {
     if (value.isEmpty) return value;
@@ -53,7 +29,7 @@ class _EditPartMasterState extends State<EditPartMaster> {
   void initState() {
     super.initState();
     namaItemC = TextEditingController(text: widget.model.namaItem);
-    type = capitalize(widget.model.typeItem);
+    typeC = TextEditingController(text: capitalize(widget.model.typeItem));
 
     controller = Get.find<PartController>();
   }
@@ -93,20 +69,24 @@ class _EditPartMasterState extends State<EditPartMaster> {
                 },
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
-                  label: Text('Nama item',
+                  label: Text('Nama Item',
                       style: Theme.of(context).textTheme.labelMedium),
                 ),
               ),
               const SizedBox(height: CustomSize.sm),
-              DropDownWidget(
-                value: type,
-                items: typeMap,
-                widthDropdownValue: 305,
-                onChanged: (String? value) {
-                  setState(() {
-                    type = value!;
-                  });
+              TextFormField(
+                controller: typeC,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return '* Type item tidak boleh kosong';
+                  }
+                  return null;
                 },
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+                  label: Text('Type Item',
+                      style: Theme.of(context).textTheme.labelMedium),
+                ),
               ),
             ],
           )),
@@ -121,7 +101,7 @@ class _EditPartMasterState extends State<EditPartMaster> {
               controller.updatePart(
                   id: widget.model.id,
                   namaItem: namaItemC.text.trim(),
-                  typeItem: type.toLowerCase());
+                  typeItem: typeC.text.trim());
             },
             child: const Text('Perbaharui')),
       ],

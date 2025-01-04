@@ -101,32 +101,32 @@ class GroupUserController extends GetxController {
   //   }
   // }
 
-  deleteGroupUser(String id) async {
-    isLoading.value = true;
-    try {
-      final response = await _dio.delete('/usergroups/$id');
+  // deleteGroupUser(String id) async {
+  //   isLoading.value = true;
+  //   try {
+  //     final response = await _dio.delete('/usergroups/$id');
 
-      if (response.statusCode == 200) {
-        await getGroupUser();
-        SnackbarLoader.successSnackBar(
-          title: 'Berhasil',
-          message: response.data['message'] ?? 'Group user berhasil dihapus',
-        );
-        Navigator.of(Get.overlayContext!).pop();
-      } else {
-        SnackbarLoader.errorSnackBar(
-          title: 'Gagal',
-          message: response.data['message'] ??
-              'Gagal menghapus group user yang dipilih',
-        );
-      }
-    } catch (e) {
-      SnackbarLoader.errorSnackBar(
-        title: 'Oops',
-        message: 'Terjadi kesalahan: ${e.toString()}',
-      );
-    } finally {
-      isLoading.value = false;
-    }
-  }
+  //     if (response.statusCode == 200) {
+  //       await getGroupUser();
+  //       SnackbarLoader.successSnackBar(
+  //         title: 'Berhasil',
+  //         message: response.data['message'] ?? 'Group user berhasil dihapus',
+  //       );
+  //       Navigator.of(Get.overlayContext!).pop();
+  //     } else {
+  //       SnackbarLoader.errorSnackBar(
+  //         title: 'Gagal',
+  //         message: response.data['message'] ??
+  //             'Gagal menghapus group user yang dipilih',
+  //       );
+  //     }
+  //   } catch (e) {
+  //     SnackbarLoader.errorSnackBar(
+  //       title: 'Oops',
+  //       message: 'Terjadi kesalahan: ${e.toString()}',
+  //     );
+  //   } finally {
+  //     isLoading.value = false;
+  //   }
+  // }
 }

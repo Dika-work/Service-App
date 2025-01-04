@@ -37,7 +37,7 @@ class MasterUser extends GetView<MasterUserController> {
               CustomDialogs.defaultDialog(
                   context: context,
                   onConfirm: () async {
-                    controller.createNewUser(
+                    await controller.createNewUser(
                         groupUserController.selectedGroupId.value,
                         groupUserController.selectedGroupId.value);
 

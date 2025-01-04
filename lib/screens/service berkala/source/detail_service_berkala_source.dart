@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../constant/custom_size.dart';
+import '../../../utils/theme/app_colors.dart';
 import '../model/detail_service_model.dart';
 
 class DetailServiceBerkalaSource extends DataGridSource {
@@ -35,6 +36,7 @@ class DetailServiceBerkalaSource extends DataGridSource {
       ...row.getCells().map<Widget>((e) {
         return Container(
           alignment: Alignment.center,
+          padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
           child: Text(
             e.value.toString(),
             textAlign: TextAlign.justify,
@@ -44,52 +46,63 @@ class DetailServiceBerkalaSource extends DataGridSource {
       }),
     ];
 
-    // if (model.isNotEmpty) {
-    //   SizedBox(
-    //     height: 60,
-    //     width: 100,
-    //     child: ElevatedButton(
-    //       onPressed: () {
-    //         if (onEdit != null) {
-    //           onEdit!(model[rowIndex]);
-    //         }
-    //       },
-    //       style: ElevatedButton.styleFrom(
-    //         backgroundColor: AppColors.success,
-    //         padding: const EdgeInsets.all(8.0),
-    //       ),
-    //       child: const Icon(
-    //         Iconsax.edit,
-    //         color: Colors.white,
-    //       ),
-    //     ),
-    //   );
-    //   cells.add(Column(
-    //     mainAxisAlignment: MainAxisAlignment.center,
-    //     children: [
-    //       SizedBox(
-    //         height: 60,
-    //         width: 100,
-    //         child: ElevatedButton(
-    //           onPressed: () {
-    //             if (onDelete != null) {
-    //               onDelete!(model[rowIndex]);
-    //             }
-    //           },
-    //           style: ElevatedButton.styleFrom(
-    //             backgroundColor: AppColors.success,
-    //             padding: const EdgeInsets.all(8.0),
-    //           ),
-    //           child: const Icon(
-    //             Iconsax.trash,
-    //             color: Colors.white,
-    //           ),
-    //         ),
-    //       ),
-    //     ],
-    //   ));
-    // }
+    if (model.isNotEmpty) {
+      // Add Edit Button
+      cells.add(Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(
+            height: 60,
+            width: 100,
+            child: ElevatedButton(
+              onPressed: () {
+                if (onEdit != null) {
+                  onEdit!(model[rowIndex]);
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.success,
+                padding: const EdgeInsets.all(8.0),
+              ),
+              child: const Icon(
+                Icons.edit,
+                color: Colors.white,
+              ),
+            ),
+          )
+        ],
+      ));
+    }
 
+    if (model.isNotEmpty) {
+      // Add Delete Button
+      cells.add(Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(
+            height: 60,
+            width: 100,
+            child: ElevatedButton(
+              onPressed: () {
+                if (onDelete != null) {
+                  onDelete!(model[rowIndex]);
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.error,
+                padding: const EdgeInsets.all(8.0),
+              ),
+              child: const Icon(
+                Icons.delete,
+                color: Colors.white,
+              ),
+            ),
+          )
+        ],
+      ));
+    }
+
+    print('Jumlah sel: ${cells.length}');
     return DataGridRowAdapter(
       color: isEvenRow ? Colors.white : Colors.grey[200],
       cells: cells,
