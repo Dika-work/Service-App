@@ -58,148 +58,162 @@ class MasterDetailServiceBerkala extends GetView<ServiceBerkalaController> {
                           fontWeight: FontWeight.w400, color: Colors.black),
                     ),
                   ),
-                  contentWidget: Form(
-                      key: controller.formKey,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.only(
-                                left: CustomSize.sm, right: 12),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(
-                                  CustomSize.inputFieldRadius),
-                              border: Border.all(
-                                  width: 1, color: AppColors.borderPrimary),
-                            ),
-                            child: Obx(() {
-                              // Menampilkan indikator loading jika data sedang dimuat
-                              if (masterKategoriController.isLoading.value) {
-                                return const CircularProgressIndicator();
-                              }
+                  contentWidget: SingleChildScrollView(
+                    child: Form(
+                        key: controller.formKey,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.only(
+                                  left: CustomSize.sm, right: 12),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(
+                                    CustomSize.inputFieldRadius),
+                                border: Border.all(
+                                    width: 1, color: AppColors.borderPrimary),
+                              ),
+                              child: Obx(() {
+                                // Menampilkan indikator loading jika data sedang dimuat
+                                if (masterKategoriController.isLoading.value) {
+                                  return const CircularProgressIndicator();
+                                }
 
-                              // Menampilkan pesan jika tidak ada data
-                              if (masterKategoriController.partModel.isEmpty) {
-                                return const Text('No group users available');
-                              }
+                                // Menampilkan pesan jika tidak ada data
+                                if (masterKategoriController
+                                    .partModel.isEmpty) {
+                                  return const Text('No group users available');
+                                }
 
-                              return DropdownButton<String>(
-                                value: masterKategoriController
-                                        .selectedKategoriName.value.isEmpty
-                                    ? null
-                                    : masterKategoriController
-                                        .selectedKategoriName.value,
-                                underline: const SizedBox.shrink(),
-                                hint: Text(
-                                  'Nama Item',
-                                  style:
-                                      Theme.of(context).textTheme.labelMedium,
-                                ),
-                                isExpanded: true,
-                                onChanged: (String? newValue) {
-                                  masterKategoriController
-                                      .selectedKategoriName.value = newValue!;
-                                  print(
-                                      'Selected group_id: ${masterKategoriController.selectedKategoriName.value}'); // Print group_id
-                                },
-                                items: masterKategoriController.partModel
-                                    .map<DropdownMenuItem<String>>(
-                                        (PartModel kategoriModel) {
-                                  return DropdownMenuItem<String>(
-                                    value: kategoriModel.namaItem,
-                                    child: Text(
-                                      kategoriModel.namaItem.toUpperCase(),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelMedium,
-                                    ), // Asumsikan partModel memiliki properti 'name'
-                                  );
-                                }).toList(),
-                              );
-                            }),
-                          ),
-                          const SizedBox(height: CustomSize.sm),
-                          TextFormField(
-                            controller: controller.kmTargetC,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return '* Bagian ini tidak boleh kosong';
-                              }
-                              return null;
-                            },
-                            keyboardType: TextInputType.text,
-                            decoration: InputDecoration(
-                              label: Text('KM Target',
-                                  style:
-                                      Theme.of(context).textTheme.labelMedium),
+                                return DropdownButton<String>(
+                                  value: masterKategoriController
+                                          .selectedKategoriName.value.isEmpty
+                                      ? null
+                                      : masterKategoriController
+                                          .selectedKategoriName.value,
+                                  underline: const SizedBox.shrink(),
+                                  hint: Text(
+                                    'Nama Item',
+                                    style:
+                                        Theme.of(context).textTheme.labelMedium,
+                                  ),
+                                  isExpanded: true,
+                                  onChanged: (String? newValue) {
+                                    masterKategoriController
+                                        .selectedKategoriName.value = newValue!;
+                                    print(
+                                        'Selected group_id: ${masterKategoriController.selectedKategoriName.value}'); // Print group_id
+                                  },
+                                  items: masterKategoriController.partModel
+                                      .map<DropdownMenuItem<String>>(
+                                          (PartModel kategoriModel) {
+                                    return DropdownMenuItem<String>(
+                                      value: kategoriModel.namaItem,
+                                      child: Text(
+                                        kategoriModel.namaItem.toUpperCase(),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .labelMedium,
+                                      ), // Asumsikan partModel memiliki properti 'name'
+                                    );
+                                  }).toList(),
+                                );
+                              }),
                             ),
-                          ),
-                          const SizedBox(height: CustomSize.sm),
-                          TextFormField(
-                            controller: controller.bulanTargetC,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return '* Bagian ini tidak boleh kosong';
-                              }
-                              return null;
-                            },
-                            keyboardType: TextInputType.text,
-                            decoration: InputDecoration(
-                              label: Text('Target (BULAN)',
-                                  style:
-                                      Theme.of(context).textTheme.labelMedium),
+                            const SizedBox(height: CustomSize.sm),
+                            TextFormField(
+                              controller: controller.kmTargetC,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return '* Bagian ini tidak boleh kosong';
+                                }
+                                return null;
+                              },
+                              keyboardType: TextInputType.text,
+                              decoration: InputDecoration(
+                                label: Text('KM Target',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelMedium),
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: CustomSize.sm),
-                          TextFormField(
-                            controller: controller.tahunTargetC,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return '* Bagian ini tidak boleh kosong';
-                              }
-                              return null;
-                            },
-                            keyboardType: TextInputType.text,
-                            decoration: InputDecoration(
-                              label: Text('Target (TAHUN)',
-                                  style:
-                                      Theme.of(context).textTheme.labelMedium),
+                            const SizedBox(height: CustomSize.sm),
+                            TextFormField(
+                              controller: controller.bulanTargetC,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return '* Bagian ini tidak boleh kosong';
+                                }
+                                return null;
+                              },
+                              keyboardType: TextInputType.text,
+                              decoration: InputDecoration(
+                                label: Text('Target (BULAN)',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelMedium),
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: CustomSize.sm),
-                          TextFormField(
-                            controller: controller.kondisiFisikC,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return '* Bagian ini tidak boleh kosong';
-                              }
-                              return null;
-                            },
-                            keyboardType: TextInputType.text,
-                            decoration: InputDecoration(
-                              label: Text('Fisik (CIRI KHUSUS)',
-                                  style:
-                                      Theme.of(context).textTheme.labelMedium),
+                            const SizedBox(height: CustomSize.sm),
+                            TextFormField(
+                              controller: controller.tahunTargetC,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return '* Bagian ini tidak boleh kosong';
+                                }
+                                // Tambahkan validasi untuk memastikan hanya angka dan titik
+                                if (!RegExp(r'^\d*\.?\d*$').hasMatch(value)) {
+                                  return 'Hanya boleh angka dan titik (.)';
+                                }
+                                return null;
+                              },
+                              keyboardType:
+                                  const TextInputType.numberWithOptions(
+                                      decimal: true),
+                              decoration: InputDecoration(
+                                label: Text('Target (TAHUN)',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelMedium),
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: CustomSize.sm),
-                          TextFormField(
-                            controller: controller.qtyC,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return '* Bagian ini tidak boleh kosong';
-                              }
-                              return null;
-                            },
-                            keyboardType: TextInputType.text,
-                            decoration: InputDecoration(
-                              label: Text('QTY DI KENDARAAN',
-                                  style:
-                                      Theme.of(context).textTheme.labelMedium),
+                            const SizedBox(height: CustomSize.sm),
+                            TextFormField(
+                              controller: controller.kondisiFisikC,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return '* Bagian ini tidak boleh kosong';
+                                }
+                                return null;
+                              },
+                              keyboardType: TextInputType.text,
+                              decoration: InputDecoration(
+                                label: Text('Fisik (CIRI KHUSUS)',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelMedium),
+                              ),
                             ),
-                          ),
-                        ],
-                      )));
+                            const SizedBox(height: CustomSize.sm),
+                            TextFormField(
+                              controller: controller.qtyC,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return '* Bagian ini tidak boleh kosong';
+                                }
+                                return null;
+                              },
+                              keyboardType: TextInputType.text,
+                              decoration: InputDecoration(
+                                label: Text('QTY DI KENDARAAN',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelMedium),
+                              ),
+                            ),
+                          ],
+                        )),
+                  ));
             },
             child: Container(
               padding: const EdgeInsets.all(CustomSize.xs),

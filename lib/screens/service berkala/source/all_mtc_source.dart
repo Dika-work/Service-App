@@ -22,28 +22,67 @@ class AllMtcSource extends DataGridSource {
   @override
   List<DataGridRow> get rows => data;
 
-  Color _getRowColor(String status) {
-    switch (status) {
-      case '0':
-        return Colors.pink[400]!; // Merah muda
-      case '1':
-        return Colors.lightBlue[400]!; // Biru muda
-      case '2':
-        return Colors.lightGreen[400]!; // Hijau muda
-      default:
-        return Colors.white; // Warna default jika status tidak dikenali
-    }
-  }
+  // Color _getRowColor(String status) {
+  //   switch (status) {
+  //     case '0':
+  //       return Colors.pink[400]!; // Merah muda
+  //     case '1':
+  //       return Colors.lightBlue[400]!; // Biru muda
+  //     case '2':
+  //       return Colors.lightGreen[400]!; // Hijau muda
+  //     default:
+  //       return Colors.white; // Warna default jika status tidak dikenali
+  //   }
+  // }
 
   @override
   DataGridRowAdapter? buildRow(DataGridRow row) {
     int rowIndex = data.indexOf(row);
-    String status = model[rowIndex].status; // Ambil status dari model
-    Color rowColor = _getRowColor(status); // Dapatkan warna berdasarkan status
+    bool isEvenRow = rowIndex % 2 == 0;
 
-    // Create cells for the first 6 columns
-    List<Widget> cells = [
-      ...row.getCells().take(11).map<Widget>((e) {
+    // Jika model kosong, gunakan warna default
+    // if (model.isEmpty) {
+    //   return DataGridRowAdapter(
+    //     color: Colors.white, // Warna default
+    //     cells: row.getCells().map<Widget>((e) {
+    //       return Container(
+    //         alignment: Alignment.center,
+    //         padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
+    //         child: Text(
+    //           e.value.toString(),
+    //           textAlign: TextAlign.justify,
+    //           style: const TextStyle(fontSize: CustomSize.fontSizeXm),
+    //         ),
+    //       );
+    //     }).toList(),
+    //   );
+    // }
+
+    // // Jika model tidak kosong, ambil warna berdasarkan status
+    // String status = model[rowIndex].status; // Ambil status dari model
+    // Color rowColor = _getRowColor(status); // Dapatkan warna berdasarkan status
+
+    // List<Widget> cells = [
+    //   ...row.getCells().take(11).map<Widget>((e) {
+    //     return Container(
+    //       alignment: Alignment.center,
+    //       padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
+    //       child: Text(
+    //         e.value.toString(),
+    //         textAlign: TextAlign.justify,
+    //         style: const TextStyle(fontSize: CustomSize.fontSizeXm),
+    //       ),
+    //     );
+    //   }),
+    // ];
+
+    // return DataGridRowAdapter(
+    //   color: rowColor,
+    //   cells: cells,
+    // );
+    return DataGridRowAdapter(
+      color: isEvenRow ? Colors.white : Colors.grey[200],
+      cells: row.getCells().map<Widget>((e) {
         return Container(
           alignment: Alignment.center,
           padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
@@ -53,12 +92,7 @@ class AllMtcSource extends DataGridSource {
             style: const TextStyle(fontSize: CustomSize.fontSizeXm),
           ),
         );
-      }),
-    ];
-
-    return DataGridRowAdapter(
-      color: rowColor,
-      cells: cells,
+      }).toList(),
     );
   }
 

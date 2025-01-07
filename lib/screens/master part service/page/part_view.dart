@@ -135,7 +135,7 @@ class PartMaster extends GetView<PartController> {
                 onEdit: (PartModel model) {
                   showDialog(
                     context: context,
-                    builder: (context) {
+                    builder: (_) {
                       return EditPartMaster(model: model);
                     },
                   );

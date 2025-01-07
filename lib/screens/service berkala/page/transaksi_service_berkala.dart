@@ -4,14 +4,16 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../constant/custom_size.dart';
 import '../../../utils/theme/app_colors.dart';
+import '../../../utils/widget/dialogs.dart';
 import '../controller/service_berkala_controller.dart';
-import '../source/service_berkala_source.dart';
+import '../source/transaksi_service_berkala_source.dart';
 
-class DetailServiceBerkala extends GetView<ServiceBerkalaController> {
-  const DetailServiceBerkala({super.key});
+class TransaksiServiceBerkala extends GetView<ServiceBerkalaController> {
+  const TransaksiServiceBerkala({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final idMtc = Get.arguments['id_mtc'];
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -24,7 +26,15 @@ class DetailServiceBerkala extends GetView<ServiceBerkalaController> {
         ),
         actions: [
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+              CustomDialogs.defaultDialog(
+                  context: context,
+                  confirmText: 'Yakin',
+                  cancelText: 'Batalkan',
+                  onConfirm: () => controller.createTransaksiService(idMtc),
+                  contentWidget: const Text(
+                      'Apakah anda sudah yakin dengan data yang terkait. Data ini akan di kirimkan, Apakah Anda yakin?'));
+            },
             child: Container(
               padding: const EdgeInsets.all(CustomSize.xs),
               margin: const EdgeInsets.fromLTRB(
@@ -67,8 +77,8 @@ class DetailServiceBerkala extends GetView<ServiceBerkalaController> {
               ),
             );
           } else {
-            final dataSource =
-                ServiceBerkalaSource(model: controller.detailServiceModel);
+            final dataSource = TransaksiServiceBerkalaSource(
+                model: controller.detailServiceModel);
 
             return RefreshIndicator(
               onRefresh: () async {
@@ -79,6 +89,7 @@ class DetailServiceBerkala extends GetView<ServiceBerkalaController> {
                 gridLinesVisibility: GridLinesVisibility.both,
                 headerGridLinesVisibility: GridLinesVisibility.both,
                 columnWidthMode: ColumnWidthMode.fitByColumnName,
+                allowEditing: true,
                 stackedHeaderRows: [
                   StackedHeaderRow(cells: [
                     StackedHeaderCell(
@@ -113,27 +124,6 @@ class DetailServiceBerkala extends GetView<ServiceBerkalaController> {
                         ),
                         child: const Text(
                           'STATUS',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
-                  ]),
-                  StackedHeaderRow(cells: [
-                    StackedHeaderCell(
-                      columnNames: [
-                        'KM Real',
-                        'WAKTU\n(BULAN)',
-                        'FISIK REAL',
-                        'QTY Real'
-                      ],
-                      child: Container(
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey),
-                          color: Colors.lightBlue.shade100,
-                        ),
-                        child: const Text(
-                          'REAL',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ),
@@ -292,83 +282,6 @@ class DetailServiceBerkala extends GetView<ServiceBerkalaController> {
                           ),
                           child: Text(
                             'Ganti',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                          ))),
-                  GridColumn(
-                      columnName: 'KM Real',
-                      label: Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            color: Colors.lightBlue.shade100,
-                          ),
-                          child: Text(
-                            'KM',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                          ))),
-                  GridColumn(
-                      columnName: 'WAKTU\n(BULAN)',
-                      label: Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            color: Colors.lightBlue.shade100,
-                          ),
-                          child: Text(
-                            'WAKTU\n(BULAN)',
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                          ))),
-                  GridColumn(
-                      columnName: 'FISIK REAL',
-                      label: Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            color: Colors.lightBlue.shade100,
-                          ),
-                          child: Text(
-                            'FISIK\n(CIRI KHUSUS)',
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                          ))),
-                  GridColumn(
-                      columnName: 'QTY Real',
-                      label: Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            color: Colors.lightBlue.shade100,
-                          ),
-                          child: Text(
-                            'QTY Real',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                          ))),
-                  GridColumn(
-                      columnName: 'KETERANGAN',
-                      label: Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            color: Colors.lightBlue.shade100,
-                          ),
-                          child: Text(
-                            'KETERANGAN',
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium

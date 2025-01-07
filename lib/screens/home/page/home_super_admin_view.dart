@@ -305,7 +305,7 @@ class HomeSuperAdmin extends GetView<HomeSuperAdminController> {
                     Get.toNamed(Routes.SERVICE_BERKALA);
                   },
                   onEdit: (MtcModel model) {
-                    Get.to(() => EditServiceBerkala(model: model),
+                    Get.to(() => EditServiceBerkalaAdmin(model: model),
                         transition: Transition.fadeIn);
                   },
                   onDelete: (MtcModel model) {

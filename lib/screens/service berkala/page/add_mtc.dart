@@ -57,21 +57,6 @@ class AddMtcView extends GetView<MtcController> {
             physics: const BouncingScrollPhysics(),
             children: [
               TextFormField(
-                controller: controller.mekanikC,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return '* Mekanik tidak boleh kosong';
-                  }
-                  return null;
-                },
-                keyboardType: TextInputType.text,
-                decoration: InputDecoration(
-                  label: Text('Mekanik',
-                      style: Theme.of(context).textTheme.labelMedium),
-                ),
-              ),
-              const SizedBox(height: CustomSize.sm),
-              TextFormField(
                 controller: controller.kpoolC,
                 validator: (value) {
                   if (value == null || value.isEmpty) {

@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:dio/dio.dart' as diomultipart;
+import 'package:get_storage/get_storage.dart';
 
 import '../../../utils/loadings/snackbar.dart';
 
 class MtcController extends GetxController {
   RxBool isLoading = false.obs;
   final formKey = GlobalKey<FormState>();
+  final localStorage = GetStorage();
 
-  final TextEditingController mekanikC = TextEditingController();
   final TextEditingController kpoolC = TextEditingController();
   final TextEditingController noPolisiC = TextEditingController();
   final TextEditingController lastKmServiceC = TextEditingController();
@@ -21,7 +22,7 @@ class MtcController extends GetxController {
 
   final diomultipart.Dio _dio = diomultipart.Dio(
     diomultipart.BaseOptions(
-      baseUrl: 'http://10.3.80.254:8080',
+      baseUrl: 'http://10.3.80.4:8080',
       connectTimeout: const Duration(seconds: 10),
       receiveTimeout: const Duration(seconds: 10),
     ),
@@ -35,9 +36,11 @@ class MtcController extends GetxController {
       return;
     }
 
+    String username = localStorage.read('username');
+
     try {
       diomultipart.FormData formData = diomultipart.FormData.fromMap({
-        'mekanik': mekanikC.text.trim(),
+        'mekanik': username,
         'kpool': kpoolC.text.trim(),
         'no_polisi': noPolisiC.text.trim(),
         'last_service': lastKmServiceC.text.trim(),
@@ -53,7 +56,6 @@ class MtcController extends GetxController {
 
       if (response.statusCode == 201) {
         Get.back(result: true);
-        mekanikC.clear();
         kpoolC.clear();
         noPolisiC.clear();
         lastKmServiceC.clear();

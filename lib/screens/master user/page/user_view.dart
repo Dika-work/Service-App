@@ -277,8 +277,12 @@ class MasterUser extends GetView<MasterUserController> {
             final dataSource = UserSource(
                 model: controller.userModel,
                 onEdit: (UserModel model) {
-                  Get.to(() => EditUserScreen(model: model),
-                      transition: Transition.fadeIn);
+                  showDialog(
+                    context: context,
+                    builder: (_) {
+                      return EditUserScreen(model: model);
+                    },
+                  );
                 },
                 onDelete: (UserModel model) {
                   CustomDialogs.deleteDialog(

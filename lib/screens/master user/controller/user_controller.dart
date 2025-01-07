@@ -26,7 +26,7 @@ class MasterUserController extends GetxController {
 
   final diomultipart.Dio _dio = diomultipart.Dio(
     diomultipart.BaseOptions(
-      baseUrl: 'http://10.3.80.254:8080',
+      baseUrl: 'http://10.3.80.4:8080',
       connectTimeout: const Duration(seconds: 10),
       receiveTimeout: const Duration(seconds: 10),
     ),
@@ -126,27 +126,22 @@ class MasterUserController extends GetxController {
   }
 
   updateUser(
+    String id,
     String username,
     String typeUser,
-    String password,
+    // String password,
   ) async {
     isLoading.value = true;
     try {
-      // Validasi form jika diperlukan
-      if (!formKey.currentState!.validate()) {
-        isLoading.value = false;
-        return;
-      }
-
       final data = {
         'username': username,
         'group_id': typeUser,
-        'password': password,
+        // 'password': password,
       };
 
       // Kirim data ke API
       final response = await _dio.put(
-        '/update-user',
+        '/users/$id',
         data: data,
       );
 
@@ -161,7 +156,6 @@ class MasterUserController extends GetxController {
 
         // Refresh daftar user
         await getAllUser();
-        Navigator.of(Get.overlayContext!).pop();
       } else {
         SnackbarLoader.errorSnackBar(
           title: 'Gagal',

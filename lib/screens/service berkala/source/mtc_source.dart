@@ -40,7 +40,7 @@ class MtcSource extends DataGridSource {
 
     // Create cells for the first 6 columns
     List<Widget> cells = [
-      ...row.getCells().take(11).map<Widget>((e) {
+      ...row.getCells().take(12).map<Widget>((e) {
         return Container(
           alignment: Alignment.center,
           padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
@@ -58,8 +58,7 @@ class MtcSource extends DataGridSource {
         cells.add(Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (model[rowIndex].status == '0') const SizedBox.shrink(),
-            if (model[rowIndex].status == '1')
+            if (model[rowIndex].status == '0')
               SizedBox(
                 height: 60,
                 width: 100,
@@ -77,6 +76,23 @@ class MtcSource extends DataGridSource {
                     Iconsax.add,
                     color: Colors.white,
                   ),
+                ),
+              ),
+            if (model[rowIndex].status == '1')
+              SizedBox(
+                height: 60,
+                width: 100,
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (onServis != null) {
+                      onServis!(model[rowIndex]);
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.success,
+                    padding: const EdgeInsets.all(8.0),
+                  ),
+                  child: const Text('MTC'),
                 ),
               ),
             if (model[rowIndex].status == '2') const Icon(Icons.check)
@@ -109,7 +125,7 @@ class MtcSource extends DataGridSource {
                 ),
               ),
             if (model[rowIndex].status == '1') const SizedBox.shrink(),
-            if (model[rowIndex].status == '2') const Icon(Icons.check)
+            if (model[rowIndex].status == '2') const SizedBox.shrink()
           ],
         ));
       }
@@ -138,12 +154,12 @@ class MtcSource extends DataGridSource {
                   ),
                 ),
               ),
-            if (model[rowIndex].status == '1') const Icon(Icons.check)
+            if (model[rowIndex].status == '1') const SizedBox.shrink(),
+            if (model[rowIndex].status == '2') const SizedBox.shrink()
           ],
         ));
       }
     }
-
     return DataGridRowAdapter(
       color: isEvenRow ? Colors.white : Colors.grey[200],
       cells: cells,
@@ -166,6 +182,7 @@ class MtcSource extends DataGridSource {
           DataGridCell<String>(columnName: 'Type Mobil', value: '-'),
           DataGridCell<String>(columnName: 'Driver', value: '-'),
           DataGridCell<String>(columnName: 'No Buntut', value: '-'),
+          DataGridCell<String>(columnName: 'Status', value: '-'),
         ]);
       },
     );
@@ -195,6 +212,7 @@ class MtcSource extends DataGridSource {
           DataGridCell<String>(columnName: 'Type Mobil', value: data.typeKen),
           DataGridCell<String>(columnName: 'Driver', value: data.driver),
           DataGridCell<String>(columnName: 'No Buntut', value: data.noBuntut),
+          DataGridCell<String>(columnName: 'Status', value: data.status),
         ];
 
         return DataGridRow(cells: cells);
@@ -202,5 +220,12 @@ class MtcSource extends DataGridSource {
     }
 
     notifyListeners();
+  }
+
+  @override
+  Future<bool> handlePageChange(int oldPageIndex, int newPageIndex) async {
+    _updateDataPager(model, newPageIndex);
+    notifyListeners();
+    return true;
   }
 }

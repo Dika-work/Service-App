@@ -11,7 +11,7 @@ import '../screens/master part service/page/part_view.dart';
 import '../screens/master user/page/user_view.dart';
 import '../screens/service berkala/page/add_mtc.dart';
 import '../screens/service berkala/page/all_mtc.dart';
-import '../screens/service berkala/page/detail_service_berkala.dart';
+import '../screens/service berkala/page/transaksi_service_berkala.dart';
 import '../screens/service berkala/page/master_detail_service_berkala.dart';
 
 part 'app_routes.dart';
@@ -67,7 +67,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.SERVICE_BERKALA,
-      page: () => const DetailServiceBerkala(),
+      page: () => const TransaksiServiceBerkala(),
       transition: Transition.rightToLeft,
       binding: ServiceBerkalaBinding(),
     ),

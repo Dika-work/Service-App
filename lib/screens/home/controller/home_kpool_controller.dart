@@ -15,7 +15,7 @@ class HomeKepalaPoolController extends GetxController {
 
   final diomultipart.Dio _dio = diomultipart.Dio(
     diomultipart.BaseOptions(
-      baseUrl: 'http://10.3.80.254:8080',
+      baseUrl: 'http://10.3.80.4:8080',
       connectTimeout: const Duration(seconds: 10),
       receiveTimeout: const Duration(seconds: 10),
     ),
@@ -53,37 +53,38 @@ class HomeKepalaPoolController extends GetxController {
     }
   }
 
-  changeStatus({required String id}) async {
-    isLoading.value = true;
+  // changeStatus({required String id}) async {
+  //   isLoading.value = true;
 
-    try {
-      final data = {
-        'id_mtc': id,
-        'status': '1',
-      };
-      final response = await _dio.put('/change-status', data: data);
+  //   try {
+  //     final data = {
+  //       'id_mtc': id,
+  //       'status': '1',
+  //     };
+  //     final response = await _dio.put('/change-status', data: data);
 
-      if (response.statusCode == 200) {
-        await getData();
-        SnackbarLoader.successSnackBar(
-          title: 'Sukses',
-          message: response.data['message'] ?? 'Status laporan berhasil diubah',
-        );
-      } else {
-        SnackbarLoader.errorSnackBar(
-          title: 'Error',
-          message: response.data['message'] ?? 'Terjadi kesalahan',
-        );
-      }
-    } catch (e) {
-      SnackbarLoader.errorSnackBar(
-        title: 'Error',
-        message: 'Terjadi kesalahan: $e',
-      );
-    } finally {
-      isLoading.value = false;
-    }
-  }
+  //     if (response.statusCode == 200) {
+  //       await getData();
+  //       SnackbarLoader.successSnackBar(
+  //         title: 'Sukses',
+  //         message:
+  //             response.data['message'] ?? 'Lampiran MTC berhasil di konfirmasi',
+  //       );
+  //     } else {
+  //       SnackbarLoader.errorSnackBar(
+  //         title: 'Error',
+  //         message: response.data['message'] ?? 'Terjadi kesalahan',
+  //       );
+  //     }
+  //   } catch (e) {
+  //     SnackbarLoader.errorSnackBar(
+  //       title: 'Error',
+  //       message: 'Terjadi kesalahan: $e',
+  //     );
+  //   } finally {
+  //     isLoading.value = false;
+  //   }
+  // }
 
   logout() {
     localStorage.remove('username');

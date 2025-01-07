@@ -15,7 +15,7 @@ class PartController extends GetxController {
 
   final diomultipart.Dio _dio = diomultipart.Dio(
     diomultipart.BaseOptions(
-      baseUrl: 'http://10.3.80.254:8080',
+      baseUrl: 'http://10.3.80.4:8080',
       connectTimeout: const Duration(seconds: 10),
       receiveTimeout: const Duration(seconds: 10),
     ),

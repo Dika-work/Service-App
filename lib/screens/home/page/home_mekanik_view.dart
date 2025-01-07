@@ -1,6 +1,10 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:service/screens/home/controller/home_mekanik_controller.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../constant/custom_size.dart';
@@ -28,9 +32,6 @@ class HomeMekanikView extends GetView<HomeMekanikController> {
                 ?.copyWith(fontWeight: FontWeight.w400, color: Colors.black),
           ),
           actions: [
-            IconButton(
-                onPressed: () => controller.logout(),
-                icon: const Icon(Icons.logout)),
             if (controller.canAdd == '1')
               GestureDetector(
                 onTap: () async {
@@ -43,7 +44,7 @@ class HomeMekanikView extends GetView<HomeMekanikController> {
                 child: Container(
                   padding: const EdgeInsets.all(CustomSize.xs),
                   margin: const EdgeInsets.fromLTRB(
-                      0, CustomSize.sm, CustomSize.sm, CustomSize.sm),
+                      0, CustomSize.sm, 0, CustomSize.sm),
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     borderRadius:
@@ -59,7 +60,136 @@ class HomeMekanikView extends GetView<HomeMekanikController> {
                   ),
                 ),
               ),
+            Builder(
+              builder: (BuildContext context) {
+                return IconButton(
+                  onPressed: () => Scaffold.of(context).openDrawer(),
+                  icon: const Icon(Iconsax.firstline),
+                );
+              },
+            ),
           ],
+        ),
+        drawer: Drawer(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Stack(
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      height: CustomSize.imageCarouselHeight,
+                      padding: const EdgeInsets.only(top: CustomSize.lg),
+                      decoration: const BoxDecoration(
+                        color: AppColors.light,
+                        image: DecorationImage(
+                            image: AssetImage('assets/images/ship.jpg'),
+                            fit: BoxFit.cover),
+                      ),
+                    ),
+                    Positioned.fill(
+                        child: ClipRect(
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 1.0, sigmaY: 2.0),
+                        child: Stack(
+                          children: [
+                            Align(
+                              alignment: Alignment.center,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    controller.username.value.toUpperCase(),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineMedium
+                                        ?.copyWith(color: AppColors.white),
+                                  ),
+                                  Text(
+                                    controller.typeUser.value,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium
+                                        ?.copyWith(
+                                            fontWeight: FontWeight.w400,
+                                            color: Colors.white),
+                                  )
+                                ],
+                              ),
+                            ),
+                            Positioned(
+                              bottom: 6,
+                              left: 5,
+                              right: 5,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Shimmer.fromColors(
+                                    baseColor: Colors.grey[500]!,
+                                    highlightColor: Colors.white,
+                                    child: Text(
+                                      'Langgeng Pranamas Sentosa',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium
+                                          ?.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                    ),
+                                  ),
+                                  Builder(
+                                    builder: (BuildContext context) {
+                                      return GestureDetector(
+                                        onTap: () =>
+                                            Scaffold.of(context).closeDrawer(),
+                                        child: const Icon(
+                                          Iconsax.back_square,
+                                          size: CustomSize.iconMd,
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    )),
+                  ],
+                ),
+                ListTile(
+                  onTap: () => Get.toNamed(Routes.ALL_MTC),
+                  leading: const Icon(
+                    Iconsax.record,
+                    color: AppColors.black,
+                  ),
+                  title: Text(
+                    'Seluruh MTC',
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleSmall
+                        ?.copyWith(color: AppColors.black),
+                  ),
+                ),
+                ListTile(
+                  onTap: () => controller.logout(),
+                  leading: const Icon(
+                    Iconsax.logout,
+                    color: AppColors.black,
+                  ),
+                  title: Text(
+                    'Keluar',
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleSmall
+                        ?.copyWith(color: AppColors.black),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
         body: Container(
           width: Get.width,
@@ -88,11 +218,20 @@ class HomeMekanikView extends GetView<HomeMekanikController> {
             } else {
               final dataSource = MtcSource(
                   model: controller.mtcModel,
-                  onServis: (MtcModel model) {
-                    Get.toNamed(Routes.SERVICE_BERKALA);
+                  onServis: (MtcModel model) async {
+                    if (model.status == '0') {
+                      final result = await Get.toNamed(Routes.SERVICE_BERKALA,
+                          arguments: {'id_mtc': model.id});
+
+                      if (result == true) {
+                        controller.getData();
+                      }
+                    } else if (model.status == '1') {
+                      print('Ini bakalan navigate ke page lain status 1');
+                    }
                   },
                   onEdit: (MtcModel model) {
-                    Get.to(() => EditServiceBerkala(model: model),
+                    Get.to(() => EditServiceBerkalaMekanik(model: model),
                         transition: Transition.fadeIn);
                   },
                   onDelete: (MtcModel model) {
@@ -275,6 +414,21 @@ class HomeMekanikView extends GetView<HomeMekanikController> {
                             ),
                             child: Text(
                               'No Buntut',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(fontWeight: FontWeight.bold),
+                            ))),
+                    GridColumn(
+                        columnName: 'Status',
+                        label: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              color: Colors.lightBlue.shade100,
+                            ),
+                            child: Text(
+                              'Status',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium

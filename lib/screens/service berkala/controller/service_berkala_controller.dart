@@ -1,14 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:dio/dio.dart' as diomultipart;
+import 'package:get_storage/get_storage.dart';
+import 'package:intl/intl.dart';
+import 'package:service/routes/app_pages.dart';
 
 import '../../../utils/loadings/snackbar.dart';
 import '../model/detail_service_model.dart';
+import '../model/mtc_model.dart';
+// import '../model/transaksi_service_model.dart';
 
 class ServiceBerkalaController extends GetxController {
   RxBool isLoading = false.obs;
   final formKey = GlobalKey<FormState>();
+  final localStorage = GetStorage();
+
   RxList<DetailServiceModel> detailServiceModel = <DetailServiceModel>[].obs;
+  RxList<MtcModel> mtcModel = <MtcModel>[].obs;
+  // RxList<TransaksiServiceModel> transaksiServiceModel = <TransaksiServiceModel>[].obs;
+
   final TextEditingController kmTargetC = TextEditingController();
   final TextEditingController bulanTargetC = TextEditingController();
   final TextEditingController tahunTargetC = TextEditingController();
@@ -17,7 +27,7 @@ class ServiceBerkalaController extends GetxController {
 
   final diomultipart.Dio _dio = diomultipart.Dio(
     diomultipart.BaseOptions(
-      baseUrl: 'http://10.3.80.254:8080',
+      baseUrl: 'http://10.3.80.4:8080',
       connectTimeout: const Duration(seconds: 10),
       receiveTimeout: const Duration(seconds: 10),
     ),
@@ -179,53 +189,84 @@ class ServiceBerkalaController extends GetxController {
     }
   }
 
-//   createTransaksiService() async {
-//   isLoading.value = true;
+  // getDataService() async {
+  //   isLoading.value = true;
 
-//   try {
-//     // Siapkan data transaksi
-//     List<Map<String, dynamic>> transaksiData = detailServiceModel.map((item) {
-//       return {
-//         'id_kategori': item.idKategori,
-//         'id': item.id,
-//         'status_service': item.selectedOption,
-//         'nama_mekanik': ,
-//         'tgl_input': ,
-//         'km_real': ,
-//         'monthly_real': ,
-//         'physical_condition_real': ,
-//         'quantity_real': ,
-//         'keterangan': ,
-//       };
-//     }).toList();
+  //   try {
+  //     final response = await _dio.get('/service');
 
-//     diomultipart.FormData formData = diomultipart.FormData.fromMap({
-//       'transaksi_data': transaksiData,
-//     });
+  //     if (response.statusCode == 200) {
+  //       final List<dynamic> data = response.data['data'];
+  //       mtcModel.value = data.map((e) => MtcModel.fromJson(e)).toList();
+  //       print('ini response user : ${mtcModel.toList()}');
+  //     }
+  //   } on diomultipart.DioException catch (e) {
+  //     SnackbarLoader.warningSnackBar(
+  //       title: 'Error',
+  //       message: e.response?.data['message'] ?? 'Terjadi kesalahan',
+  //     );
 
-//     // Kirim data ke endpoint
-//     final response = await _dio.post('/create-transaksi', data: formData);
+  //     print(
+  //         'Error getAllUser: ${e.response?.data['message'] ?? 'Terjadi kesalahan'}');
+  //   } finally {
+  //     isLoading.value = false;
+  //   }
+  // }
 
-//     if (response.statusCode == 201) {
-//       SnackbarLoader.successSnackBar(
-//         title: 'Sukses',
-//         message: 'Transaksi berhasil dibuat.',
-//       );
-//       await getData(); // Ambil data terbaru jika diperlukan
-//     } else {
-//       SnackbarLoader.errorSnackBar(
-//         title: 'Gagal',
-//         message: response.data['message'] ?? 'Terjadi kesalahan.',
-//       );
-//     }
-//   } catch (e) {
-//     SnackbarLoader.errorSnackBar(
-//       title: 'Error',
-//       message: 'Terjadi kesalahan: $e',
-//     );
-//     print('ERROR CREATE TRANSAKSI SERVICE: $e');
-//   } finally {
-//     isLoading.value = false;
-//   }
-// }
+  createTransaksiService(String idMtc) async {
+    // Validasi apakah semua radio button sudah dipilih
+    bool allSelected =
+        detailServiceModel.every((item) => item.selectedOption != '0');
+
+    if (!allSelected) {
+      SnackbarLoader.errorSnackBar(
+        title: 'Oops',
+        message: 'Harap mengisi semua pilihan sebelum melanjutkan.',
+      );
+      return; // Hentikan eksekusi jika ada yang belum dipilih
+    }
+
+    isLoading.value = true;
+    try {
+      String namaMekanik = localStorage.read('username');
+      print('Mekanik: $namaMekanik');
+
+      List<Map<String, dynamic>> transaksiData = detailServiceModel.map((item) {
+        return {
+          'id_mtc': idMtc,
+          'id_detail_kategori': item.id,
+          'status_service': item.selectedOption,
+          'nama_mekanik': namaMekanik,
+          'tgl_input': DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now()),
+          'status': '1'
+        };
+      }).toList();
+
+      print('Transaksi Data: $transaksiData'); // Log the data being sent
+
+      final response =
+          await _dio.post('/create-transaksi', data: {'data': transaksiData});
+
+      if (response.statusCode == 201) {
+        SnackbarLoader.successSnackBar(
+          title: 'Sukses',
+          message: 'Transaksi berhasil dibuat.',
+        );
+        Get.offAndToNamed(Routes.HOME_MEKANIK, result: true);
+      } else {
+        SnackbarLoader.errorSnackBar(
+          title: 'Gagal',
+          message: response.data['message'] ?? 'Terjadi kesalahan.',
+        );
+      }
+    } catch (e) {
+      SnackbarLoader.errorSnackBar(
+        title: 'Error',
+        message: 'Terjadi kesalahan: $e',
+      );
+      print('ERROR CREATE TRANSAKSI SERVICE: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
 }

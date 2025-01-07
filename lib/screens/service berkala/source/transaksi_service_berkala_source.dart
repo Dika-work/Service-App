@@ -4,11 +4,11 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import '../../../constant/custom_size.dart';
 import '../model/detail_service_model.dart';
 
-class ServiceBerkalaSource extends DataGridSource {
+class TransaksiServiceBerkalaSource extends DataGridSource {
   final List<DetailServiceModel> model;
   int startIndex = 0;
 
-  ServiceBerkalaSource({
+  TransaksiServiceBerkalaSource({
     required this.model,
   }) {
     _updateDataPager(model, startIndex);
@@ -43,7 +43,7 @@ class ServiceBerkalaSource extends DataGridSource {
         // Radio button for Cek
         Container(
           alignment: Alignment.center,
-          child: Radio<String>(
+          child: Radio<String?>(
             value: '1',
             groupValue: currentModel.selectedOption,
             onChanged: (value) {
@@ -54,7 +54,7 @@ class ServiceBerkalaSource extends DataGridSource {
         // Radio button for Repair
         Container(
           alignment: Alignment.center,
-          child: Radio<String>(
+          child: Radio<String?>(
             value: '2',
             groupValue: currentModel.selectedOption,
             onChanged: (value) {
@@ -65,7 +65,7 @@ class ServiceBerkalaSource extends DataGridSource {
         // Radio button for Ganti
         Container(
           alignment: Alignment.center,
-          child: Radio<String>(
+          child: Radio<String?>(
             value: '3',
             groupValue: currentModel.selectedOption,
             onChanged: (value) {
@@ -73,16 +73,6 @@ class ServiceBerkalaSource extends DataGridSource {
             },
           ),
         ),
-        ...row.getCells().sublist(10).map<Widget>((e) {
-          return Container(
-            alignment: Alignment.center,
-            child: Text(
-              e.value.toString(),
-              textAlign: TextAlign.justify,
-              style: const TextStyle(fontSize: CustomSize.fontSizeXm),
-            ),
-          );
-        }),
       ],
     );
   }
@@ -108,11 +98,6 @@ class ServiceBerkalaSource extends DataGridSource {
           DataGridCell<String>(columnName: 'Cek', value: '-'),
           DataGridCell<String>(columnName: 'Repair', value: '-'),
           DataGridCell<String>(columnName: 'Ganti', value: '-'),
-          DataGridCell<String>(columnName: 'KM Real', value: '-'),
-          DataGridCell<String>(columnName: 'WAKTU\n(BULAN)', value: '-'),
-          DataGridCell<String>(columnName: 'FISIK REAL', value: '-'),
-          DataGridCell<String>(columnName: 'QTY Real', value: '-'),
-          DataGridCell<String>(columnName: 'KETERANGAN', value: '-'),
         ]);
       },
     );
@@ -147,11 +132,6 @@ class ServiceBerkalaSource extends DataGridSource {
           const DataGridCell<String>(columnName: 'Cek', value: '1'),
           const DataGridCell<String>(columnName: 'Repair', value: '2'),
           const DataGridCell<String>(columnName: 'Ganti', value: '3'),
-          const DataGridCell<String>(columnName: 'KM Real', value: ''),
-          const DataGridCell<String>(columnName: 'WAKTU\n(BULAN)', value: ''),
-          const DataGridCell<String>(columnName: 'FISIK REAL', value: ''),
-          const DataGridCell<String>(columnName: 'QTY Real', value: ''),
-          const DataGridCell<String>(columnName: 'KETERANGAN', value: ''),
         ];
 
         return DataGridRow(cells: cells);
