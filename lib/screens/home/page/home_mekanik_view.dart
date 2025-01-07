@@ -11,6 +11,7 @@ import '../../../constant/custom_size.dart';
 import '../../../routes/app_pages.dart';
 import '../../../utils/theme/app_colors.dart';
 import '../../../utils/widget/dialogs.dart';
+import '../../data real/page/input_data_real.dart';
 import '../../service berkala/model/mtc_model.dart';
 import '../../service berkala/page/edit_service_berkala.dart';
 import '../../service berkala/source/mtc_source.dart';
@@ -227,7 +228,7 @@ class HomeMekanikView extends GetView<HomeMekanikController> {
                         controller.getData();
                       }
                     } else if (model.status == '1') {
-                      print('Ini bakalan navigate ke page lain status 1');
+                      Get.to(() => InputDataReal(idMtc: model.id));
                     }
                   },
                   onEdit: (MtcModel model) {
@@ -414,21 +415,6 @@ class HomeMekanikView extends GetView<HomeMekanikController> {
                             ),
                             child: Text(
                               'No Buntut',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(fontWeight: FontWeight.bold),
-                            ))),
-                    GridColumn(
-                        columnName: 'Status',
-                        label: Container(
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              color: Colors.lightBlue.shade100,
-                            ),
-                            child: Text(
-                              'Status',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium

@@ -4,7 +4,6 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../constant/custom_size.dart';
 import '../../../utils/theme/app_colors.dart';
-import '../../../utils/widget/dialogs.dart';
 import '../controller/service_berkala_controller.dart';
 import '../source/transaksi_service_berkala_source.dart';
 
@@ -13,7 +12,11 @@ class TransaksiServiceBerkala extends GetView<ServiceBerkalaController> {
 
   @override
   Widget build(BuildContext context) {
-    final idMtc = Get.arguments['id_mtc'];
+    final arguments = Get.arguments;
+    final idMtc = arguments != null && arguments['id_mtc'] != null
+        ? arguments['id_mtc']
+        : '';
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -26,15 +29,7 @@ class TransaksiServiceBerkala extends GetView<ServiceBerkalaController> {
         ),
         actions: [
           GestureDetector(
-            onTap: () {
-              CustomDialogs.defaultDialog(
-                  context: context,
-                  confirmText: 'Yakin',
-                  cancelText: 'Batalkan',
-                  onConfirm: () => controller.createTransaksiService(idMtc),
-                  contentWidget: const Text(
-                      'Apakah anda sudah yakin dengan data yang terkait. Data ini akan di kirimkan, Apakah Anda yakin?'));
-            },
+            onTap: () => controller.createTransaksiService(idMtc),
             child: Container(
               padding: const EdgeInsets.all(CustomSize.xs),
               margin: const EdgeInsets.fromLTRB(

@@ -3,12 +3,9 @@ import 'package:get/get.dart';
 import 'package:dio/dio.dart' as diomultipart;
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
-import 'package:service/routes/app_pages.dart';
 
 import '../../../utils/loadings/snackbar.dart';
 import '../model/detail_service_model.dart';
-import '../model/mtc_model.dart';
-// import '../model/transaksi_service_model.dart';
 
 class ServiceBerkalaController extends GetxController {
   RxBool isLoading = false.obs;
@@ -16,8 +13,6 @@ class ServiceBerkalaController extends GetxController {
   final localStorage = GetStorage();
 
   RxList<DetailServiceModel> detailServiceModel = <DetailServiceModel>[].obs;
-  RxList<MtcModel> mtcModel = <MtcModel>[].obs;
-  // RxList<TransaksiServiceModel> transaksiServiceModel = <TransaksiServiceModel>[].obs;
 
   final TextEditingController kmTargetC = TextEditingController();
   final TextEditingController bulanTargetC = TextEditingController();
@@ -189,30 +184,6 @@ class ServiceBerkalaController extends GetxController {
     }
   }
 
-  // getDataService() async {
-  //   isLoading.value = true;
-
-  //   try {
-  //     final response = await _dio.get('/service');
-
-  //     if (response.statusCode == 200) {
-  //       final List<dynamic> data = response.data['data'];
-  //       mtcModel.value = data.map((e) => MtcModel.fromJson(e)).toList();
-  //       print('ini response user : ${mtcModel.toList()}');
-  //     }
-  //   } on diomultipart.DioException catch (e) {
-  //     SnackbarLoader.warningSnackBar(
-  //       title: 'Error',
-  //       message: e.response?.data['message'] ?? 'Terjadi kesalahan',
-  //     );
-
-  //     print(
-  //         'Error getAllUser: ${e.response?.data['message'] ?? 'Terjadi kesalahan'}');
-  //   } finally {
-  //     isLoading.value = false;
-  //   }
-  // }
-
   createTransaksiService(String idMtc) async {
     // Validasi apakah semua radio button sudah dipilih
     bool allSelected =
@@ -248,11 +219,13 @@ class ServiceBerkalaController extends GetxController {
           await _dio.post('/create-transaksi', data: {'data': transaksiData});
 
       if (response.statusCode == 201) {
+        Get.back(result: true);
         SnackbarLoader.successSnackBar(
           title: 'Sukses',
           message: 'Transaksi berhasil dibuat.',
         );
-        Get.offAndToNamed(Routes.HOME_MEKANIK, result: true);
+        // Get.offNamed(Routes.HOME_MEKANIK);
+        // await getDataService();
       } else {
         SnackbarLoader.errorSnackBar(
           title: 'Gagal',

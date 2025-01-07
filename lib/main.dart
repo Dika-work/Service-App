@@ -25,7 +25,7 @@ void main() async {
     initialLocation = AppPages.INITIAL;
     await localStorage.write('IsFirstTime', false);
   } else if (isLoggedIn) {
-    if (typeUser == 'super admin') {
+    if (typeUser == 'admin') {
       initialLocation = Routes.HOME_SUPER_ADMIN;
     } else if (typeUser == 'kpool') {
       initialLocation = Routes.HOME_KPOOL;

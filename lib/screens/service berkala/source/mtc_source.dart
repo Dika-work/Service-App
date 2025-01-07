@@ -40,7 +40,7 @@ class MtcSource extends DataGridSource {
 
     // Create cells for the first 6 columns
     List<Widget> cells = [
-      ...row.getCells().take(12).map<Widget>((e) {
+      ...row.getCells().take(11).map<Widget>((e) {
         return Container(
           alignment: Alignment.center,
           padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
@@ -92,7 +92,10 @@ class MtcSource extends DataGridSource {
                     backgroundColor: AppColors.success,
                     padding: const EdgeInsets.all(8.0),
                   ),
-                  child: const Text('MTC'),
+                  child: const Text(
+                    'DETAIL\nSB',
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ),
             if (model[rowIndex].status == '2') const Icon(Icons.check)
@@ -182,7 +185,6 @@ class MtcSource extends DataGridSource {
           DataGridCell<String>(columnName: 'Type Mobil', value: '-'),
           DataGridCell<String>(columnName: 'Driver', value: '-'),
           DataGridCell<String>(columnName: 'No Buntut', value: '-'),
-          DataGridCell<String>(columnName: 'Status', value: '-'),
         ]);
       },
     );
@@ -200,8 +202,10 @@ class MtcSource extends DataGridSource {
         // Create row cells
         List<DataGridCell> cells = [
           DataGridCell<int>(columnName: 'No', value: index),
-          DataGridCell<String>(columnName: 'Mekanik', value: data.mekanik),
-          DataGridCell<String>(columnName: 'K.Pool', value: data.kpool),
+          DataGridCell<String>(
+              columnName: 'Mekanik', value: data.mekanik.toUpperCase()),
+          DataGridCell<String>(
+              columnName: 'K.Pool', value: data.kpool.toUpperCase()),
           DataGridCell<String>(columnName: 'No Polisi', value: data.noPolisi),
           DataGridCell<String>(
               columnName: 'KM Terakhir Servis', value: data.lastService),
@@ -212,7 +216,6 @@ class MtcSource extends DataGridSource {
           DataGridCell<String>(columnName: 'Type Mobil', value: data.typeKen),
           DataGridCell<String>(columnName: 'Driver', value: data.driver),
           DataGridCell<String>(columnName: 'No Buntut', value: data.noBuntut),
-          DataGridCell<String>(columnName: 'Status', value: data.status),
         ];
 
         return DataGridRow(cells: cells);

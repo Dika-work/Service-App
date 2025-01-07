@@ -12,6 +12,7 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../utils/widget/dialogs.dart';
 import '../../../utils/widget/expandable_container.dart';
+import '../../data real/page/input_data_real.dart';
 import '../../service berkala/model/mtc_model.dart';
 import '../../service berkala/page/edit_service_berkala.dart';
 import '../../service berkala/source/mtc_source.dart';
@@ -301,8 +302,17 @@ class HomeSuperAdmin extends GetView<HomeSuperAdminController> {
             } else {
               final dataSource = MtcSource(
                   model: controller.mtcModel,
-                  onServis: (MtcModel model) {
-                    Get.toNamed(Routes.SERVICE_BERKALA);
+                  onServis: (MtcModel model) async {
+                    if (model.status == '0') {
+                      final result = await Get.toNamed(Routes.SERVICE_BERKALA,
+                          arguments: {'id_mtc': model.id});
+
+                      if (result == true) {
+                        controller.getData();
+                      }
+                    } else if (model.status == '1') {
+                      Get.to(() => InputDataReal(idMtc: model.id));
+                    }
                   },
                   onEdit: (MtcModel model) {
                     Get.to(() => EditServiceBerkalaAdmin(model: model),
