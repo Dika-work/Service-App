@@ -57,6 +57,46 @@ class GroupUserController extends GetxController {
     }
   }
 
+  updateGroupUser({
+    required String id,
+    required String add,
+    required String edit,
+    required String delete,
+  }) async {
+    isLoading.value = true;
+
+    try {
+      final data = {
+        'can_add': add,
+        'can_edit': edit,
+        'can_delete': delete,
+      };
+
+      final response = await _dio.put('/usergroups/$id', data: data);
+
+      if (response.statusCode == 200) {
+        await getGroupUser();
+        SnackbarLoader.successSnackBar(
+          title: 'Sukses',
+          message: 'Group user berhasil diperbarui.',
+        );
+        Navigator.of(Get.overlayContext!).pop();
+      } else {
+        SnackbarLoader.errorSnackBar(
+          title: 'Gagal',
+          message: response.data['message'] ?? 'Terjadi kesalahan.',
+        );
+      }
+    } catch (e) {
+      SnackbarLoader.errorSnackBar(
+        title: 'Error',
+        message: 'Terjadi kesalahan: $e',
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   // createGroupUser() async {
   //   isLoading.value = true;
 

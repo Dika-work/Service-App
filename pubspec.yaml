@@ -32,17 +32,20 @@ dependencies:
   dio: ^5.7.0
   dropdown_button2: ^2.3.9
   dropdown_search: ^6.0.1
-  flutter_speed_dial: ^7.0.0
   flutter:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
+  flutter_speed_dial: ^7.0.0
   get: ^4.6.6
   get_storage: ^2.1.1
   iconsax: ^0.0.8
   intl: ^0.19.0
+  open_file: ^3.5.10
+  pdf: ^3.11.1
   shimmer: ^3.0.0
-  syncfusion_flutter_datagrid: ^28.1.35
+  syncfusion_flutter_datagrid: ^26.1.40
+  syncfusion_flutter_pdfviewer: ^26.2.14
 
 dev_dependencies:
   flutter_lints: ^4.0.0

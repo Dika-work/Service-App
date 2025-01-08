@@ -95,30 +95,6 @@ class HomeSuperAdmin extends GetView<HomeSuperAdminController> {
                       filter: ImageFilter.blur(sigmaX: 1.0, sigmaY: 2.0),
                       child: Stack(
                         children: [
-                          Positioned(
-                            top: 15,
-                            right: 5,
-                            child: GestureDetector(
-                              onTap: () => controller.logout(),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    'Keluar',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleMedium
-                                        ?.copyWith(
-                                            fontWeight: FontWeight.w400,
-                                            color: Colors.black),
-                                  ),
-                                  const Icon(
-                                    Iconsax.logout,
-                                    size: CustomSize.iconMd,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
                           Align(
                             alignment: Alignment.center,
                             child: Column(
@@ -264,6 +240,20 @@ class HomeSuperAdmin extends GetView<HomeSuperAdminController> {
                 ),
                 title: Text(
                   'Seluruh MTC',
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleSmall
+                      ?.copyWith(color: AppColors.black),
+                ),
+              ),
+              ListTile(
+                onTap: () => controller.logout(),
+                leading: const Icon(
+                  Iconsax.logout,
+                  color: AppColors.black,
+                ),
+                title: Text(
+                  'Keluar',
                   style: Theme.of(context)
                       .textTheme
                       .titleSmall

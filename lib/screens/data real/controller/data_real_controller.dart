@@ -76,27 +76,22 @@ class DataRealController extends GetxController {
           return; // Hentikan eksekusi jika ada field yang kosong
         }
 
-        try {
-          transaksiData.add({
-            'id_transaksi': realModel[i].idTransaksi,
-            'id_mtc': realModel[i].idMtc,
-            'km_real': kmRealControllers[i].text,
-            'monthly_real': waktuBulanRealControllers[i].text,
-            'physical_condition_real': kondisiFisikRealControllers[i].text,
-            'quantity_real': qtyRealControllers[i].text,
-            'keterangan': keteranganControllers[i].text,
-          });
-          print('ID Transaksi: ${realModel[i].idTransaksi}');
-          print('ID Mtc: ${realModel[i].idMtc}');
-          print('KM Real: ${kmRealControllers[i].text}');
-          print('Monthly Real: ${waktuBulanRealControllers[i].text}');
-          print('Physical Condition: ${kondisiFisikRealControllers[i].text}');
-          print('Quantity Real: ${qtyRealControllers[i].text}');
-          print('Keterangan: ${keteranganControllers[i].text}');
-        } catch (e) {
-          Get.snackbar('Error', 'Input tidak valid: ${e.toString()}');
-          return; // Hentikan eksekusi jika parsing gagal
-        }
+        transaksiData.add({
+          'id_transaksi': realModel[i].idTransaksi,
+          'id_mtc': realModel[i].idMtc,
+          'km_real': kmRealControllers[i].text,
+          'monthly_real': waktuBulanRealControllers[i].text,
+          'physical_condition_real': kondisiFisikRealControllers[i].text,
+          'quantity_real': qtyRealControllers[i].text,
+          'keterangan': keteranganControllers[i].text,
+        });
+        print('ID Transaksi: ${realModel[i].idTransaksi}');
+        print('ID Mtc: ${realModel[i].idMtc}');
+        print('KM Real: ${kmRealControllers[i].text}');
+        print('Monthly Real: ${waktuBulanRealControllers[i].text}');
+        print('Physical Condition: ${kondisiFisikRealControllers[i].text}');
+        print('Quantity Real: ${qtyRealControllers[i].text}');
+        print('Keterangan: ${keteranganControllers[i].text}');
       }
 
       final data = {
@@ -117,13 +112,18 @@ class DataRealController extends GetxController {
 
       if (response.statusCode == 200) {
         Get.back(result: true);
-        Get.snackbar('Berhasil', 'Data transaksi berhasil diperbarui');
+        SnackbarLoader.successSnackBar(
+            title: 'Berhasil', message: 'Service berkala berhasil terkirim');
       } else {
-        Get.snackbar('Error', 'Gagal memperbarui transaksi: ${response.data}');
+        SnackbarLoader.warningSnackBar(
+            title: 'Error',
+            message: 'Gagal memperbarui transaksi: ${response.data}');
       }
     } on diomultipart.DioException catch (e) {
-      Get.snackbar('Error',
-          e.response?.data['message'] ?? 'Gagal memperbarui transaksi');
+      SnackbarLoader.errorSnackBar(
+          title: 'Error',
+          message:
+              e.response?.data['message'] ?? 'Gagal memperbarui transaksi');
     } finally {
       isLoading.value = false;
     }

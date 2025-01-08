@@ -29,34 +29,51 @@ class HomeMekanikController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    getData();
     username.value = localStorage.read('username') ?? '';
     canAdd = localStorage.read('add') ?? '';
     canEdit = localStorage.read('edit') ?? '';
     canDelete = localStorage.read('delete') ?? '';
     typeUser.value = localStorage.read('type_user') ?? '';
+    getData();
   }
 
   getData() async {
     isLoading.value = true;
 
     try {
-      final response = await _dio.get('/service');
+      print('getData sesuai dengan username mekanik: ${username.value}');
+      // Kirim request ke API dengan parameter 'mekanik'
+      final response = await _dio.get(
+        '/service-mekanik', // URL endpoint API
+        queryParameters: {
+          'mekanik': username.value
+        }, // Mengirimkan parameter mekanik
+      );
 
       if (response.statusCode == 200) {
         final List<dynamic> data = response.data['data'];
+
+        // Memetakan data JSON ke dalam model MtcModel
         mtcModel.value = data.map((e) => MtcModel.fromJson(e)).toList();
-        print('ini response user : ${mtcModel.toList()}');
+
+        print('Data Mekanik: ${mtcModel.toList()}');
+      } else {
+        // Tangani jika status code bukan 200
+        SnackbarLoader.errorSnackBar(
+          title: 'Gagal',
+          message: 'Gagal mengambil data mekanik.',
+        );
       }
     } on diomultipart.DioException catch (e) {
+      // Tangani error jika ada masalah dengan request
       SnackbarLoader.warningSnackBar(
         title: 'Error',
         message: e.response?.data['message'] ?? 'Terjadi kesalahan',
       );
-
       print(
-          'Error getAllUser: ${e.response?.data['message'] ?? 'Terjadi kesalahan'}');
+          'Error getData: ${e.response?.data['message'] ?? 'Terjadi kesalahan'}');
     } finally {
+      // Set loading ke false setelah selesai
       isLoading.value = false;
     }
   }

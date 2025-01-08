@@ -37,6 +37,7 @@ class MtcSource extends DataGridSource {
     final canAdd = localStorage.read('add');
     final canEdit = localStorage.read('edit');
     final canDelete = localStorage.read('delete');
+    final typeUser = localStorage.read('type_user');
 
     // Create cells for the first 6 columns
     List<Widget> cells = [
@@ -98,7 +99,29 @@ class MtcSource extends DataGridSource {
                   ),
                 ),
               ),
-            if (model[rowIndex].status == '2') const Icon(Icons.check)
+            if (model[rowIndex].status == '2' && typeUser == 'mekanik')
+              const Icon(Icons.check),
+            if (model[rowIndex].status == '2' &&
+                (typeUser == 'admin' || typeUser == 'staff'))
+              SizedBox(
+                height: 60,
+                width: 100,
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (onServis != null) {
+                      onServis!(model[rowIndex]);
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.success,
+                    padding: const EdgeInsets.all(8.0),
+                  ),
+                  child: const Text(
+                    'ACC',
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
           ],
         ));
       }
@@ -128,7 +151,30 @@ class MtcSource extends DataGridSource {
                 ),
               ),
             if (model[rowIndex].status == '1') const SizedBox.shrink(),
-            if (model[rowIndex].status == '2') const Icon(Icons.check)
+            if (model[rowIndex].status == '2') const Icon(Icons.check),
+            // if (model[rowIndex].status == '2' && typeUser == 'mekanik')
+            //   const Icon(Icons.check),
+            // if (model[rowIndex].status == '2' &&
+            //     (typeUser == 'admin' || typeUser == 'staff'))
+            //   SizedBox(
+            //     height: 60,
+            //     width: 100,
+            //     child: ElevatedButton(
+            //       onPressed: () {
+            //         if (onServis != null) {
+            //           onServis!(model[rowIndex]);
+            //         }
+            //       },
+            //       style: ElevatedButton.styleFrom(
+            //         backgroundColor: AppColors.warning,
+            //         padding: const EdgeInsets.all(8.0),
+            //       ),
+            //       child: const Text(
+            //         'EDIT',
+            //         textAlign: TextAlign.center,
+            //       ),
+            //     ),
+            //   ),
           ],
         ));
       }
@@ -158,7 +204,7 @@ class MtcSource extends DataGridSource {
                 ),
               ),
             if (model[rowIndex].status == '1') const SizedBox.shrink(),
-            if (model[rowIndex].status == '2') const SizedBox.shrink()
+            if (model[rowIndex].status == '2') const Icon(Icons.check)
           ],
         ));
       }
