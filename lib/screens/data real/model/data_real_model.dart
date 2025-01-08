@@ -1,5 +1,6 @@
 class DataRealModel {
   String idTransaksi;
+  String idMtc;
   String mekanik;
   String deskripsiPengecekan;
   String kmTarget;
@@ -11,6 +12,7 @@ class DataRealModel {
 
   DataRealModel({
     required this.idTransaksi,
+    required this.idMtc,
     required this.mekanik,
     required this.deskripsiPengecekan,
     required this.kmTarget,
@@ -24,6 +26,7 @@ class DataRealModel {
   factory DataRealModel.fromJson(Map<String, dynamic> json) {
     return DataRealModel(
       idTransaksi: json['id_transaksi'],
+      idMtc: json['id_mtc'],
       mekanik: json['mekanik'],
       deskripsiPengecekan: json['deskripsi_pengecekan'],
       kmTarget: json['km_target'],

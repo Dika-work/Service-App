@@ -194,7 +194,7 @@ class ServiceBerkalaController extends GetxController {
         title: 'Oops',
         message: 'Harap mengisi semua pilihan sebelum melanjutkan.',
       );
-      return; // Hentikan eksekusi jika ada yang belum dipilih
+      return;
     }
 
     isLoading.value = true;
@@ -213,7 +213,7 @@ class ServiceBerkalaController extends GetxController {
         };
       }).toList();
 
-      print('Transaksi Data: $transaksiData'); // Log the data being sent
+      print('Transaksi Data: $transaksiData');
 
       final response =
           await _dio.post('/create-transaksi', data: {'data': transaksiData});
@@ -224,8 +224,6 @@ class ServiceBerkalaController extends GetxController {
           title: 'Sukses',
           message: 'Transaksi berhasil dibuat.',
         );
-        // Get.offNamed(Routes.HOME_MEKANIK);
-        // await getDataService();
       } else {
         SnackbarLoader.errorSnackBar(
           title: 'Gagal',

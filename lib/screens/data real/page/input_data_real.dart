@@ -54,7 +54,7 @@ class _InputDataRealState extends State<InputDataReal> {
         ),
         actions: [
           GestureDetector(
-            onTap: () {},
+            onTap: () => controller.updateTransaksi(),
             child: Container(
               padding: const EdgeInsets.all(CustomSize.xs),
               margin: const EdgeInsets.fromLTRB(
@@ -203,7 +203,7 @@ class _InputDataRealState extends State<InputDataReal> {
                       children: [
                         Expanded(
                           child: TextFormField(
-                            controller: controller.kmRealC,
+                            controller: controller.kmRealControllers[index],
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return '* Bagian ini tidak boleh kosong';
@@ -221,7 +221,8 @@ class _InputDataRealState extends State<InputDataReal> {
                         const SizedBox(width: CustomSize.sm),
                         Expanded(
                           child: TextFormField(
-                            controller: controller.waktuBulanRealC,
+                            controller:
+                                controller.waktuBulanRealControllers[index],
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return '* Bagian ini tidak boleh kosong';
@@ -243,7 +244,8 @@ class _InputDataRealState extends State<InputDataReal> {
                       children: [
                         Expanded(
                           child: TextFormField(
-                            controller: controller.kondisiFisikRealC,
+                            controller:
+                                controller.kondisiFisikRealControllers[index],
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return '* Bagian ini tidak boleh kosong';
@@ -261,7 +263,7 @@ class _InputDataRealState extends State<InputDataReal> {
                         const SizedBox(width: CustomSize.sm),
                         Expanded(
                           child: TextFormField(
-                            controller: controller.qtyRealC,
+                            controller: controller.qtyRealControllers[index],
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return '* Bagian ini tidak boleh kosong';
@@ -280,7 +282,7 @@ class _InputDataRealState extends State<InputDataReal> {
                     ),
                     const SizedBox(height: CustomSize.sm),
                     TextFormField(
-                      controller: controller.keteranganC,
+                      controller: controller.keteranganControllers[index],
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return '* Bagian ini tidak boleh kosong';

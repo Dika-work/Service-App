@@ -128,7 +128,7 @@ class MtcSource extends DataGridSource {
                 ),
               ),
             if (model[rowIndex].status == '1') const SizedBox.shrink(),
-            if (model[rowIndex].status == '2') const SizedBox.shrink()
+            if (model[rowIndex].status == '2') const Icon(Icons.check)
           ],
         ));
       }

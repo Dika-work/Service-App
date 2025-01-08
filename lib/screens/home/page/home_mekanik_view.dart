@@ -228,7 +228,12 @@ class HomeMekanikView extends GetView<HomeMekanikController> {
                         controller.getData();
                       }
                     } else if (model.status == '1') {
-                      Get.to(() => InputDataReal(idMtc: model.id));
+                      final result =
+                          await Get.to(() => InputDataReal(idMtc: model.id));
+
+                      if (result == true) {
+                        controller.getData();
+                      }
                     }
                   },
                   onEdit: (MtcModel model) {
