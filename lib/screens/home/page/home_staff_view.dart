@@ -13,7 +13,7 @@ import '../../../routes/app_pages.dart';
 import '../../../utils/theme/app_colors.dart';
 import '../../../utils/widget/expandable_container.dart';
 import '../../../utils/widget/pdf_preview.dart';
-import '../../data real/page/input_data_real.dart';
+// import '../../data real/page/input_data_real.dart';
 import '../../service berkala/model/mtc_model.dart';
 import '../../service berkala/page/edit_service_berkala.dart';
 import '../../service berkala/source/mtc_source.dart';
@@ -215,40 +215,69 @@ class HomeStaffView extends GetView<HomeStaffController> {
               final dataSource = MtcSource(
                   model: controller.mtcModel,
                   onServis: (MtcModel model) async {
-                    if (model.status == '0') {
-                      final result = await Get.toNamed(Routes.SERVICE_BERKALA,
-                          arguments: {'id_mtc': model.id});
-
-                      if (result == true) {
-                        controller.getData();
-                      }
-                    } else if (model.status == '1') {
-                      Get.to(() => InputDataReal(idMtc: model.id));
-                    } else if (model.status == '2') {
+                    if (model.status == '3') {
                       // Generate dua jenis PDF
+                      print('Start generating PDF with header...');
+                      final startTime = DateTime.now();
                       final pdfBytesWithHeader =
                           await controller.generatePDF(model, withHeader: true);
 
                       final pdfBytesWithoutHeader = await controller
                           .generatePDF(model, withHeader: false);
 
+                      final endTime = DateTime.now();
+                      print(
+                          'PDF generated in ${endTime.difference(startTime).inMilliseconds} ms');
+
                       // Navigasi ke layar preview PDF
                       if (pdfBytesWithHeader.isNotEmpty &&
                           pdfBytesWithoutHeader.isNotEmpty) {
-                        // Dapatkan tanggal saat ini
-                        DateTime now = DateTime.now();
-
-                        // Format tanggal menjadi 1/8/2025
-                        String formattedDate = DateFormat('d/M/y').format(now);
                         Get.to(
                           () => PdfPreviewScreen(
                             pdfBytesWithHeader: pdfBytesWithHeader,
                             pdfBytesWithoutHeader: pdfBytesWithoutHeader,
-                            fileName: 'Acc-Service-Berkala-$formattedDate.pdf',
+                            fileName:
+                                'Acc-Service-Berkala-${DateFormat('dd MMM yyyy').format(DateTime.now())}.pdf',
                           ),
                         );
                       }
                     }
+                    // if (model.status == '0') {
+                    //   final result = await Get.toNamed(Routes.SERVICE_BERKALA,
+                    //       arguments: {'id_mtc': model.id});
+
+                    //   if (result == true) {
+                    //     controller.getData();
+                    //   }
+                    // } else if (model.status == '1') {
+                    //   Get.to(() => InputDataReal(idMtc: model.id));
+                    // } else if (model.status == '2') {
+                    //   // Generate dua jenis PDF
+                    //   print('Start generating PDF with header...');
+                    //   final startTime = DateTime.now();
+                    //   final pdfBytesWithHeader =
+                    //       await controller.generatePDF(model, withHeader: true);
+
+                    //   final pdfBytesWithoutHeader = await controller
+                    //       .generatePDF(model, withHeader: false);
+
+                    //   final endTime = DateTime.now();
+                    //   print(
+                    //       'PDF generated in ${endTime.difference(startTime).inMilliseconds} ms');
+
+                    //   // Navigasi ke layar preview PDF
+                    //   if (pdfBytesWithHeader.isNotEmpty &&
+                    //       pdfBytesWithoutHeader.isNotEmpty) {
+                    //     Get.to(
+                    //       () => PdfPreviewScreen(
+                    //         pdfBytesWithHeader: pdfBytesWithHeader,
+                    //         pdfBytesWithoutHeader: pdfBytesWithoutHeader,
+                    //         fileName:
+                    //             'Acc-Service-Berkala-${DateFormat('dd MMM yyyy').format(DateTime.now())}.pdf',
+                    //       ),
+                    //     );
+                    //   }
+                    // }
                   },
                   onEdit: (MtcModel model) {
                     Get.to(() => EditServiceBerkalaAdmin(model: model),

@@ -8,17 +8,18 @@ import '../../master part service/model/part_model.dart';
 import '../controller/service_berkala_controller.dart';
 import '../model/detail_service_model.dart';
 
-class EditDetailServiceBerkala extends StatefulWidget {
-  const EditDetailServiceBerkala({super.key, required this.model});
+class EditMasterDetailServiceBerkala extends StatefulWidget {
+  const EditMasterDetailServiceBerkala({super.key, required this.model});
 
   final DetailServiceModel model;
 
   @override
-  State<EditDetailServiceBerkala> createState() =>
+  State<EditMasterDetailServiceBerkala> createState() =>
       _EditDetailServiceBerkalaState();
 }
 
-class _EditDetailServiceBerkalaState extends State<EditDetailServiceBerkala> {
+class _EditDetailServiceBerkalaState
+    extends State<EditMasterDetailServiceBerkala> {
   late String id;
   late TextEditingController kmTargetC;
   late TextEditingController bulanTargetC;

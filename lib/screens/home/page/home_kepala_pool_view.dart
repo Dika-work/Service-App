@@ -10,6 +10,8 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../constant/custom_size.dart';
 import '../../../utils/theme/app_colors.dart';
+import '../../../utils/widget/dialogs.dart';
+import '../../service berkala/model/mtc_model.dart';
 import '../../service berkala/source/kpool_service_source.dart';
 
 class HomeKepalaPoolView extends GetView<HomeKepalaPoolController> {
@@ -193,19 +195,18 @@ class HomeKepalaPoolView extends GetView<HomeKepalaPoolController> {
                 );
               } else {
                 final dataSource = KpoolServiceSource(
-                  model: controller.mtcModel,
-                  // onAcc: (MtcModel model) {
-                  //   CustomDialogs.defaultDialog(
-                  //       context: context,
-                  //       onConfirm: () {
-                  //         controller.changeStatus(id: model.id);
-                  //         Navigator.of(context).pop();
-                  //       },
-                  //       titleWidget: const Text('Konfirmasi'),
-                  //       contentWidget: const Text(
-                  //           'Anda akan menkonfirmasi data yang terkait. Apakah anda yakin?'));
-                  // }
-                );
+                    model: controller.mtcModel,
+                    onAcc: (MtcModel model) {
+                      CustomDialogs.defaultDialog(
+                          context: context,
+                          onConfirm: () {
+                            controller.changeStatus(id: model.id);
+                            Navigator.of(context).pop();
+                          },
+                          titleWidget: const Text('Konfirmasi'),
+                          contentWidget: const Text(
+                              'Anda akan menkonfirmasi data yang terkait. Apakah anda yakin?'));
+                    });
 
                 return RefreshIndicator(
                   onRefresh: () async {
@@ -385,23 +386,23 @@ class HomeKepalaPoolView extends GetView<HomeKepalaPoolController> {
                                       .bodyMedium
                                       ?.copyWith(fontWeight: FontWeight.bold),
                                 ))),
-                        // if (controller.mtcModel.isNotEmpty)
-                        //   GridColumn(
-                        //       width: 120,
-                        //       columnName: 'Accept',
-                        //       label: Container(
-                        //           alignment: Alignment.center,
-                        //           decoration: BoxDecoration(
-                        //             border: Border.all(color: Colors.grey),
-                        //             color: Colors.lightBlue.shade100,
-                        //           ),
-                        //           child: Text(
-                        //             'Accept',
-                        //             style: Theme.of(context)
-                        //                 .textTheme
-                        //                 .bodyMedium
-                        //                 ?.copyWith(fontWeight: FontWeight.bold),
-                        //           ))),
+                        if (controller.mtcModel.isNotEmpty)
+                          GridColumn(
+                              width: 120,
+                              columnName: 'Accept',
+                              label: Container(
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.grey),
+                                    color: Colors.lightBlue.shade100,
+                                  ),
+                                  child: Text(
+                                    'Accept',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(fontWeight: FontWeight.bold),
+                                  ))),
                       ]),
                 );
               }

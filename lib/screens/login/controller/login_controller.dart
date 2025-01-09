@@ -72,7 +72,8 @@ class LoginController extends GetxController {
           Get.offAllNamed(Routes.HOME_SUPER_ADMIN);
         } else if (data['type_user'] == 'kpool') {
           Get.offAllNamed(Routes.HOME_KPOOL);
-        } else if (data['type_user'] == 'mekanik') {
+        } else if (data['type_user'] == 'mekanik' ||
+            data['type_user'] == 'pic') {
           Get.offAllNamed(Routes.HOME_MEKANIK);
         } else if (data['type_user'] == 'staff') {
           Get.offAllNamed(Routes.HOME_STAFF);

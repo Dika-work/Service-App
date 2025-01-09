@@ -34,7 +34,11 @@ class HomeMekanikController extends GetxController {
     canEdit = localStorage.read('edit') ?? '';
     canDelete = localStorage.read('delete') ?? '';
     typeUser.value = localStorage.read('type_user') ?? '';
-    getData();
+    if (typeUser.value == 'mekanik') {
+      getData();
+    } else if (typeUser.value == 'pic') {
+      getDataPic();
+    }
   }
 
   getData() async {
@@ -74,6 +78,30 @@ class HomeMekanikController extends GetxController {
           'Error getData: ${e.response?.data['message'] ?? 'Terjadi kesalahan'}');
     } finally {
       // Set loading ke false setelah selesai
+      isLoading.value = false;
+    }
+  }
+
+  getDataPic() async {
+    isLoading.value = true;
+
+    try {
+      final response = await _dio.get('/service');
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = response.data['data'];
+        mtcModel.value = data.map((e) => MtcModel.fromJson(e)).toList();
+        print('ini response user : ${mtcModel.toList()}');
+      }
+    } on diomultipart.DioException catch (e) {
+      SnackbarLoader.warningSnackBar(
+        title: 'Error',
+        message: e.response?.data['message'] ?? 'Terjadi kesalahan',
+      );
+
+      print(
+          'Error getAllUser: ${e.response?.data['message'] ?? 'Terjadi kesalahan'}');
+    } finally {
       isLoading.value = false;
     }
   }

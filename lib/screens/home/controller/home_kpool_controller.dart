@@ -53,38 +53,45 @@ class HomeKepalaPoolController extends GetxController {
     }
   }
 
-  // changeStatus({required String id}) async {
-  //   isLoading.value = true;
+  changeStatus({required String id}) async {
+    print('Mengubah status menjadi 3 untuk id_mtc: $id');
+    isLoading.value = true;
 
-  //   try {
-  //     final data = {
-  //       'id_mtc': id,
-  //       'status': '1',
-  //     };
-  //     final response = await _dio.put('/change-status', data: data);
+    try {
+      final data = {
+        'id_mtc': id,
+      };
 
-  //     if (response.statusCode == 200) {
-  //       await getData();
-  //       SnackbarLoader.successSnackBar(
-  //         title: 'Sukses',
-  //         message:
-  //             response.data['message'] ?? 'Lampiran MTC berhasil di konfirmasi',
-  //       );
-  //     } else {
-  //       SnackbarLoader.errorSnackBar(
-  //         title: 'Error',
-  //         message: response.data['message'] ?? 'Terjadi kesalahan',
-  //       );
-  //     }
-  //   } catch (e) {
-  //     SnackbarLoader.errorSnackBar(
-  //       title: 'Error',
-  //       message: 'Terjadi kesalahan: $e',
-  //     );
-  //   } finally {
-  //     isLoading.value = false;
-  //   }
-  // }
+      final response = await _dio.put(
+        '/change-status',
+        data: data,
+        options: diomultipart.Options(
+          headers: {'Content-Type': 'application/json'},
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        await getData(); // Refresh data setelah status diubah
+        SnackbarLoader.successSnackBar(
+          title: 'Sukses',
+          message: response.data['message'] ?? 'Status berhasil diperbarui',
+        );
+      } else {
+        SnackbarLoader.errorSnackBar(
+          title: 'Error',
+          message: response.data['message'] ?? 'Gagal memperbarui status',
+        );
+      }
+    } catch (e) {
+      SnackbarLoader.errorSnackBar(
+        title: 'Error',
+        message: 'Terjadi kesalahan: $e',
+      );
+      print('Error changeStatus: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
 
   logout() {
     localStorage.remove('username');

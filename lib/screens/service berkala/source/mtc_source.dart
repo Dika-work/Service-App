@@ -99,9 +99,10 @@ class MtcSource extends DataGridSource {
                   ),
                 ),
               ),
-            if (model[rowIndex].status == '2' && typeUser == 'mekanik')
-              const Icon(Icons.check),
             if (model[rowIndex].status == '2' &&
+                (typeUser == 'mekanik' || typeUser == 'pic'))
+              const Icon(Icons.check),
+            if (model[rowIndex].status == '3' &&
                 (typeUser == 'admin' || typeUser == 'staff'))
               SizedBox(
                 height: 60,
@@ -150,7 +151,26 @@ class MtcSource extends DataGridSource {
                   ),
                 ),
               ),
-            if (model[rowIndex].status == '1') const SizedBox.shrink(),
+            if (model[rowIndex].status == '1')
+              SizedBox(
+                height: 60,
+                width: 100,
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (onEdit != null) {
+                      onEdit!(model[rowIndex]);
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.warning,
+                    padding: const EdgeInsets.all(8.0),
+                  ),
+                  child: const Text(
+                    'EDIT\nSB',
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
             if (model[rowIndex].status == '2') const Icon(Icons.check),
             // if (model[rowIndex].status == '2' && typeUser == 'mekanik')
             //   const Icon(Icons.check),

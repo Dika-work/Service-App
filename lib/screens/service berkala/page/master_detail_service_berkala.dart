@@ -10,7 +10,7 @@ import '../../master part service/model/part_model.dart';
 import '../controller/service_berkala_controller.dart';
 import '../model/detail_service_model.dart';
 import '../source/detail_service_berkala_source.dart';
-import 'edit_detail_service_berkala.dart';
+import 'edit_master_detail_service_berkala.dart';
 
 class MasterDetailServiceBerkala extends GetView<ServiceBerkalaController> {
   const MasterDetailServiceBerkala({super.key});
@@ -262,7 +262,7 @@ class MasterDetailServiceBerkala extends GetView<ServiceBerkalaController> {
                 showDialog(
                     context: context,
                     builder: (_) {
-                      return EditDetailServiceBerkala(model: model);
+                      return EditMasterDetailServiceBerkala(model: model);
                     });
               },
               onDelete: (DetailServiceModel model) {

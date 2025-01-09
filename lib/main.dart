@@ -29,7 +29,7 @@ void main() async {
       initialLocation = Routes.HOME_SUPER_ADMIN;
     } else if (typeUser == 'kpool') {
       initialLocation = Routes.HOME_KPOOL;
-    } else if (typeUser == 'mekanik') {
+    } else if (typeUser == 'mekanik' || typeUser == 'pic') {
       initialLocation = Routes.HOME_MEKANIK;
     } else if (typeUser == 'staff') {
       initialLocation = Routes.HOME_STAFF;

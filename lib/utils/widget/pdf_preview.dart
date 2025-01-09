@@ -83,6 +83,8 @@ class _PdfPreviewScreenState extends State<PdfPreviewScreen>
               isWithHeaderSelected
                   ? widget.pdfBytesWithHeader
                   : widget.pdfBytesWithoutHeader,
+              canShowPaginationDialog: false,
+              enableDoubleTapZooming: false,
             ),
           ),
           const SizedBox(height: 10),
@@ -160,44 +162,33 @@ class _PdfPreviewScreenState extends State<PdfPreviewScreen>
   }) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        width: 150,
-        height: 200, // Ukuran untuk thumbnail PDF
-        decoration: BoxDecoration(
-          border: isSelected
-              ? Border.all(color: Colors.blue, width: 3) // Border jika dipilih
-              : Border.all(color: Colors.transparent, width: 3),
-        ),
-        child: Stack(
-          children: [
-            // Tampilkan thumbnail PDF
-            Positioned.fill(
-              child: SfPdfViewer.memory(
-                pdfBytes,
-                canShowPaginationDialog: false,
-                canShowScrollHead: false,
-                enableDoubleTapZooming: false,
+      child: Column(
+        children: [
+          Container(
+            width: 150,
+            height: 200,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: isSelected ? Colors.blue : Colors.transparent,
+                width: 3,
               ),
             ),
-            // Label di bawah thumbnail
-            isSelected
-                ? const SizedBox.shrink()
-                : Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Container(
-                      width: double.infinity,
-                      color: Colors.black.withOpacity(0.5),
-                      padding: const EdgeInsets.all(5),
-                      child: Text(
-                        title,
-                        style:
-                            const TextStyle(color: Colors.white, fontSize: 10),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-          ],
-        ),
+            child: SfPdfViewer.memory(
+              pdfBytes,
+              canShowPaginationDialog: false,
+              canShowScrollHead: false,
+              enableDoubleTapZooming: false,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            title,
+            style: TextStyle(
+              color: isSelected ? Colors.blue : Colors.black,
+              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+            ),
+          ),
+        ],
       ),
     );
   }

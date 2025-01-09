@@ -13,6 +13,7 @@ import '../../../utils/theme/app_colors.dart';
 import '../../../utils/widget/dialogs.dart';
 import '../../data real/page/input_data_real.dart';
 import '../../service berkala/model/mtc_model.dart';
+import '../../service berkala/page/edit_sb.dart';
 import '../../service berkala/page/edit_service_berkala.dart';
 import '../../service berkala/source/mtc_source.dart';
 
@@ -36,10 +37,17 @@ class HomeMekanikView extends GetView<HomeMekanikController> {
             if (controller.canAdd == '1')
               GestureDetector(
                 onTap: () async {
+                  print(
+                      'TypeUser saat TAMBAH MTC dipanggil: ${controller.typeUser.value}');
+
                   final result = await Get.toNamed(Routes.ADD_MTC);
 
                   if (result == true) {
-                    controller.getData();
+                    if (controller.typeUser.value == 'mekanik') {
+                      controller.getData();
+                    } else if (controller.typeUser.value == 'pic') {
+                      controller.getDataPic();
+                    }
                   }
                 },
                 child: Container(
@@ -225,20 +233,41 @@ class HomeMekanikView extends GetView<HomeMekanikController> {
                           arguments: {'id_mtc': model.id});
 
                       if (result == true) {
-                        controller.getData();
+                        if (controller.typeUser.value == 'mekanik') {
+                          controller.getData();
+                        } else if (controller.typeUser.value == 'pic') {
+                          controller.getDataPic();
+                        }
                       }
                     } else if (model.status == '1') {
                       final result =
                           await Get.to(() => InputDataReal(idMtc: model.id));
 
                       if (result == true) {
-                        controller.getData();
+                        if (controller.typeUser.value == 'mekanik') {
+                          controller.getData();
+                        } else if (controller.typeUser.value == 'pic') {
+                          controller.getDataPic();
+                        }
                       }
                     }
                   },
-                  onEdit: (MtcModel model) {
-                    Get.to(() => EditServiceBerkalaMekanik(model: model),
-                        transition: Transition.fadeIn);
+                  onEdit: (MtcModel model) async {
+                    if (model.status == '0') {
+                      Get.to(() => EditServiceBerkalaMekanik(model: model),
+                          transition: Transition.fadeIn);
+                    } else if (model.status == '1') {
+                      final result =
+                          await Get.to(() => EditDetailSB(idMtc: model.id));
+
+                      if (result == true) {
+                        if (controller.typeUser.value == 'mekanik') {
+                          controller.getData();
+                        } else if (controller.typeUser.value == 'pic') {
+                          controller.getDataPic();
+                        }
+                      }
+                    }
                   },
                   onDelete: (MtcModel model) {
                     CustomDialogs.deleteDialog(

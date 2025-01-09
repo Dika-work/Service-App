@@ -305,8 +305,12 @@ class HomeSuperAdmin extends GetView<HomeSuperAdminController> {
                     }
                   },
                   onEdit: (MtcModel model) {
-                    Get.to(() => EditServiceBerkalaAdmin(model: model),
-                        transition: Transition.fadeIn);
+                    if (model.status == '0') {
+                      Get.to(() => EditServiceBerkalaMekanik(model: model),
+                          transition: Transition.fadeIn);
+                    } else if (model.status == '1') {
+                      print('INI AKAN NAVIGATE KE EDIT STATUS BARANG');
+                    }
                   },
                   onDelete: (MtcModel model) {
                     CustomDialogs.deleteDialog(

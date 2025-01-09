@@ -66,39 +66,43 @@ class DataRealController extends GetxController {
 
       // Iterasi melalui semua item di realModel
       for (int i = 0; i < realModel.length; i++) {
-        // Validasi input
-        if (kmRealControllers[i].text.isEmpty ||
-            waktuBulanRealControllers[i].text.isEmpty ||
-            kondisiFisikRealControllers[i].text.isEmpty ||
-            qtyRealControllers[i].text.isEmpty ||
-            keteranganControllers[i].text.isEmpty) {
-          Get.snackbar('Error', 'Semua field harus diisi.');
-          return; // Hentikan eksekusi jika ada field yang kosong
+        final data = realModel[i];
+
+        // Validasi input hanya jika statusService != '1'
+        if (data.statusService != '1') {
+          if (kmRealControllers[i].text.isEmpty ||
+              waktuBulanRealControllers[i].text.isEmpty ||
+              kondisiFisikRealControllers[i].text.isEmpty ||
+              qtyRealControllers[i].text.isEmpty ||
+              keteranganControllers[i].text.isEmpty) {
+            Get.snackbar('Error', 'Semua field yang diperlukan harus diisi.');
+            return; // Hentikan eksekusi jika ada field yang kosong
+          }
         }
 
+        // Tambahkan data ke list transaksiData
         transaksiData.add({
-          'id_transaksi': realModel[i].idTransaksi,
-          'id_mtc': realModel[i].idMtc,
-          'km_real': kmRealControllers[i].text,
-          'monthly_real': waktuBulanRealControllers[i].text,
-          'physical_condition_real': kondisiFisikRealControllers[i].text,
-          'quantity_real': qtyRealControllers[i].text,
+          'id_transaksi': data.idTransaksi,
+          'id_mtc': data.idMtc,
+          'km_real':
+              data.statusService != '1' ? kmRealControllers[i].text : '-',
+          'monthly_real': data.statusService != '1'
+              ? waktuBulanRealControllers[i].text
+              : '-',
+          'physical_condition_real': data.statusService != '1'
+              ? kondisiFisikRealControllers[i].text
+              : '-',
+          'quantity_real':
+              data.statusService != '1' ? qtyRealControllers[i].text : '-',
           'keterangan': keteranganControllers[i].text,
         });
-        print('ID Transaksi: ${realModel[i].idTransaksi}');
-        print('ID Mtc: ${realModel[i].idMtc}');
-        print('KM Real: ${kmRealControllers[i].text}');
-        print('Monthly Real: ${waktuBulanRealControllers[i].text}');
-        print('Physical Condition: ${kondisiFisikRealControllers[i].text}');
-        print('Quantity Real: ${qtyRealControllers[i].text}');
-        print('Keterangan: ${keteranganControllers[i].text}');
       }
 
       final data = {
         'transaksi': transaksiData,
       };
 
-      // Pastikan Content-Type yang benar untuk JSON
+      // Kirim data ke server
       final response = await _dio.put(
         '/update-transaksi-real',
         data: data,
@@ -120,6 +124,68 @@ class DataRealController extends GetxController {
             message: 'Gagal memperbarui transaksi: ${response.data}');
       }
     } on diomultipart.DioException catch (e) {
+      SnackbarLoader.errorSnackBar(
+          title: 'Error',
+          message:
+              e.response?.data['message'] ?? 'Gagal memperbarui transaksi');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> updateTransaksiDetailSb(String idMtc) async {
+    isLoading.value = true;
+
+    try {
+      // Pastikan realModel tidak kosong
+      if (realModel.isEmpty) {
+        SnackbarLoader.warningSnackBar(
+            title: 'Error', message: 'Tidak ada data untuk diperbarui.');
+        return;
+      }
+
+      // List untuk menyimpan data setiap item
+      List<Map<String, dynamic>> transaksiData = [];
+
+      // Iterasi dan ambil status terbaru dari realModel
+      for (final data in realModel) {
+        transaksiData.add({
+          'id_transaksi': data.idTransaksi, // Pastikan id_transaksi ada
+          'status_service': data.statusService, // Gunakan status terbaru
+        });
+      }
+
+      final requestData = {
+        'id_mtc': idMtc,
+        'data': transaksiData,
+      };
+
+      // Kirim request PUT ke server
+      final response = await _dio.put(
+        '/update-status-service',
+        data: requestData,
+        options: diomultipart.Options(
+          headers: {'Content-Type': 'application/json'},
+        ),
+      );
+
+      // Log response untuk debugging
+      print('Response Status Code: ${response.statusCode}');
+      print('Response Data: ${response.data}');
+
+      if (response.statusCode == 200) {
+        Get.back(result: true);
+        SnackbarLoader.successSnackBar(
+            title: 'Berhasil', message: 'Data berhasil diperbarui.');
+      } else {
+        SnackbarLoader.warningSnackBar(
+            title: 'Error',
+            message: 'Gagal memperbarui transaksi: ${response.data}');
+      }
+    } on diomultipart.DioException catch (e) {
+      // Tangani error jika ada
+      print('DioException: ${e.message}');
+      print('DioException Response: ${e.response?.data}');
       SnackbarLoader.errorSnackBar(
           title: 'Error',
           message:

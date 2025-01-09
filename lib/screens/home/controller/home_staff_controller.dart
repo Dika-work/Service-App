@@ -167,6 +167,185 @@ class HomeStaffController extends GetxController {
                     ]),
                   ],
                 ),
+                pw.SizedBox(height: 20),
+                pw.Table(
+                  border: pw.TableBorder.all(),
+                  columnWidths: {
+                    0: const pw.FixedColumnWidth(30),
+                    1: const pw.FlexColumnWidth(1),
+                    2: const pw.FlexColumnWidth(2),
+                    3: const pw.FlexColumnWidth(30),
+                    4: const pw.FlexColumnWidth(1),
+                    5: const pw.FlexColumnWidth(2),
+                    6: const pw.FlexColumnWidth(2),
+                    7: const pw.FlexColumnWidth(2),
+                    8: const pw.FlexColumnWidth(2),
+                    9: const pw.FlexColumnWidth(2),
+                    10: const pw.FlexColumnWidth(2),
+                  },
+                  children: [
+                    pw.TableRow(children: [
+                      pw.Padding(
+                        padding: const pw.EdgeInsets.all(4),
+                        child: pw.Text('1',
+                            textAlign: pw.TextAlign.center,
+                            style: pw.TextStyle(font: ttfRegular)),
+                      ),
+                      pw.Padding(
+                        padding: const pw.EdgeInsets.all(4),
+                        child: pw.Text('NO POLISI',
+                            textAlign: pw.TextAlign.left,
+                            style: pw.TextStyle(font: ttfRegular)),
+                      ),
+                      pw.Padding(
+                        padding: const pw.EdgeInsets.all(4),
+                        child: pw.Text(selectedData.noPolisi,
+                            textAlign: pw.TextAlign.left,
+                            style: pw.TextStyle(font: ttfRegular)),
+                      ),
+                    ]),
+                    pw.TableRow(children: [
+                      pw.Padding(
+                        padding: const pw.EdgeInsets.all(4),
+                        child: pw.Text('2',
+                            textAlign: pw.TextAlign.center,
+                            style: pw.TextStyle(font: ttfRegular)),
+                      ),
+                      pw.Padding(
+                        padding: const pw.EdgeInsets.all(4),
+                        child: pw.Text('KM TERAKHIR SERVICE',
+                            textAlign: pw.TextAlign.left,
+                            style: pw.TextStyle(font: ttfRegular)),
+                      ),
+                      pw.Padding(
+                        padding: const pw.EdgeInsets.all(4),
+                        child: pw.Text(selectedData.lastService,
+                            textAlign: pw.TextAlign.left,
+                            style: pw.TextStyle(font: ttfRegular)),
+                      ),
+                    ]),
+                    pw.TableRow(children: [
+                      pw.Padding(
+                        padding: const pw.EdgeInsets.all(4),
+                        child: pw.Text('3',
+                            textAlign: pw.TextAlign.center,
+                            style: pw.TextStyle(font: ttfRegular)),
+                      ),
+                      pw.Padding(
+                        padding: const pw.EdgeInsets.all(4),
+                        child: pw.Text('KM SAAT INI',
+                            textAlign: pw.TextAlign.left,
+                            style: pw.TextStyle(font: ttfRegular)),
+                      ),
+                      pw.Padding(
+                        padding: const pw.EdgeInsets.all(4),
+                        child: pw.Text(selectedData.nowKm,
+                            textAlign: pw.TextAlign.left,
+                            style: pw.TextStyle(font: ttfRegular)),
+                      ),
+                    ]),
+                    pw.TableRow(children: [
+                      pw.Padding(
+                        padding: const pw.EdgeInsets.all(4),
+                        child: pw.Text('4',
+                            textAlign: pw.TextAlign.center,
+                            style: pw.TextStyle(font: ttfRegular)),
+                      ),
+                      pw.Padding(
+                        padding: const pw.EdgeInsets.all(4),
+                        child: pw.Text('KM SERVIS SELANJUTNYA',
+                            textAlign: pw.TextAlign.left,
+                            style: pw.TextStyle(font: ttfRegular)),
+                      ),
+                      pw.Padding(
+                        padding: const pw.EdgeInsets.all(4),
+                        child: pw.Text(selectedData.nextService,
+                            textAlign: pw.TextAlign.left,
+                            style: pw.TextStyle(font: ttfRegular)),
+                      ),
+                    ]),
+                    pw.TableRow(children: [
+                      pw.Padding(
+                        padding: const pw.EdgeInsets.all(4),
+                        child: pw.Text('5',
+                            textAlign: pw.TextAlign.center,
+                            style: pw.TextStyle(font: ttfRegular)),
+                      ),
+                      pw.Padding(
+                        padding: const pw.EdgeInsets.all(4),
+                        child: pw.Text('JENIS MOBIL',
+                            textAlign: pw.TextAlign.left,
+                            style: pw.TextStyle(font: ttfRegular)),
+                      ),
+                      pw.Padding(
+                        padding: const pw.EdgeInsets.all(4),
+                        child: pw.Text(selectedData.jenisKen,
+                            textAlign: pw.TextAlign.left,
+                            style: pw.TextStyle(font: ttfRegular)),
+                      ),
+                    ]),
+                    pw.TableRow(children: [
+                      pw.Padding(
+                        padding: const pw.EdgeInsets.all(4),
+                        child: pw.Text('6',
+                            textAlign: pw.TextAlign.center,
+                            style: pw.TextStyle(font: ttfRegular)),
+                      ),
+                      pw.Padding(
+                        padding: const pw.EdgeInsets.all(4),
+                        child: pw.Text('TIPE MOBIL',
+                            textAlign: pw.TextAlign.left,
+                            style: pw.TextStyle(font: ttfRegular)),
+                      ),
+                      pw.Padding(
+                        padding: const pw.EdgeInsets.all(4),
+                        child: pw.Text(selectedData.typeKen,
+                            textAlign: pw.TextAlign.left,
+                            style: pw.TextStyle(font: ttfRegular)),
+                      ),
+                    ]),
+                    pw.TableRow(children: [
+                      pw.Padding(
+                        padding: const pw.EdgeInsets.all(4),
+                        child: pw.Text('7',
+                            textAlign: pw.TextAlign.center,
+                            style: pw.TextStyle(font: ttfRegular)),
+                      ),
+                      pw.Padding(
+                        padding: const pw.EdgeInsets.all(4),
+                        child: pw.Text('DRIVER/KENEK',
+                            textAlign: pw.TextAlign.left,
+                            style: pw.TextStyle(font: ttfRegular)),
+                      ),
+                      pw.Padding(
+                        padding: const pw.EdgeInsets.all(4),
+                        child: pw.Text(selectedData.driver,
+                            textAlign: pw.TextAlign.left,
+                            style: pw.TextStyle(font: ttfRegular)),
+                      ),
+                    ]),
+                    pw.TableRow(children: [
+                      pw.Padding(
+                        padding: const pw.EdgeInsets.all(4),
+                        child: pw.Text('8',
+                            textAlign: pw.TextAlign.center,
+                            style: pw.TextStyle(font: ttfRegular)),
+                      ),
+                      pw.Padding(
+                        padding: const pw.EdgeInsets.all(4),
+                        child: pw.Text('NO BUNTUT',
+                            textAlign: pw.TextAlign.left,
+                            style: pw.TextStyle(font: ttfRegular)),
+                      ),
+                      pw.Padding(
+                        padding: const pw.EdgeInsets.all(4),
+                        child: pw.Text(selectedData.noBuntut,
+                            textAlign: pw.TextAlign.left,
+                            style: pw.TextStyle(font: ttfRegular)),
+                      ),
+                    ]),
+                  ],
+                ),
               ],
             ),
           );
