@@ -1,5 +1,9 @@
 import 'package:get/get.dart';
 
+import '../screens/master kendaraan/controller/master_kendaraan_controller.dart';
+import '../screens/master keterangan/controller/master_keterangan_controller.dart';
+import '../screens/master type item/controller/master_type_item_controller.dart';
+import '../screens/satuan/controller/master_satuan_controller.dart';
 import '../screens/group user/controller/group_user_controller.dart';
 import '../screens/home/controller/home_kpool_controller.dart';
 import '../screens/home/controller/home_mekanik_controller.dart';
@@ -86,5 +90,33 @@ class AllMtcBinding extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut<AllMtcController>(() => AllMtcController());
+  }
+}
+
+class SatuanBinding extends Bindings {
+  @override
+  void dependencies() {
+    Get.lazyPut<MasterSatuanController>(() => MasterSatuanController());
+  }
+}
+
+class MasterKendaraanBinding extends Bindings {
+  @override
+  void dependencies() {
+    Get.lazyPut<MasterKendaraanController>(() => MasterKendaraanController());
+  }
+}
+
+class MasterTypeItemBinding extends Bindings {
+  @override
+  void dependencies() {
+    Get.lazyPut<MasterTypeItemController>(() => MasterTypeItemController());
+  }
+}
+
+class MasterKeteranganBinding extends Bindings {
+  @override
+  void dependencies() {
+    Get.lazyPut<MasterKeteranganController>(() => MasterKeteranganController());
   }
 }

@@ -32,8 +32,10 @@ class _InputDataRealState extends State<InputDataReal> {
       case '1':
         return 'CEK';
       case '2':
-        return 'REPAIR';
+        return 'BONGKAR';
       case '3':
+        return 'REPAIR';
+      case '4':
         return 'GANTI';
       default:
         return 'Status Tidak Diketahui';
@@ -102,207 +104,319 @@ class _InputDataRealState extends State<InputDataReal> {
                     border: Border.all(width: 1, color: Colors.black)),
                 child: Column(
                   children: [
-                    Row(
-                      children: [
-                        Expanded(
-                            child: TextFormField(
-                          controller: TextEditingController(
-                              text: data.deskripsiPengecekan.toUpperCase()),
-                          keyboardType: TextInputType.none,
-                          readOnly: true,
-                          decoration: InputDecoration(
-                            label: Text('Deskripsi Pengecekan',
-                                style: Theme.of(context).textTheme.labelMedium),
-                          ),
-                        )),
-                        const SizedBox(width: CustomSize.sm),
-                        Expanded(
-                            child: TextFormField(
-                          controller:
-                              TextEditingController(text: data.kmTarget),
-                          keyboardType: TextInputType.none,
-                          readOnly: true,
-                          decoration: InputDecoration(
-                            label: Text('KM STANDART',
-                                style: Theme.of(context).textTheme.labelMedium),
-                          ),
-                        )),
-                      ],
+                    Text(
+                      'STANDART SERVICE',
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w400, color: Colors.black),
+                    ),
+                    const Divider(height: CustomSize.dividerHeight),
+                    Padding(
+                      padding: const EdgeInsets.only(top: CustomSize.sm),
+                      child: Row(
+                        children: [
+                          Expanded(
+                              child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Nama Item',
+                                  style:
+                                      Theme.of(context).textTheme.labelMedium),
+                              TextFormField(
+                                controller: TextEditingController(
+                                    text:
+                                        data.deskripsiPengecekan.toUpperCase()),
+                                keyboardType: TextInputType.none,
+                                readOnly: true,
+                                decoration: const InputDecoration(
+                                  filled: true,
+                                  fillColor: AppColors.buttonDisabled,
+                                ),
+                              ),
+                            ],
+                          )),
+                          const SizedBox(width: CustomSize.sm),
+                          Expanded(
+                              child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('KM STANDART',
+                                  style:
+                                      Theme.of(context).textTheme.labelMedium),
+                              TextFormField(
+                                controller:
+                                    TextEditingController(text: data.kmTarget),
+                                keyboardType: TextInputType.none,
+                                readOnly: true,
+                                decoration: const InputDecoration(
+                                  filled: true,
+                                  fillColor: AppColors.buttonDisabled,
+                                ),
+                              ),
+                            ],
+                          )),
+                        ],
+                      ),
                     ),
                     const SizedBox(height: CustomSize.sm),
                     Row(
                       children: [
                         Expanded(
-                            child: TextFormField(
-                          controller:
-                              TextEditingController(text: data.bulanTarget),
-                          keyboardType: TextInputType.none,
-                          readOnly: true,
-                          decoration: InputDecoration(
-                            label: Text('TARGET (BULAN)',
+                            child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('TARGET (BULAN)',
                                 style: Theme.of(context).textTheme.labelMedium),
-                          ),
+                            TextFormField(
+                              controller:
+                                  TextEditingController(text: data.bulanTarget),
+                              keyboardType: TextInputType.none,
+                              readOnly: true,
+                              decoration: const InputDecoration(
+                                filled: true,
+                                fillColor: AppColors.buttonDisabled,
+                              ),
+                            ),
+                          ],
                         )),
                         const SizedBox(width: CustomSize.sm),
                         Expanded(
-                            child: TextFormField(
-                          controller:
-                              TextEditingController(text: data.tahunTarget),
-                          keyboardType: TextInputType.none,
-                          readOnly: true,
-                          decoration: InputDecoration(
-                            label: Text('Target (TAHUN)',
+                            child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Target (TAHUN)',
                                 style: Theme.of(context).textTheme.labelMedium),
-                          ),
+                            TextFormField(
+                              controller:
+                                  TextEditingController(text: data.tahunTarget),
+                              keyboardType: TextInputType.none,
+                              readOnly: true,
+                              decoration: const InputDecoration(
+                                filled: true,
+                                fillColor: AppColors.buttonDisabled,
+                              ),
+                            ),
+                          ],
                         )),
                       ],
                     ),
                     const SizedBox(height: CustomSize.sm),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text('KONDISI FISIK BAGUS',
+                          style: Theme.of(context).textTheme.labelMedium),
+                    ),
                     TextFormField(
                       controller: TextEditingController(
-                          text: data.kondisiFisik.toUpperCase()),
+                          text: data.kondisiFisikBagus.toUpperCase()),
                       keyboardType: TextInputType.none,
                       readOnly: true,
                       maxLines: 10,
                       minLines: 1,
-                      decoration: InputDecoration(
-                        label: Text('FISIK (CIRI KHUSUS)',
-                            style: Theme.of(context).textTheme.labelMedium),
+                      decoration: const InputDecoration(
+                        filled: true,
+                        fillColor: AppColors.buttonDisabled,
+                      ),
+                    ),
+                    const SizedBox(height: CustomSize.sm),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text('KONDISI FISIK JELEK',
+                          style: Theme.of(context).textTheme.labelMedium),
+                    ),
+                    TextFormField(
+                      controller: TextEditingController(
+                          text: data.kondisiFisikJelek.toUpperCase()),
+                      keyboardType: TextInputType.none,
+                      readOnly: true,
+                      maxLines: 10,
+                      minLines: 1,
+                      decoration: const InputDecoration(
+                        filled: true,
+                        fillColor: AppColors.buttonDisabled,
                       ),
                     ),
                     const SizedBox(height: CustomSize.sm),
                     Row(
                       children: [
                         Expanded(
-                            child: TextFormField(
-                          controller: TextEditingController(
-                              text: data.quantity.toUpperCase()),
-                          keyboardType: TextInputType.none,
-                          readOnly: true,
-                          decoration: InputDecoration(
-                            label: Text('QTY DI KENDARAAN',
-                                style: Theme.of(context).textTheme.labelMedium),
-                          ),
+                            child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Align(
+                              alignment: Alignment.bottomLeft,
+                              child: Text('QTY DI KENDARAAN',
+                                  style:
+                                      Theme.of(context).textTheme.labelMedium),
+                            ),
+                            TextFormField(
+                              controller: TextEditingController(
+                                  text: data.quantity.toUpperCase()),
+                              keyboardType: TextInputType.none,
+                              readOnly: true,
+                              decoration: const InputDecoration(
+                                filled: true,
+                                fillColor: AppColors.buttonDisabled,
+                              ),
+                            ),
+                          ],
                         )),
                         const SizedBox(width: CustomSize.sm),
                         Expanded(
-                            child: TextFormField(
-                          controller: TextEditingController(
-                              text: getStatusDescription(data.statusService)),
-                          keyboardType: TextInputType.none,
-                          readOnly: true,
-                          decoration: InputDecoration(
-                            label: Text('STATUS',
+                            child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('STATUS',
                                 style: Theme.of(context).textTheme.labelMedium),
-                          ),
+                            TextFormField(
+                              controller: TextEditingController(
+                                  text:
+                                      getStatusDescription(data.statusService)),
+                              keyboardType: TextInputType.none,
+                              readOnly: true,
+                              decoration: const InputDecoration(
+                                filled: true,
+                                fillColor: AppColors.buttonDisabled,
+                              ),
+                            ),
+                          ],
                         )),
                       ],
                     ),
-                    const SizedBox(height: CustomSize.sm),
-                    if (data.statusService != '1')
-                      Row(
-                        children: [
-                          Expanded(
-                            child: TextFormField(
-                              controller: controller.kmRealControllers[index],
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return '* Bagian ini tidak boleh kosong';
-                                }
-                                return null;
-                              },
-                              keyboardType: TextInputType.text,
-                              decoration: InputDecoration(
-                                label: Text('KM',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .labelMedium),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: CustomSize.sm),
-                          Expanded(
-                            child: TextFormField(
-                              controller:
-                                  controller.waktuBulanRealControllers[index],
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return '* Bagian ini tidak boleh kosong';
-                                }
-                                return null;
-                              },
-                              keyboardType: TextInputType.text,
-                              decoration: InputDecoration(
-                                label: Text('WAKTU (BULAN)',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .labelMedium),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    if (data.statusService != '1')
+                    if (data.statusService == '4')
                       const SizedBox(height: CustomSize.sm),
-                    if (data.statusService != '1')
-                      Row(
-                        children: [
-                          Expanded(
-                            child: TextFormField(
-                              controller:
-                                  controller.kondisiFisikRealControllers[index],
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return '* Bagian ini tidak boleh kosong';
-                                }
-                                return null;
-                              },
-                              keyboardType: TextInputType.text,
-                              decoration: InputDecoration(
-                                label: Text('FISIK (CIRI KHUSUS)',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .labelMedium),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: CustomSize.sm),
-                          Expanded(
-                            child: TextFormField(
-                              controller: controller.qtyRealControllers[index],
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return '* Bagian ini tidak boleh kosong';
-                                }
-                                return null;
-                              },
-                              keyboardType: TextInputType.text,
-                              decoration: InputDecoration(
-                                label: Text('QTY',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .labelMedium),
-                              ),
-                            ),
-                          ),
-                        ],
+                    if (data.statusService == '4')
+                      Text(
+                        'STANDART SERVICE',
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium
+                            ?.copyWith(
+                                fontWeight: FontWeight.w400,
+                                color: Colors.black),
                       ),
-                    if (data.statusService != '1')
+                    const Divider(height: CustomSize.dividerHeight),
+                    if (data.statusService == '4')
+                      Padding(
+                        padding: const EdgeInsets.only(top: CustomSize.sm),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('KM',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelMedium),
+                                  TextFormField(
+                                    controller:
+                                        controller.kmRealControllers[index],
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return '* Bagian ini tidak boleh kosong';
+                                      }
+                                      return null;
+                                    },
+                                    keyboardType: TextInputType.text,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: CustomSize.sm),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('WAKTU (BULAN)',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelMedium),
+                                  TextFormField(
+                                    controller: controller
+                                        .waktuBulanRealControllers[index],
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return '* Bagian ini tidak boleh kosong';
+                                      }
+                                      return null;
+                                    },
+                                    keyboardType: TextInputType.text,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    if (data.statusService == '4')
                       const SizedBox(height: CustomSize.sm),
-                    TextFormField(
-                      controller: controller.keteranganControllers[index],
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return '* Bagian ini tidak boleh kosong';
-                        }
-                        return null;
-                      },
-                      keyboardType: TextInputType.text,
-                      decoration: InputDecoration(
-                        label: Text('KETERANGAN',
+                    if (data.statusService == '4')
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text('FISIK (CIRI KHUSUS)',
                             style: Theme.of(context).textTheme.labelMedium),
                       ),
-                    ),
+                    if (data.statusService == '4')
+                      TextFormField(
+                        controller:
+                            controller.kondisiFisikRealControllers[index],
+                        maxLines: 10,
+                        minLines: 1,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return '* Bagian ini tidak boleh kosong';
+                          }
+                          return null;
+                        },
+                        keyboardType: TextInputType.text,
+                      ),
+                    if (data.statusService == '4')
+                      const SizedBox(height: CustomSize.sm),
+                    if (data.statusService == '4')
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text('QTY',
+                            style: Theme.of(context).textTheme.labelMedium),
+                      ),
+                    if (data.statusService == '4')
+                      TextFormField(
+                        controller: controller.qtyRealControllers[index],
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return '* Bagian ini tidak boleh kosong';
+                          }
+                          return null;
+                        },
+                        keyboardType: TextInputType.text,
+                      ),
+                    if (data.statusService == '4')
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text('** qty <= standart',
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelMedium
+                                ?.apply(color: Colors.red)),
+                      ),
+                    if (data.statusService == '4')
+                      const SizedBox(height: CustomSize.sm),
+                    if (data.statusService == '4')
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text('KETERANGAN',
+                            style: Theme.of(context).textTheme.labelMedium),
+                      ),
+                    if (data.statusService == '4')
+                      TextFormField(
+                        controller: controller.keteranganControllers[index],
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return '* Bagian ini tidak boleh kosong';
+                          }
+                          return null;
+                        },
+                        keyboardType: TextInputType.text,
+                      ),
                   ],
                 ),
               );

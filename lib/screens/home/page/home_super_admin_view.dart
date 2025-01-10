@@ -14,6 +14,7 @@ import '../../../utils/widget/dialogs.dart';
 import '../../../utils/widget/expandable_container.dart';
 import '../../data real/page/input_data_real.dart';
 import '../../service berkala/model/mtc_model.dart';
+import '../../service berkala/page/edit_sb.dart';
 import '../../service berkala/page/edit_service_berkala.dart';
 import '../../service berkala/source/mtc_source.dart';
 
@@ -229,6 +230,20 @@ class HomeSuperAdmin extends GetView<HomeSuperAdminController> {
                             ?.copyWith(color: AppColors.black),
                       ),
                     ),
+                    ListTile(
+                      onTap: () => Get.toNamed(Routes.MASTER_TYPE_ITEM),
+                      leading: const Icon(
+                        Iconsax.record,
+                        color: AppColors.black,
+                      ),
+                      title: Text(
+                        'Master Type Kategori',
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleSmall
+                            ?.copyWith(color: AppColors.black),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -240,6 +255,48 @@ class HomeSuperAdmin extends GetView<HomeSuperAdminController> {
                 ),
                 title: Text(
                   'Seluruh MTC',
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleSmall
+                      ?.copyWith(color: AppColors.black),
+                ),
+              ),
+              ListTile(
+                onTap: () => Get.toNamed(Routes.MASTER_KENDARAAN),
+                leading: const Icon(
+                  Iconsax.record,
+                  color: AppColors.black,
+                ),
+                title: Text(
+                  'Master Jenis Kendaraan',
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleSmall
+                      ?.copyWith(color: AppColors.black),
+                ),
+              ),
+              ListTile(
+                onTap: () => Get.toNamed(Routes.MASTER_KETERANGAN),
+                leading: const Icon(
+                  Iconsax.record,
+                  color: AppColors.black,
+                ),
+                title: Text(
+                  'Master Keterangan',
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleSmall
+                      ?.copyWith(color: AppColors.black),
+                ),
+              ),
+              ListTile(
+                onTap: () => Get.toNamed(Routes.MASTER_SATUAN),
+                leading: const Icon(
+                  Iconsax.record,
+                  color: AppColors.black,
+                ),
+                title: Text(
+                  'Master Satuan',
                   style: Theme.of(context)
                       .textTheme
                       .titleSmall
@@ -304,12 +361,16 @@ class HomeSuperAdmin extends GetView<HomeSuperAdminController> {
                       Get.to(() => InputDataReal(idMtc: model.id));
                     }
                   },
-                  onEdit: (MtcModel model) {
+                  onEdit: (MtcModel model) async {
                     if (model.status == '0') {
-                      Get.to(() => EditServiceBerkalaMekanik(model: model),
+                      Get.to(() => EditServiceBerkalaAdmin(model: model),
                           transition: Transition.fadeIn);
                     } else if (model.status == '1') {
-                      print('INI AKAN NAVIGATE KE EDIT STATUS BARANG');
+                      final result =
+                          await Get.to(() => EditDetailSB(idMtc: model.id));
+                      if (result == true) {
+                        controller.getData();
+                      }
                     }
                   },
                   onDelete: (MtcModel model) {
@@ -348,6 +409,36 @@ class HomeSuperAdmin extends GetView<HomeSuperAdminController> {
                                   ?.copyWith(fontWeight: FontWeight.bold),
                             ))),
                     GridColumn(
+                        columnName: 'Tgl Dibuat',
+                        label: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              color: Colors.lightBlue.shade100,
+                            ),
+                            child: Text(
+                              'Tgl Dibuat',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(fontWeight: FontWeight.bold),
+                            ))),
+                    GridColumn(
+                        columnName: 'No Polisi',
+                        label: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              color: Colors.lightBlue.shade100,
+                            ),
+                            child: Text(
+                              'No Polisi',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(fontWeight: FontWeight.bold),
+                            ))),
+                    GridColumn(
                         columnName: 'Mekanik',
                         label: Container(
                             alignment: Alignment.center,
@@ -372,21 +463,6 @@ class HomeSuperAdmin extends GetView<HomeSuperAdminController> {
                             ),
                             child: Text(
                               'K.Pool',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(fontWeight: FontWeight.bold),
-                            ))),
-                    GridColumn(
-                        columnName: 'No Polisi',
-                        label: Container(
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              color: Colors.lightBlue.shade100,
-                            ),
-                            child: Text(
-                              'No Polisi',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium

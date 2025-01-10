@@ -16,6 +16,10 @@ abstract class Routes {
   static const DETAIL_KATEGORI = _Paths.DETAIL_KATEGORI;
   static const ADD_MTC = _Paths.ADD_MTC;
   static const ALL_MTC = _Paths.ALL_MTC;
+  static const MASTER_SATUAN = _Paths.MASTER_SATUAN;
+  static const MASTER_KENDARAAN = _Paths.MASTER_KENDARAAN;
+  static const MASTER_TYPE_ITEM = _Paths.MASTER_TYPE_ITEM;
+  static const MASTER_KETERANGAN = _Paths.MASTER_KETERANGAN;
 }
 
 abstract class _Paths {
@@ -31,4 +35,8 @@ abstract class _Paths {
   static const DETAIL_KATEGORI = '/detail-kategori';
   static const ADD_MTC = '/add-mtc';
   static const ALL_MTC = '/all-mtc';
+  static const MASTER_SATUAN = '/master-satuan';
+  static const MASTER_KENDARAAN = '/master-kendaraan';
+  static const MASTER_TYPE_ITEM = '/master-type-item';
+  static const MASTER_KETERANGAN = '/master-keterangan';
 }

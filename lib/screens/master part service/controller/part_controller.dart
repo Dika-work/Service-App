@@ -10,12 +10,12 @@ class PartController extends GetxController {
   final formKey = GlobalKey<FormState>();
   RxList<PartModel> partModel = <PartModel>[].obs;
   final TextEditingController namaItemC = TextEditingController();
-  final TextEditingController typeC = TextEditingController();
-  RxString selectedKategoriName = ''.obs;
+  RxString selectedTypeItem = ''.obs;
+  RxString selectedNameItem = ''.obs;
 
   final diomultipart.Dio _dio = diomultipart.Dio(
     diomultipart.BaseOptions(
-      baseUrl: 'http://10.3.80.4:8080',
+      baseUrl: 'http://192.168.1.4:8080',
       connectTimeout: const Duration(seconds: 10),
       receiveTimeout: const Duration(seconds: 10),
     ),
@@ -51,7 +51,7 @@ class PartController extends GetxController {
     }
   }
 
-  createPart() async {
+  createPart(String typeItem) async {
     isLoading.value = true;
 
     if (!formKey.currentState!.validate()) {
@@ -61,8 +61,8 @@ class PartController extends GetxController {
 
     try {
       diomultipart.FormData formData = diomultipart.FormData.fromMap({
-        'nama_item': namaItemC.text.trim(),
-        'type_item': typeC.text.trim().toLowerCase(),
+        'nama_item': namaItemC.text.trim().toLowerCase(),
+        'type_item': typeItem,
       });
 
       final response = await _dio.post('/create-part', data: formData);
@@ -71,7 +71,6 @@ class PartController extends GetxController {
         Navigator.of(Get.overlayContext!).pop();
         await getData();
         namaItemC.clear();
-        typeC.clear();
         SnackbarLoader.successSnackBar(
             title: 'Berhasil', message: 'Data berhasil ditambahkan');
       }

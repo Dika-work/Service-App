@@ -83,7 +83,7 @@ class TransaksiServiceBerkala extends GetView<ServiceBerkalaController> {
                 source: dataSource,
                 gridLinesVisibility: GridLinesVisibility.both,
                 headerGridLinesVisibility: GridLinesVisibility.both,
-                columnWidthMode: ColumnWidthMode.fitByColumnName,
+                columnWidthMode: ColumnWidthMode.auto,
                 allowEditing: true,
                 stackedHeaderRows: [
                   StackedHeaderRow(cells: [
@@ -92,7 +92,8 @@ class TransaksiServiceBerkala extends GetView<ServiceBerkalaController> {
                         'KM',
                         'TARGET\n(BULAN)',
                         'TARGET\n(TAHUN)',
-                        'FISIK\n(CIRI KHUSUS)',
+                        'KONDISI FISIK\nBAGUS',
+                        'KONDISI FISIK\nJELEK',
                         'QTY\nDI KENDARAAN'
                       ],
                       child: Container(
@@ -110,7 +111,13 @@ class TransaksiServiceBerkala extends GetView<ServiceBerkalaController> {
                   ]),
                   StackedHeaderRow(cells: [
                     StackedHeaderCell(
-                      columnNames: ['Cek', 'Repair', 'Ganti', 'Status'],
+                      columnNames: [
+                        'Cek',
+                        'Bongkar',
+                        'Repair',
+                        'Ganti',
+                        'Status'
+                      ],
                       child: Container(
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
@@ -143,7 +150,7 @@ class TransaksiServiceBerkala extends GetView<ServiceBerkalaController> {
                                 ?.copyWith(fontWeight: FontWeight.bold),
                           ))),
                   GridColumn(
-                      columnName: 'Deskripsi\nPengecekan',
+                      columnName: 'Nama\nItem',
                       label: Container(
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
@@ -151,7 +158,7 @@ class TransaksiServiceBerkala extends GetView<ServiceBerkalaController> {
                             color: Colors.lightBlue.shade100,
                           ),
                           child: Text(
-                            'Deskripsi\nPengecekan',
+                            'Nama\nItem',
                             textAlign: TextAlign.center,
                             style: Theme.of(context)
                                 .textTheme
@@ -206,7 +213,7 @@ class TransaksiServiceBerkala extends GetView<ServiceBerkalaController> {
                                 ?.copyWith(fontWeight: FontWeight.bold),
                           ))),
                   GridColumn(
-                      columnName: 'FISIK\n(CIRI KHUSUS)',
+                      columnName: 'KONDISI FISIK\nBAGUS',
                       label: Container(
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
@@ -214,7 +221,23 @@ class TransaksiServiceBerkala extends GetView<ServiceBerkalaController> {
                             color: Colors.lightBlue.shade100,
                           ),
                           child: Text(
-                            'FISIK\n(CIRI KHUSUS)',
+                            'KONDISI FISIK\nBAGUS',
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(fontWeight: FontWeight.bold),
+                          ))),
+                  GridColumn(
+                      columnName: 'KONDISI FISIK\nJELEK',
+                      label: Container(
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            color: Colors.lightBlue.shade100,
+                          ),
+                          child: Text(
+                            'KONDISI FISIK\nJELEK',
                             textAlign: TextAlign.center,
                             style: Theme.of(context)
                                 .textTheme
@@ -253,6 +276,21 @@ class TransaksiServiceBerkala extends GetView<ServiceBerkalaController> {
                                 ?.copyWith(fontWeight: FontWeight.bold),
                           ))),
                   GridColumn(
+                      columnName: 'Bongkar',
+                      label: Container(
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            color: Colors.lightBlue.shade100,
+                          ),
+                          child: Text(
+                            'Bongkar',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(fontWeight: FontWeight.bold),
+                          ))),
+                  GridColumn(
                       columnName: 'Repair',
                       label: Container(
                           alignment: Alignment.center,
@@ -282,6 +320,24 @@ class TransaksiServiceBerkala extends GetView<ServiceBerkalaController> {
                                 .bodyMedium
                                 ?.copyWith(fontWeight: FontWeight.bold),
                           ))),
+                  GridColumn(
+                    columnName: 'KETERANGAN',
+                    columnWidthMode: ColumnWidthMode.fitByCellValue,
+                    label: Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        color: Colors.lightBlue.shade100,
+                      ),
+                      child: Text(
+                        'KETERANGAN',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium
+                            ?.copyWith(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             );

@@ -29,7 +29,8 @@ class TransaksiServiceBerkalaSource extends DataGridSource {
     return DataGridRowAdapter(
       color: isEvenRow ? Colors.white : Colors.grey[200],
       cells: [
-        ...row.getCells().sublist(0, 7).map<Widget>((e) {
+        // Kolom 0 sampai 8
+        ...row.getCells().sublist(0, 8).map<Widget>((e) {
           return Container(
             alignment: Alignment.center,
             padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -40,39 +41,34 @@ class TransaksiServiceBerkalaSource extends DataGridSource {
             ),
           );
         }),
-        // Radio button for Cek
-        Container(
-          alignment: Alignment.center,
-          child: Radio<String?>(
-            value: '1',
-            groupValue: currentModel.selectedOption,
-            onChanged: (value) {
-              _updateSelectedOption(rowIndex, value!);
-            },
-          ),
-        ),
-        // Radio button for Repair
-        Container(
-          alignment: Alignment.center,
-          child: Radio<String?>(
-            value: '2',
-            groupValue: currentModel.selectedOption,
-            onChanged: (value) {
-              _updateSelectedOption(rowIndex, value!);
-            },
-          ),
-        ),
-        // Radio button for Ganti
-        Container(
-          alignment: Alignment.center,
-          child: Radio<String?>(
-            value: '3',
-            groupValue: currentModel.selectedOption,
-            onChanged: (value) {
-              _updateSelectedOption(rowIndex, value!);
-            },
-          ),
-        ),
+        // Kolom radio button dan KETERANGAN
+        ...row.getCells().sublist(8).map<Widget>((e) {
+          if (e.columnName == 'Cek' ||
+              e.columnName == 'Bongkar' ||
+              e.columnName == 'Repair' ||
+              e.columnName == 'Ganti') {
+            // Radio button logic
+            return Container(
+              alignment: Alignment.center,
+              child: Radio<String?>(
+                value: e.value.toString(),
+                groupValue: currentModel.selectedOption,
+                onChanged: (value) {
+                  _updateSelectedOption(rowIndex, value!);
+                },
+              ),
+            );
+          } else {
+            // Default untuk kolom lain seperti 'KETERANGAN'
+            return Center(
+              child: Text(
+                e.value.toString(),
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: CustomSize.fontSizeXm),
+              ),
+            );
+          }
+        }),
       ],
     );
   }
@@ -89,15 +85,18 @@ class TransaksiServiceBerkalaSource extends DataGridSource {
       (index) {
         return const DataGridRow(cells: [
           DataGridCell<String>(columnName: 'No', value: '-'),
-          DataGridCell<String>(columnName: 'Deskripsi\nPengecekan', value: '-'),
+          DataGridCell<String>(columnName: 'Nama\nItem', value: '-'),
           DataGridCell<String>(columnName: 'KM', value: '-'),
           DataGridCell<String>(columnName: 'TARGET\n(BULAN)', value: '-'),
           DataGridCell<String>(columnName: 'TARGET\n(TAHUN)', value: '-'),
-          DataGridCell<String>(columnName: 'FISIK\n(CIRI KHUSUS)', value: '-'),
+          DataGridCell<String>(columnName: 'KONDISI FISIK\nBAGUS', value: '-'),
+          DataGridCell<String>(columnName: 'STANDART FISIK\nJELEK', value: '-'),
           DataGridCell<String>(columnName: 'QTY\nDI KENDARAAN', value: '-'),
           DataGridCell<String>(columnName: 'Cek', value: '-'),
+          DataGridCell<String>(columnName: 'Bongkar', value: '-'),
           DataGridCell<String>(columnName: 'Repair', value: '-'),
           DataGridCell<String>(columnName: 'Ganti', value: '-'),
+          DataGridCell<String>(columnName: 'KETERANGAN', value: '-'),
         ]);
       },
     );
@@ -116,22 +115,27 @@ class TransaksiServiceBerkalaSource extends DataGridSource {
         List<DataGridCell> cells = [
           DataGridCell<int>(columnName: 'No', value: index),
           DataGridCell<String>(
-              columnName: 'Deskripsi\nPengecekan',
-              value: data.namaItem.toUpperCase()),
+              columnName: 'Nama\nItem', value: data.namaItem.toUpperCase()),
           DataGridCell<String>(columnName: 'KM', value: data.kmTarget),
           DataGridCell<String>(
               columnName: 'TARGET\n(BULAN)', value: data.bulanTarget),
           DataGridCell<String>(
               columnName: 'TARGET\n(TAHUN)', value: data.tahunTarget),
           DataGridCell<String>(
-              columnName: 'FISIK\n(CIRI KHUSUS)',
-              value: data.kondisiFisik.toUpperCase()),
+              columnName: 'KONDISI FISIK\nBAGUS',
+              value: data.kondisiFisikBagus.toUpperCase()),
+          DataGridCell<String>(
+              columnName: 'STANDART FISIK\nJELEK',
+              value: data.kondisiFisikJelek.toUpperCase()),
           DataGridCell<String>(
               columnName: 'QTY\nDI KENDARAAN',
               value: data.quantity.toUpperCase()),
           const DataGridCell<String>(columnName: 'Cek', value: '1'),
-          const DataGridCell<String>(columnName: 'Repair', value: '2'),
-          const DataGridCell<String>(columnName: 'Ganti', value: '3'),
+          const DataGridCell<String>(columnName: 'Bongkar', value: '2'),
+          const DataGridCell<String>(columnName: 'Repair', value: '3'),
+          const DataGridCell<String>(columnName: 'Ganti', value: '4'),
+          DataGridCell<String>(
+              columnName: 'KETERANGAN', value: data.keterangan.toUpperCase()),
         ];
 
         return DataGridRow(cells: cells);

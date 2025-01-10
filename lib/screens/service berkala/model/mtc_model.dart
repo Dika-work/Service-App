@@ -11,6 +11,7 @@ class MtcModel {
   String driver;
   String noBuntut;
   String status;
+  String createAt;
 
   MtcModel({
     required this.id,
@@ -25,6 +26,7 @@ class MtcModel {
     required this.driver,
     required this.noBuntut,
     required this.status,
+    required this.createAt,
   });
 
   factory MtcModel.fromJson(Map<String, dynamic> json) {
@@ -41,6 +43,7 @@ class MtcModel {
       driver: json['driver'],
       noBuntut: json['no_buntut'],
       status: json['status'],
+      createAt: json['created_at'],
     );
   }
 }

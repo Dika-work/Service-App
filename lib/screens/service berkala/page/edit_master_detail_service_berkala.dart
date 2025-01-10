@@ -24,7 +24,8 @@ class _EditDetailServiceBerkalaState
   late TextEditingController kmTargetC;
   late TextEditingController bulanTargetC;
   late TextEditingController tahunTargetC;
-  late TextEditingController kondisiFisikC;
+  late TextEditingController kondisiFisikBagusC;
+  late TextEditingController kondisiFisikJelekC;
   late TextEditingController quantityC;
 
   late ServiceBerkalaController controller;
@@ -37,14 +38,17 @@ class _EditDetailServiceBerkalaState
     kmTargetC = TextEditingController(text: widget.model.kmTarget);
     bulanTargetC = TextEditingController(text: widget.model.bulanTarget);
     tahunTargetC = TextEditingController(text: widget.model.tahunTarget);
-    kondisiFisikC = TextEditingController(text: widget.model.kondisiFisik);
+    kondisiFisikBagusC =
+        TextEditingController(text: widget.model.kondisiFisikBagus);
+    kondisiFisikJelekC =
+        TextEditingController(text: widget.model.kondisiFisikJelek);
     quantityC = TextEditingController(text: widget.model.quantity);
 
     controller = Get.find<ServiceBerkalaController>();
     masterKategoriController = Get.find<PartController>();
 
     // Set the initial value for the dropdown
-    masterKategoriController.selectedKategoriName.value = widget.model.namaItem;
+    masterKategoriController.selectedTypeItem.value = widget.model.namaItem;
   }
 
   @override
@@ -52,7 +56,8 @@ class _EditDetailServiceBerkalaState
     kmTargetC.dispose();
     bulanTargetC.dispose();
     tahunTargetC.dispose();
-    kondisiFisikC.dispose();
+    kondisiFisikBagusC.dispose();
+    kondisiFisikJelekC.dispose();
     quantityC.dispose();
     super.dispose();
   }
@@ -86,7 +91,9 @@ class _EditDetailServiceBerkalaState
               const SizedBox(height: CustomSize.sm),
               _buildTextField(tahunTargetC, 'Target (TAHUN)'),
               const SizedBox(height: CustomSize.sm),
-              _buildTextField(kondisiFisikC, 'Fisik (CIRI KHUSUS)'),
+              _buildTextField(kondisiFisikBagusC, 'STANDART FISIK\nBAGUS'),
+              const SizedBox(height: CustomSize.sm),
+              _buildTextField(kondisiFisikJelekC, 'STANDART FISIK\nJELEK'),
               const SizedBox(height: CustomSize.sm),
               _buildTextField(quantityC, 'QTY DI KENDARAAN'),
             ],
@@ -106,11 +113,12 @@ class _EditDetailServiceBerkalaState
             if (formKey.currentState!.validate()) {
               await controller.updateDetailService(
                 id: id,
-                namaItem: masterKategoriController.selectedKategoriName.value,
+                namaItem: masterKategoriController.selectedTypeItem.value,
                 kmTarget: kmTargetC.text,
                 bulanTarget: bulanTargetC.text,
                 tahunTarget: tahunTargetC.text,
-                kondisiFisik: kondisiFisikC.text,
+                kondisiFisikBagus: kondisiFisikBagusC.text,
+                kondisiFisikJelek: kondisiFisikJelekC.text,
                 quantity: quantityC.text,
               );
               if (mounted) {
@@ -142,9 +150,9 @@ class _EditDetailServiceBerkalaState
         }
 
         return DropdownButton<String>(
-          value: masterKategoriController.selectedKategoriName.value.isEmpty
+          value: masterKategoriController.selectedTypeItem.value.isEmpty
               ? null
-              : masterKategoriController.selectedKategoriName.value,
+              : masterKategoriController.selectedTypeItem.value,
           underline: const SizedBox.shrink(),
           hint: Text(
             'Nama Item',
@@ -152,7 +160,7 @@ class _EditDetailServiceBerkalaState
           ),
           isExpanded: true,
           onChanged: (String? newValue) {
-            masterKategoriController.selectedKategoriName.value = newValue!;
+            masterKategoriController.selectedTypeItem.value = newValue!;
           },
           items: masterKategoriController.partModel
               .map<DropdownMenuItem<String>>((PartModel kategoriModel) {
@@ -189,11 +197,12 @@ class _EditDetailServiceBerkalaState
   }
 
   void _clearFields() {
-    masterKategoriController.selectedKategoriName.value = '';
+    masterKategoriController.selectedTypeItem.value = '';
     kmTargetC.clear();
     bulanTargetC.clear();
     tahunTargetC.clear();
-    kondisiFisikC.clear();
+    kondisiFisikBagusC.clear();
+    kondisiFisikJelekC.clear();
     quantityC.clear();
   }
 }

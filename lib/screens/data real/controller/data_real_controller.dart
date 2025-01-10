@@ -17,7 +17,7 @@ class DataRealController extends GetxController {
 
   final diomultipart.Dio _dio = diomultipart.Dio(
     diomultipart.BaseOptions(
-      baseUrl: 'http://10.3.80.4:8080',
+      baseUrl: 'http://192.168.1.4:8080',
       connectTimeout: const Duration(seconds: 10),
       receiveTimeout: const Duration(seconds: 10),
     ),
@@ -52,6 +52,7 @@ class DataRealController extends GetxController {
         title: 'Error',
         message: e.response?.data['message'] ?? 'Terjadi kesalahan',
       );
+      print('INI ERROR SAAT DI DATA REAL: $e');
     } finally {
       isLoading.value = false;
     }
@@ -69,7 +70,7 @@ class DataRealController extends GetxController {
         final data = realModel[i];
 
         // Validasi input hanya jika statusService != '1'
-        if (data.statusService != '1') {
+        if (data.statusService == '4') {
           if (kmRealControllers[i].text.isEmpty ||
               waktuBulanRealControllers[i].text.isEmpty ||
               kondisiFisikRealControllers[i].text.isEmpty ||

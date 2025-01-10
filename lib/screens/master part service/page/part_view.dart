@@ -5,6 +5,8 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../constant/custom_size.dart';
 import '../../../utils/theme/app_colors.dart';
+import '../../master type item/controller/master_type_item_controller.dart';
+import '../../master type item/model/master_type_item_model.dart';
 import '../controller/part_controller.dart';
 import '../model/part_model.dart';
 import '../source/part_source.dart';
@@ -15,6 +17,7 @@ class PartMaster extends GetView<PartController> {
 
   @override
   Widget build(BuildContext context) {
+    final masterTypeItemController = Get.put(MasterTypeItemController());
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -35,10 +38,12 @@ class PartMaster extends GetView<PartController> {
                   cancelText: 'Kembali',
                   onCancel: () {
                     controller.namaItemC.clear();
-                    controller.typeC.clear();
                     Navigator.of(Get.overlayContext!).pop();
                   },
-                  onConfirm: () => controller.createPart(),
+                  onConfirm: () {
+                    controller.createPart(
+                        masterTypeItemController.selectedTypeItem.value);
+                  },
                   titleWidget: Center(
                     child: Text(
                       'Tambah Kategori',
@@ -67,21 +72,83 @@ class PartMaster extends GetView<PartController> {
                             ),
                           ),
                           const SizedBox(height: CustomSize.sm),
-                          TextFormField(
-                            controller: controller.typeC,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return '* Type part tidak boleh kosong';
-                              }
-                              return null;
-                            },
-                            keyboardType: TextInputType.text,
-                            decoration: InputDecoration(
-                              label: Text('Type Part',
-                                  style:
-                                      Theme.of(context).textTheme.labelMedium),
+                          Container(
+                            padding: const EdgeInsets.only(
+                                left: CustomSize.sm, right: 12),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                  CustomSize.inputFieldRadius),
+                              border: Border.all(
+                                  width: 1, color: AppColors.borderPrimary),
                             ),
+                            child: Obx(() {
+                              if (masterTypeItemController.isLoading.value) {
+                                return const Center(
+                                    child: CircularProgressIndicator());
+                              }
+
+                              if (masterTypeItemController
+                                  .masterTypeItemModel.isEmpty) {
+                                return const Text('No type items available');
+                              }
+
+                              return DropdownButton<String>(
+                                value: masterTypeItemController
+                                        .selectedTypeItem.value.isEmpty
+                                    ? null
+                                    : masterTypeItemController
+                                        .selectedTypeItem.value,
+                                underline: const SizedBox.shrink(),
+                                hint: Text(
+                                  'Select Type Item',
+                                  style: const TextStyle().copyWith(
+                                    fontSize: CustomSize.fontSizeSm,
+                                    color: AppColors.textPrimary,
+                                    fontFamily: 'Urbanist',
+                                  ),
+                                ),
+                                isExpanded: true,
+                                onChanged: (String? newValue) {
+                                  masterTypeItemController
+                                      .selectedTypeItem.value = newValue!;
+                                  print(
+                                      'Selected ID: ${masterTypeItemController.selectedTypeItem.value}');
+                                },
+                                items: masterTypeItemController
+                                    .masterTypeItemModel
+                                    .map<DropdownMenuItem<String>>(
+                                        (MasterTypeItemModel item) {
+                                  return DropdownMenuItem<String>(
+                                    value: item.id, // Simpan ID di sini
+                                    child: Text(
+                                      item.typeItem, // Tampilkan type_item
+                                      style: const TextStyle().copyWith(
+                                        fontSize: CustomSize.fontSizeSm,
+                                        color: AppColors.textPrimary,
+                                        fontFamily: 'Urbanist',
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
+                              );
+                            }),
                           ),
+
+                          // TextFormField(
+                          //   controller: controller.typeC,
+                          //   validator: (value) {
+                          //     if (value == null || value.isEmpty) {
+                          //       return '* Type part tidak boleh kosong';
+                          //     }
+                          //     return null;
+                          //   },
+                          //   keyboardType: TextInputType.text,
+                          //   decoration: InputDecoration(
+                          //     label: Text('Type Part',
+                          //         style:
+                          //             Theme.of(context).textTheme.labelMedium),
+                          //   ),
+                          // ),
                         ],
                       )));
             },
@@ -131,21 +198,22 @@ class PartMaster extends GetView<PartController> {
             );
           } else {
             final dataSource = PartSource(
-                model: controller.partModel,
-                onEdit: (PartModel model) {
-                  showDialog(
-                    context: context,
-                    builder: (_) {
-                      return EditPartMaster(model: model);
-                    },
-                  );
-                },
-                onDelete: (PartModel model) {
-                  CustomDialogs.deleteDialog(
-                    context: context,
-                    onConfirm: () => controller.deletePart(model.id),
-                  );
-                });
+              model: controller.partModel,
+              onEdit: (PartModel model) {
+                showDialog(
+                  context: context,
+                  builder: (_) {
+                    return EditPartMaster(model: model);
+                  },
+                );
+              },
+              // onDelete: (PartModel model) {
+              //   CustomDialogs.deleteDialog(
+              //     context: context,
+              //     onConfirm: () => controller.deletePart(model.id),
+              //   );
+              // }
+            );
 
             return RefreshIndicator(
               onRefresh: () async {
@@ -155,9 +223,7 @@ class PartMaster extends GetView<PartController> {
                 source: dataSource,
                 frozenColumnsCount: 2,
                 rowHeight: 65,
-                columnWidthMode: controller.partModel.isEmpty
-                    ? ColumnWidthMode.fill
-                    : ColumnWidthMode.auto,
+                columnWidthMode: ColumnWidthMode.fill,
                 gridLinesVisibility: GridLinesVisibility.both,
                 headerGridLinesVisibility: GridLinesVisibility.both,
                 columns: [
@@ -224,23 +290,23 @@ class PartMaster extends GetView<PartController> {
                                   .bodyMedium
                                   ?.copyWith(fontWeight: FontWeight.bold),
                             ))),
-                  if (controller.partModel.isNotEmpty)
-                    GridColumn(
-                        width: 120,
-                        columnName: 'Hapus',
-                        label: Container(
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              color: Colors.lightBlue.shade100,
-                            ),
-                            child: Text(
-                              'Hapus',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(fontWeight: FontWeight.bold),
-                            ))),
+                  // if (controller.partModel.isNotEmpty)
+                  //   GridColumn(
+                  //       width: 120,
+                  //       columnName: 'Hapus',
+                  //       label: Container(
+                  //           alignment: Alignment.center,
+                  //           decoration: BoxDecoration(
+                  //             border: Border.all(color: Colors.grey),
+                  //             color: Colors.lightBlue.shade100,
+                  //           ),
+                  //           child: Text(
+                  //             'Hapus',
+                  //             style: Theme.of(context)
+                  //                 .textTheme
+                  //                 .bodyMedium
+                  //                 ?.copyWith(fontWeight: FontWeight.bold),
+                  //           ))),
                 ],
               ),
             );

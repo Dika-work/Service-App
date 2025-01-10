@@ -115,11 +115,12 @@ class DetailServiceBerkalaSource extends DataGridSource {
       (index) {
         return const DataGridRow(cells: [
           DataGridCell<String>(columnName: 'No', value: '-'),
-          DataGridCell<String>(columnName: 'Deskripsi\nPengecekan', value: '-'),
+          DataGridCell<String>(columnName: 'Nama\nItem', value: '-'),
           DataGridCell<String>(columnName: 'KM', value: '-'),
           DataGridCell<String>(columnName: 'TARGET\n(BULAN)', value: '-'),
           DataGridCell<String>(columnName: 'TARGET\n(TAHUN)', value: '-'),
-          DataGridCell<String>(columnName: 'FISIK\n(CIRI KHUSUS)', value: '-'),
+          DataGridCell<String>(columnName: 'KONDISI FISIK\nBAGUS', value: '-'),
+          DataGridCell<String>(columnName: 'KONDISI FISIK\nJELEK', value: '-'),
           DataGridCell<String>(columnName: 'QTY\nDI KENDARAAN', value: '-'),
         ]);
       },
@@ -139,7 +140,7 @@ class DetailServiceBerkalaSource extends DataGridSource {
         List<DataGridCell> cells = [
           DataGridCell<int>(columnName: 'No', value: index),
           DataGridCell<String>(
-              columnName: 'Deskripsi\nPengecekan',
+              columnName: 'Nama\nItem',
               value: data.namaItem
                   .toUpperCase()), // Ganti dengan field yang sesuai
           DataGridCell<String>(
@@ -152,8 +153,12 @@ class DetailServiceBerkalaSource extends DataGridSource {
               columnName: 'TARGET\n(TAHUN)',
               value: data.tahunTarget), // Ganti dengan field yang sesuai
           DataGridCell<String>(
-              columnName: 'FISIK\n(CIRI KHUSUS)',
-              value: data.kondisiFisik
+              columnName: 'KONDISI FISIK\nBAGUS',
+              value: data.kondisiFisikBagus
+                  .toUpperCase()), // Ganti dengan field yang sesuai
+          DataGridCell<String>(
+              columnName: 'KONDISI FISIK\nJELEK',
+              value: data.kondisiFisikJelek
                   .toUpperCase()), // Ganti dengan field yang sesuai
           DataGridCell<String>(
               columnName: 'QTY\nDI KENDARAAN',

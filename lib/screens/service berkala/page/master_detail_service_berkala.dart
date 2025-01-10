@@ -39,17 +39,18 @@ class MasterDetailServiceBerkala extends GetView<ServiceBerkalaController> {
                     controller.kmTargetC.clear();
                     controller.bulanTargetC.clear();
                     controller.tahunTargetC.clear();
-                    controller.kondisiFisikC.clear();
+                    controller.kondisiFisikBagusC.clear();
+                    controller.kondisiFisikJelekC.clear();
                     controller.qtyC.clear();
-                    masterKategoriController.selectedKategoriName.value = '';
+                    masterKategoriController.selectedTypeItem.value = '';
                     Navigator.of(Get.overlayContext!).pop();
                   },
                   onConfirm: () async {
                     await controller.createDetailService(
-                        masterKategoriController.selectedKategoriName.value,
-                        masterKategoriController.selectedKategoriName.value);
+                        masterKategoriController.selectedTypeItem.value,
+                        masterKategoriController.selectedTypeItem.value);
 
-                    masterKategoriController.selectedKategoriName.value = '';
+                    masterKategoriController.selectedTypeItem.value = '';
                   },
                   titleWidget: Center(
                     child: Text(
@@ -87,10 +88,10 @@ class MasterDetailServiceBerkala extends GetView<ServiceBerkalaController> {
 
                                 return DropdownButton<String>(
                                   value: masterKategoriController
-                                          .selectedKategoriName.value.isEmpty
+                                          .selectedTypeItem.value.isEmpty
                                       ? null
                                       : masterKategoriController
-                                          .selectedKategoriName.value,
+                                          .selectedTypeItem.value,
                                   underline: const SizedBox.shrink(),
                                   hint: Text(
                                     'Nama Item',
@@ -100,9 +101,9 @@ class MasterDetailServiceBerkala extends GetView<ServiceBerkalaController> {
                                   isExpanded: true,
                                   onChanged: (String? newValue) {
                                     masterKategoriController
-                                        .selectedKategoriName.value = newValue!;
+                                        .selectedTypeItem.value = newValue!;
                                     print(
-                                        'Selected group_id: ${masterKategoriController.selectedKategoriName.value}'); // Print group_id
+                                        'Selected group_id: ${masterKategoriController.selectedTypeItem.value}'); // Print group_id
                                   },
                                   items: masterKategoriController.partModel
                                       .map<DropdownMenuItem<String>>(
@@ -179,7 +180,7 @@ class MasterDetailServiceBerkala extends GetView<ServiceBerkalaController> {
                             ),
                             const SizedBox(height: CustomSize.sm),
                             TextFormField(
-                              controller: controller.kondisiFisikC,
+                              controller: controller.kondisiFisikBagusC,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return '* Bagian ini tidak boleh kosong';
@@ -188,7 +189,24 @@ class MasterDetailServiceBerkala extends GetView<ServiceBerkalaController> {
                               },
                               keyboardType: TextInputType.text,
                               decoration: InputDecoration(
-                                label: Text('Fisik (CIRI KHUSUS)',
+                                label: Text('KONDISI FISIK\nBAGUS',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelMedium),
+                              ),
+                            ),
+                            const SizedBox(height: CustomSize.sm),
+                            TextFormField(
+                              controller: controller.kondisiFisikJelekC,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return '* Bagian ini tidak boleh kosong';
+                                }
+                                return null;
+                              },
+                              keyboardType: TextInputType.text,
+                              decoration: InputDecoration(
+                                label: Text('Kondisi Fisik\nJelek',
                                     style: Theme.of(context)
                                         .textTheme
                                         .labelMedium),
@@ -292,7 +310,7 @@ class MasterDetailServiceBerkala extends GetView<ServiceBerkalaController> {
                           ?.copyWith(fontWeight: FontWeight.bold),
                     ))),
             GridColumn(
-                columnName: 'Deskripsi\nPengecekan',
+                columnName: 'Nama\nItem',
                 label: Container(
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
@@ -300,7 +318,7 @@ class MasterDetailServiceBerkala extends GetView<ServiceBerkalaController> {
                       color: Colors.lightBlue.shade100,
                     ),
                     child: Text(
-                      'Deskripsi\nPengecekan',
+                      'Nama\nItem',
                       textAlign: TextAlign.center,
                       style: Theme.of(context)
                           .textTheme
@@ -355,7 +373,7 @@ class MasterDetailServiceBerkala extends GetView<ServiceBerkalaController> {
                           ?.copyWith(fontWeight: FontWeight.bold),
                     ))),
             GridColumn(
-                columnName: 'FISIK\n(CIRI KHUSUS)',
+                columnName: 'KONDISI FISIK\nBAGUS',
                 label: Container(
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
@@ -363,7 +381,23 @@ class MasterDetailServiceBerkala extends GetView<ServiceBerkalaController> {
                       color: Colors.lightBlue.shade100,
                     ),
                     child: Text(
-                      'FISIK\n(CIRI KHUSUS)',
+                      'KONDISI FISIK\nBAGUS',
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(fontWeight: FontWeight.bold),
+                    ))),
+            GridColumn(
+                columnName: 'KONDISI FISIK\nJELEK',
+                label: Container(
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      color: Colors.lightBlue.shade100,
+                    ),
+                    child: Text(
+                      'KONDISI FISIK\nJELEK',
                       textAlign: TextAlign.center,
                       style: Theme.of(context)
                           .textTheme
@@ -445,7 +479,8 @@ class MasterDetailServiceBerkala extends GetView<ServiceBerkalaController> {
                         'KM',
                         'TARGET\n(BULAN)',
                         'TARGET\n(TAHUN)',
-                        'FISIK\n(CIRI KHUSUS)',
+                        'KONDISI FISIK\nBAGUS',
+                        'KONDISI FISIK\nJELEK',
                         'QTY\nDI KENDARAAN'
                       ],
                       child: Container(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../constant/custom_size.dart';
@@ -41,7 +42,7 @@ class MtcSource extends DataGridSource {
 
     // Create cells for the first 6 columns
     List<Widget> cells = [
-      ...row.getCells().take(11).map<Widget>((e) {
+      ...row.getCells().take(12).map<Widget>((e) {
         return Container(
           alignment: Alignment.center,
           padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
@@ -241,9 +242,10 @@ class MtcSource extends DataGridSource {
       (index) {
         return const DataGridRow(cells: [
           DataGridCell<String>(columnName: 'No', value: '-'),
+          DataGridCell<String>(columnName: 'Tgl Dibuat', value: '-'),
+          DataGridCell<String>(columnName: 'No Polisi', value: '-'),
           DataGridCell<String>(columnName: 'Mekanik', value: '-'),
           DataGridCell<String>(columnName: 'K.Pool', value: '-'),
-          DataGridCell<String>(columnName: 'No Polisi', value: '-'),
           DataGridCell<String>(columnName: 'KM Terakhir Servis', value: '-'),
           DataGridCell<String>(columnName: 'KM Saat Ini', value: '-'),
           DataGridCell<String>(columnName: 'KM Servis Selanjutnya', value: '-'),
@@ -269,10 +271,14 @@ class MtcSource extends DataGridSource {
         List<DataGridCell> cells = [
           DataGridCell<int>(columnName: 'No', value: index),
           DataGridCell<String>(
+              columnName: 'Tgl Dibuat',
+              value:
+                  DateFormat('d/MMM/y').format(DateTime.parse(data.createAt))),
+          DataGridCell<String>(columnName: 'No Polisi', value: data.noPolisi),
+          DataGridCell<String>(
               columnName: 'Mekanik', value: data.mekanik.toUpperCase()),
           DataGridCell<String>(
               columnName: 'K.Pool', value: data.kpool.toUpperCase()),
-          DataGridCell<String>(columnName: 'No Polisi', value: data.noPolisi),
           DataGridCell<String>(
               columnName: 'KM Terakhir Servis', value: data.lastService),
           DataGridCell<String>(columnName: 'KM Saat Ini', value: data.nowKm),

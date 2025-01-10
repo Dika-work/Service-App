@@ -6,6 +6,10 @@ import 'package:service/screens/home/page/home_staff_view.dart';
 import 'package:service/screens/home/page/home_super_admin_view.dart';
 import 'package:service/screens/login/page/login_view.dart';
 
+import '../screens/master kendaraan/pages/master_kendaraan_view.dart';
+import '../screens/master keterangan/pages/master_keterangan_view.dart';
+import '../screens/master type item/page/master_type_item.dart';
+import '../screens/satuan/pages/satuan_view.dart';
 import '../screens/group user/page/group_user_view.dart';
 import '../screens/master part service/page/part_view.dart';
 import '../screens/master user/page/user_view.dart';
@@ -28,6 +32,10 @@ class AppPages {
   static const SERVICE_BERKALA = Routes.SERVICE_BERKALA;
   static const ADD_MTC = Routes.ADD_MTC;
   static const ALL_MTC = Routes.ALL_MTC;
+  static const MASTER_SATUAN = Routes.MASTER_SATUAN;
+  static const MASTER_KENDARAAN = Routes.MASTER_KENDARAAN;
+  static const MASTER_TYPE_ITEM = Routes.MASTER_TYPE_ITEM;
+  static const MASTER_KETERANGAN = Routes.MASTER_KETERANGAN;
 
   static final routes = [
     GetPage(
@@ -90,6 +98,30 @@ class AppPages {
       name: _Paths.ALL_MTC,
       page: () => const AllMtcView(),
       binding: AllMtcBinding(),
+      transition: Transition.leftToRightWithFade,
+    ),
+    GetPage(
+      name: _Paths.MASTER_SATUAN,
+      page: () => const MasterSatuan(),
+      binding: SatuanBinding(),
+      transition: Transition.leftToRightWithFade,
+    ),
+    GetPage(
+      name: _Paths.MASTER_KENDARAAN,
+      page: () => const MasterKendaraanView(),
+      binding: MasterKendaraanBinding(),
+      transition: Transition.leftToRightWithFade,
+    ),
+    GetPage(
+      name: _Paths.MASTER_TYPE_ITEM,
+      page: () => const MasterTypeItemView(),
+      binding: MasterTypeItemBinding(),
+      transition: Transition.leftToRightWithFade,
+    ),
+    GetPage(
+      name: _Paths.MASTER_KETERANGAN,
+      page: () => const MasterKeteranganView(),
+      binding: MasterKeteranganBinding(),
       transition: Transition.leftToRightWithFade,
     ),
   ];

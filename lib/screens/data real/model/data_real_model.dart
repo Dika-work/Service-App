@@ -6,7 +6,8 @@ class DataRealModel {
   String kmTarget;
   String bulanTarget;
   String tahunTarget;
-  String kondisiFisik;
+  String kondisiFisikBagus;
+  String kondisiFisikJelek;
   String quantity;
   String statusService;
 
@@ -18,7 +19,8 @@ class DataRealModel {
     required this.kmTarget,
     required this.bulanTarget,
     required this.tahunTarget,
-    required this.kondisiFisik,
+    required this.kondisiFisikBagus,
+    required this.kondisiFisikJelek,
     required this.quantity,
     required this.statusService,
   });
@@ -32,7 +34,8 @@ class DataRealModel {
       kmTarget: json['km_target'],
       bulanTarget: json['bulan_target'],
       tahunTarget: json['tahun_target'],
-      kondisiFisik: json['kondisi_fisik'],
+      kondisiFisikBagus: json['kondisi_fisik_bagus'],
+      kondisiFisikJelek: json['kondisi_fisik_jelek'],
       quantity: json['quantity'],
       statusService: json['status_service'],
     );

@@ -17,12 +17,13 @@ class ServiceBerkalaController extends GetxController {
   final TextEditingController kmTargetC = TextEditingController();
   final TextEditingController bulanTargetC = TextEditingController();
   final TextEditingController tahunTargetC = TextEditingController();
-  final TextEditingController kondisiFisikC = TextEditingController();
+  final TextEditingController kondisiFisikBagusC = TextEditingController();
+  final TextEditingController kondisiFisikJelekC = TextEditingController();
   final TextEditingController qtyC = TextEditingController();
 
   final diomultipart.Dio _dio = diomultipart.Dio(
     diomultipart.BaseOptions(
-      baseUrl: 'http://10.3.80.4:8080',
+      baseUrl: 'http://192.168.1.4:8080',
       connectTimeout: const Duration(seconds: 10),
       receiveTimeout: const Duration(seconds: 10),
     ),
@@ -80,7 +81,10 @@ class ServiceBerkalaController extends GetxController {
         'km_target': kmTargetC.text.trim().toLowerCase(),
         'monthly_target': bulanTargetC.text.trim().toLowerCase(),
         'yearly_target': tahunTargetC.text.trim().toLowerCase(),
-        'physical_condition': kondisiFisikC.text.trim().toLowerCase(),
+        'physical_condition_bagus':
+            kondisiFisikBagusC.text.trim().toLowerCase(),
+        'physical_condition_jelek':
+            kondisiFisikJelekC.text.trim().toLowerCase(),
         'quantity': qtyC.text.trim().toLowerCase(),
       });
 
@@ -92,7 +96,8 @@ class ServiceBerkalaController extends GetxController {
         kmTargetC.clear();
         bulanTargetC.clear();
         tahunTargetC.clear();
-        kondisiFisikC.clear();
+        kondisiFisikBagusC.clear();
+        kondisiFisikJelekC.clear();
         qtyC.clear();
         SnackbarLoader.successSnackBar(
             title: 'Berhasil', message: 'Data berhasil ditambahkan');
@@ -114,7 +119,8 @@ class ServiceBerkalaController extends GetxController {
     required String kmTarget,
     required String bulanTarget,
     required String tahunTarget,
-    required String kondisiFisik,
+    required String kondisiFisikBagus,
+    required String kondisiFisikJelek,
     required String quantity,
   }) async {
     isLoading.value = true;
@@ -125,7 +131,8 @@ class ServiceBerkalaController extends GetxController {
         'km_target': kmTarget,
         'monthly_target': bulanTarget,
         'yearly_target': tahunTarget,
-        'physical_condition': kondisiFisik,
+        'physical_condition_bagus': kondisiFisikBagus,
+        'physical_condition_jelek': kondisiFisikJelek,
         'quantity': quantity,
       };
 

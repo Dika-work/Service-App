@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../constant/custom_size.dart';
+import '../../master type item/controller/master_type_item_controller.dart';
+import '../../master type item/model/master_type_item_model.dart';
 import '../controller/part_controller.dart';
 import '../model/part_model.dart';
 
@@ -16,22 +18,18 @@ class EditPartMaster extends StatefulWidget {
 
 class _EditPartMasterState extends State<EditPartMaster> {
   late TextEditingController namaItemC;
-  late TextEditingController typeC;
+  late String selectedTypeItem;
 
   late PartController controller;
-
-  String capitalize(String value) {
-    if (value.isEmpty) return value;
-    return value[0].toUpperCase() + value.substring(1).toLowerCase();
-  }
+  late MasterTypeItemController masterTypeItemController;
 
   @override
   void initState() {
     super.initState();
     namaItemC = TextEditingController(text: widget.model.namaItem);
-    typeC = TextEditingController(text: capitalize(widget.model.typeItem));
-
+    selectedTypeItem = widget.model.typeItem;
     controller = Get.find<PartController>();
+    masterTypeItemController = Get.find<MasterTypeItemController>();
   }
 
   @override
@@ -74,20 +72,37 @@ class _EditPartMasterState extends State<EditPartMaster> {
                 ),
               ),
               const SizedBox(height: CustomSize.sm),
-              TextFormField(
-                controller: typeC,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return '* Type item tidak boleh kosong';
-                  }
-                  return null;
-                },
-                keyboardType: TextInputType.text,
-                decoration: InputDecoration(
-                  label: Text('Type Item',
-                      style: Theme.of(context).textTheme.labelMedium),
-                ),
-              ),
+              Obx(() {
+                if (masterTypeItemController.isLoading.value) {
+                  return const CircularProgressIndicator();
+                }
+
+                return DropdownButtonFormField<String>(
+                  value: selectedTypeItem,
+                  isExpanded: true,
+                  decoration: InputDecoration(
+                    label: Text(
+                      'Type Item',
+                      style: Theme.of(context).textTheme.labelMedium,
+                    ),
+                  ),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      selectedTypeItem = newValue!;
+                      print(
+                          'ini nilai terbaru dari id type kategori yg di pilih: $selectedTypeItem');
+                    });
+                  },
+                  items: masterTypeItemController.masterTypeItemModel
+                      .map<DropdownMenuItem<String>>(
+                          (MasterTypeItemModel typeItem) {
+                    return DropdownMenuItem<String>(
+                      value: typeItem.typeItem,
+                      child: Text(typeItem.typeItem.toUpperCase()),
+                    );
+                  }).toList(),
+                );
+              }),
             ],
           )),
       actions: [
@@ -101,7 +116,7 @@ class _EditPartMasterState extends State<EditPartMaster> {
               controller.updatePart(
                   id: widget.model.id,
                   namaItem: namaItemC.text.trim(),
-                  typeItem: typeC.text.trim());
+                  typeItem: selectedTypeItem);
             },
             child: const Text('Perbaharui')),
       ],

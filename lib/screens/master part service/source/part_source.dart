@@ -9,13 +9,13 @@ import '../model/part_model.dart';
 class PartSource extends DataGridSource {
   final List<PartModel> model;
   final void Function(PartModel)? onEdit;
-  final void Function(PartModel)? onDelete;
+  // final void Function(PartModel)? onDelete;
   int startIndex = 0;
 
   PartSource({
     required this.model,
     required this.onEdit,
-    required this.onDelete,
+    // required this.onDelete,
   }) {
     _updateDataPager(model, startIndex);
   }
@@ -69,27 +69,27 @@ class PartSource extends DataGridSource {
         ],
       ));
 
-      cells.add(Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(
-            height: 60,
-            width: 100,
-            child: ElevatedButton(
-              onPressed: () {
-                if (onDelete != null) {
-                  onDelete!(model[rowIndex]);
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.success,
-                padding: const EdgeInsets.all(8.0),
-              ),
-              child: const Icon(Iconsax.trash),
-            ),
-          ),
-        ],
-      ));
+      // cells.add(Column(
+      //   mainAxisAlignment: MainAxisAlignment.center,
+      //   children: [
+      //     SizedBox(
+      //       height: 60,
+      //       width: 100,
+      //       child: ElevatedButton(
+      //         onPressed: () {
+      //           if (onDelete != null) {
+      //             onDelete!(model[rowIndex]);
+      //           }
+      //         },
+      //         style: ElevatedButton.styleFrom(
+      //           backgroundColor: AppColors.success,
+      //           padding: const EdgeInsets.all(8.0),
+      //         ),
+      //         child: const Icon(Iconsax.trash),
+      //       ),
+      //     ),
+      //   ],
+      // ));
     }
 
     return DataGridRowAdapter(
