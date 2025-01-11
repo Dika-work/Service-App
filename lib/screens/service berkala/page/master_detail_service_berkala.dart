@@ -1,3 +1,4 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
@@ -7,6 +8,8 @@ import '../../../utils/theme/app_colors.dart';
 import '../../../utils/widget/dialogs.dart';
 import '../../master part service/controller/part_controller.dart';
 import '../../master part service/model/part_model.dart';
+import '../../satuan/controller/master_satuan_controller.dart';
+import '../../satuan/model/satuan_model.dart';
 import '../controller/service_berkala_controller.dart';
 import '../model/detail_service_model.dart';
 import '../source/detail_service_berkala_source.dart';
@@ -18,6 +21,8 @@ class MasterDetailServiceBerkala extends GetView<ServiceBerkalaController> {
   @override
   Widget build(BuildContext context) {
     final PartController masterKategoriController = Get.put(PartController());
+    final MasterSatuanController masterSatuanController =
+        Get.put(MasterSatuanController());
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -42,6 +47,7 @@ class MasterDetailServiceBerkala extends GetView<ServiceBerkalaController> {
                     controller.kondisiFisikBagusC.clear();
                     controller.kondisiFisikJelekC.clear();
                     controller.qtyC.clear();
+                    controller.satuanQtyC.clear();
                     masterKategoriController.selectedTypeItem.value = '';
                     Navigator.of(Get.overlayContext!).pop();
                   },
@@ -59,179 +65,252 @@ class MasterDetailServiceBerkala extends GetView<ServiceBerkalaController> {
                           fontWeight: FontWeight.w400, color: Colors.black),
                     ),
                   ),
-                  contentWidget: SingleChildScrollView(
-                    child: Form(
-                        key: controller.formKey,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.only(
-                                  left: CustomSize.sm, right: 12),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(
-                                    CustomSize.inputFieldRadius),
-                                border: Border.all(
-                                    width: 1, color: AppColors.borderPrimary),
+                  contentWidget: Obx(() {
+                    if (masterSatuanController.isLoading.value) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+
+                    if (masterSatuanController.satuanModel.isEmpty) {
+                      return const Text(
+                          "Data master satuan tidak tersedia, harap isi terlebih dahulu");
+                    }
+
+                    return SingleChildScrollView(
+                      child: Form(
+                          key: controller.formKey,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.only(
+                                    left: CustomSize.sm, right: 12),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(
+                                      CustomSize.inputFieldRadius),
+                                  border: Border.all(
+                                      width: 1, color: AppColors.borderPrimary),
+                                ),
+                                child: Obx(() {
+                                  // Menampilkan indikator loading jika data sedang dimuat
+                                  if (masterKategoriController
+                                      .isLoading.value) {
+                                    return const CircularProgressIndicator();
+                                  }
+
+                                  // Menampilkan pesan jika tidak ada data
+                                  if (masterKategoriController
+                                      .partModel.isEmpty) {
+                                    return const Text(
+                                        'Harap mengisi master kategori terlebih dahulu');
+                                  }
+
+                                  return DropdownButton<String>(
+                                    value: masterKategoriController
+                                            .selectedTypeItem.value.isEmpty
+                                        ? null
+                                        : masterKategoriController
+                                            .selectedTypeItem.value,
+                                    underline: const SizedBox.shrink(),
+                                    hint: Text(
+                                      'Nama Item',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelMedium,
+                                    ),
+                                    isExpanded: true,
+                                    onChanged: (String? newValue) {
+                                      masterKategoriController
+                                          .selectedTypeItem.value = newValue!;
+                                      print(
+                                          'Selected group_id: ${masterKategoriController.selectedTypeItem.value}'); // Print group_id
+                                    },
+                                    items: masterKategoriController.partModel
+                                        .map<DropdownMenuItem<String>>(
+                                            (PartModel kategoriModel) {
+                                      return DropdownMenuItem<String>(
+                                        value: kategoriModel.namaItem,
+                                        child: Text(
+                                          kategoriModel.namaItem.toUpperCase(),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .labelMedium,
+                                        ), // Asumsikan partModel memiliki properti 'name'
+                                      );
+                                    }).toList(),
+                                  );
+                                }),
                               ),
-                              child: Obx(() {
-                                // Menampilkan indikator loading jika data sedang dimuat
-                                if (masterKategoriController.isLoading.value) {
-                                  return const CircularProgressIndicator();
-                                }
-
-                                // Menampilkan pesan jika tidak ada data
-                                if (masterKategoriController
-                                    .partModel.isEmpty) {
-                                  return const Text('No group users available');
-                                }
-
-                                return DropdownButton<String>(
-                                  value: masterKategoriController
-                                          .selectedTypeItem.value.isEmpty
-                                      ? null
-                                      : masterKategoriController
-                                          .selectedTypeItem.value,
-                                  underline: const SizedBox.shrink(),
-                                  hint: Text(
-                                    'Nama Item',
-                                    style:
-                                        Theme.of(context).textTheme.labelMedium,
+                              const SizedBox(height: CustomSize.sm),
+                              TextFormField(
+                                controller: controller.kmTargetC,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return '* Bagian ini tidak boleh kosong';
+                                  }
+                                  return null;
+                                },
+                                keyboardType: TextInputType.text,
+                                decoration: InputDecoration(
+                                  label: Text('KM Target',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelMedium),
+                                ),
+                              ),
+                              const SizedBox(height: CustomSize.sm),
+                              TextFormField(
+                                controller: controller.bulanTargetC,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return '* Bagian ini tidak boleh kosong';
+                                  }
+                                  return null;
+                                },
+                                keyboardType: TextInputType.text,
+                                decoration: InputDecoration(
+                                  label: Text('Target (BULAN)',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelMedium),
+                                ),
+                              ),
+                              const SizedBox(height: CustomSize.sm),
+                              TextFormField(
+                                controller: controller.tahunTargetC,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return '* Bagian ini tidak boleh kosong';
+                                  }
+                                  // Tambahkan validasi untuk memastikan hanya angka dan titik
+                                  if (!RegExp(r'^\d*\.?\d*$').hasMatch(value)) {
+                                    return 'Hanya boleh angka dan titik (.)';
+                                  }
+                                  return null;
+                                },
+                                keyboardType:
+                                    const TextInputType.numberWithOptions(
+                                        decimal: true),
+                                decoration: InputDecoration(
+                                  label: Text('Target (TAHUN)',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelMedium),
+                                ),
+                              ),
+                              const SizedBox(height: CustomSize.sm),
+                              TextFormField(
+                                controller: controller.kondisiFisikBagusC,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return '* Bagian ini tidak boleh kosong';
+                                  }
+                                  return null;
+                                },
+                                keyboardType: TextInputType.text,
+                                decoration: InputDecoration(
+                                  label: Text('Kondisi Fisik Bagus',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelMedium),
+                                ),
+                              ),
+                              const SizedBox(height: CustomSize.sm),
+                              TextFormField(
+                                controller: controller.kondisiFisikJelekC,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return '* Bagian ini tidak boleh kosong';
+                                  }
+                                  return null;
+                                },
+                                keyboardType: TextInputType.text,
+                                decoration: InputDecoration(
+                                  label: Text('Kondisi Fisik Jelek',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelMedium),
+                                ),
+                              ),
+                              const SizedBox(height: CustomSize.sm),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text('QTY',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .labelMedium),
+                                        TextFormField(
+                                          controller: controller.qtyC,
+                                          validator: (value) {
+                                            if (value == null ||
+                                                value.isEmpty) {
+                                              return '**';
+                                            }
+                                            return null;
+                                          },
+                                          keyboardType: TextInputType.text,
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  isExpanded: true,
-                                  onChanged: (String? newValue) {
-                                    masterKategoriController
-                                        .selectedTypeItem.value = newValue!;
-                                    print(
-                                        'Selected group_id: ${masterKategoriController.selectedTypeItem.value}'); // Print group_id
-                                  },
-                                  items: masterKategoriController.partModel
-                                      .map<DropdownMenuItem<String>>(
-                                          (PartModel kategoriModel) {
-                                    return DropdownMenuItem<String>(
-                                      value: kategoriModel.namaItem,
-                                      child: Text(
-                                        kategoriModel.namaItem.toUpperCase(),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .labelMedium,
-                                      ), // Asumsikan partModel memiliki properti 'name'
-                                    );
-                                  }).toList(),
-                                );
-                              }),
-                            ),
-                            const SizedBox(height: CustomSize.sm),
-                            TextFormField(
-                              controller: controller.kmTargetC,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return '* Bagian ini tidak boleh kosong';
-                                }
-                                return null;
-                              },
-                              keyboardType: TextInputType.text,
-                              decoration: InputDecoration(
-                                label: Text('KM Target',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .labelMedium),
-                              ),
-                            ),
-                            const SizedBox(height: CustomSize.sm),
-                            TextFormField(
-                              controller: controller.bulanTargetC,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return '* Bagian ini tidak boleh kosong';
-                                }
-                                return null;
-                              },
-                              keyboardType: TextInputType.text,
-                              decoration: InputDecoration(
-                                label: Text('Target (BULAN)',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .labelMedium),
-                              ),
-                            ),
-                            const SizedBox(height: CustomSize.sm),
-                            TextFormField(
-                              controller: controller.tahunTargetC,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return '* Bagian ini tidak boleh kosong';
-                                }
-                                // Tambahkan validasi untuk memastikan hanya angka dan titik
-                                if (!RegExp(r'^\d*\.?\d*$').hasMatch(value)) {
-                                  return 'Hanya boleh angka dan titik (.)';
-                                }
-                                return null;
-                              },
-                              keyboardType:
-                                  const TextInputType.numberWithOptions(
-                                      decimal: true),
-                              decoration: InputDecoration(
-                                label: Text('Target (TAHUN)',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .labelMedium),
-                              ),
-                            ),
-                            const SizedBox(height: CustomSize.sm),
-                            TextFormField(
-                              controller: controller.kondisiFisikBagusC,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return '* Bagian ini tidak boleh kosong';
-                                }
-                                return null;
-                              },
-                              keyboardType: TextInputType.text,
-                              decoration: InputDecoration(
-                                label: Text('KONDISI FISIK\nBAGUS',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .labelMedium),
-                              ),
-                            ),
-                            const SizedBox(height: CustomSize.sm),
-                            TextFormField(
-                              controller: controller.kondisiFisikJelekC,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return '* Bagian ini tidak boleh kosong';
-                                }
-                                return null;
-                              },
-                              keyboardType: TextInputType.text,
-                              decoration: InputDecoration(
-                                label: Text('Kondisi Fisik\nJelek',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .labelMedium),
-                              ),
-                            ),
-                            const SizedBox(height: CustomSize.sm),
-                            TextFormField(
-                              controller: controller.qtyC,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return '* Bagian ini tidak boleh kosong';
-                                }
-                                return null;
-                              },
-                              keyboardType: TextInputType.text,
-                              decoration: InputDecoration(
-                                label: Text('QTY DI KENDARAAN',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .labelMedium),
-                              ),
-                            ),
-                          ],
-                        )),
-                  ));
+                                  const SizedBox(width: CustomSize.sm),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text('Satuan',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .labelMedium),
+                                        DropdownSearch<SatuanModel>(
+                                          popupProps: const PopupProps.menu(
+                                            showSearchBox: true,
+                                            constraints: BoxConstraints(
+                                              maxHeight: 200,
+                                            ),
+                                            searchFieldProps: TextFieldProps(
+                                              decoration: InputDecoration(
+                                                labelText: "Cari Nama Satuan",
+                                              ),
+                                            ),
+                                          ),
+                                          items: (_, __) =>
+                                              masterSatuanController
+                                                  .satuanModel,
+                                          itemAsString: (SatuanModel item) =>
+                                              item.namaSatuan,
+                                          compareFn:
+                                              (SatuanModel a, SatuanModel b) =>
+                                                  a.namaSatuan == b.namaSatuan,
+                                          onChanged: (value) {
+                                            controller.satuanQtyC.text =
+                                                value?.singkatan ?? "";
+                                            print(
+                                                'ini yang di pilih satuan pada tambah detail kategori :${controller.satuanQtyC.text}');
+                                          },
+                                          validator: (value) {
+                                            if (value == null) {
+                                              return "**";
+                                            }
+                                            return null;
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ],
+                          )),
+                    );
+                  }));
             },
             child: Container(
               padding: const EdgeInsets.all(CustomSize.xs),

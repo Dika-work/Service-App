@@ -7,6 +7,7 @@ class MtcModel {
   String nowKm;
   String nextService;
   String jenisKen;
+  String merkKen;
   String typeKen;
   String driver;
   String noBuntut;
@@ -22,6 +23,7 @@ class MtcModel {
     required this.nowKm,
     required this.nextService,
     required this.jenisKen,
+    required this.merkKen,
     required this.typeKen,
     required this.driver,
     required this.noBuntut,
@@ -39,6 +41,7 @@ class MtcModel {
       nowKm: json['now_km'],
       nextService: json['next_service'],
       jenisKen: json['jenis_ken'],
+      merkKen: json['merk_ken'],
       typeKen: json['type_ken'],
       driver: json['driver'],
       noBuntut: json['no_buntut'],

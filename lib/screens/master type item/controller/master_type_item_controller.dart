@@ -8,13 +8,13 @@ import '../model/master_type_item_model.dart';
 class MasterTypeItemController extends GetxController {
   RxBool isLoading = false.obs;
   RxList<MasterTypeItemModel> masterTypeItemModel = <MasterTypeItemModel>[].obs;
-  RxString selectedTypeItem = ''.obs;
+  // RxString selectedTypeItem = ''.obs;
   final formKey = GlobalKey<FormState>();
   final TextEditingController typeKategoriC = TextEditingController();
 
   final diomultipart.Dio _dio = diomultipart.Dio(
     diomultipart.BaseOptions(
-      baseUrl: 'http://192.168.1.4:8080',
+      baseUrl: 'http://10.3.80.4:8080',
       connectTimeout: const Duration(seconds: 10),
       receiveTimeout: const Duration(seconds: 10),
     ),

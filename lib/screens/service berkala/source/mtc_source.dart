@@ -42,7 +42,7 @@ class MtcSource extends DataGridSource {
 
     // Create cells for the first 6 columns
     List<Widget> cells = [
-      ...row.getCells().take(12).map<Widget>((e) {
+      ...row.getCells().take(13).map<Widget>((e) {
         return Container(
           alignment: Alignment.center,
           padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
@@ -244,12 +244,13 @@ class MtcSource extends DataGridSource {
           DataGridCell<String>(columnName: 'No', value: '-'),
           DataGridCell<String>(columnName: 'Tgl Dibuat', value: '-'),
           DataGridCell<String>(columnName: 'No Polisi', value: '-'),
-          DataGridCell<String>(columnName: 'Mekanik', value: '-'),
+          DataGridCell<String>(columnName: 'Mekanik/User Input', value: '-'),
           DataGridCell<String>(columnName: 'K.Pool', value: '-'),
           DataGridCell<String>(columnName: 'KM Terakhir Servis', value: '-'),
           DataGridCell<String>(columnName: 'KM Saat Ini', value: '-'),
           DataGridCell<String>(columnName: 'KM Servis Selanjutnya', value: '-'),
           DataGridCell<String>(columnName: 'Jenis Mobil', value: '-'),
+          DataGridCell<String>(columnName: 'Merk Mobil', value: '-'),
           DataGridCell<String>(columnName: 'Type Mobil', value: '-'),
           DataGridCell<String>(columnName: 'Driver', value: '-'),
           DataGridCell<String>(columnName: 'No Buntut', value: '-'),
@@ -276,7 +277,8 @@ class MtcSource extends DataGridSource {
                   DateFormat('d/MMM/y').format(DateTime.parse(data.createAt))),
           DataGridCell<String>(columnName: 'No Polisi', value: data.noPolisi),
           DataGridCell<String>(
-              columnName: 'Mekanik', value: data.mekanik.toUpperCase()),
+              columnName: 'Mekanik/User Input',
+              value: data.mekanik.toUpperCase()),
           DataGridCell<String>(
               columnName: 'K.Pool', value: data.kpool.toUpperCase()),
           DataGridCell<String>(
@@ -285,6 +287,7 @@ class MtcSource extends DataGridSource {
           DataGridCell<String>(
               columnName: 'KM Servis Selanjutnya', value: data.nextService),
           DataGridCell<String>(columnName: 'Jenis Mobil', value: data.jenisKen),
+          DataGridCell<String>(columnName: 'Merk Mobil', value: data.merkKen),
           DataGridCell<String>(columnName: 'Type Mobil', value: data.typeKen),
           DataGridCell<String>(columnName: 'Driver', value: data.driver),
           DataGridCell<String>(columnName: 'No Buntut', value: data.noBuntut),

@@ -39,7 +39,9 @@ class PartSource extends DataGridSource {
           padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
           child: Text(
             e.value.toString(),
-            textAlign: TextAlign.justify,
+            textAlign: TextAlign.center,
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
             style: const TextStyle(fontSize: CustomSize.fontSizeXm),
           ),
         );
@@ -123,8 +125,10 @@ class PartSource extends DataGridSource {
         // Create row cells
         List<DataGridCell> cells = [
           DataGridCell<int>(columnName: 'No', value: index),
-          DataGridCell<String>(columnName: 'Nama Item', value: data.namaItem),
-          DataGridCell<String>(columnName: 'Type', value: data.typeItem),
+          DataGridCell<String>(
+              columnName: 'Nama Item', value: data.namaItem.toUpperCase()),
+          DataGridCell<String>(
+              columnName: 'Type', value: data.typeItem.toUpperCase()),
         ];
 
         return DataGridRow(cells: cells);

@@ -229,8 +229,22 @@ class HomeMekanikView extends GetView<HomeMekanikController> {
                   model: controller.mtcModel,
                   onServis: (MtcModel model) async {
                     if (model.status == '0') {
-                      final result = await Get.toNamed(Routes.SERVICE_BERKALA,
-                          arguments: {'id_mtc': model.id});
+                      final result =
+                          await Get.toNamed(Routes.SERVICE_BERKALA, arguments: {
+                        'id_mtc': model.id,
+                        'tgl_dibuat': model.createAt,
+                        'no_polisi': model.noPolisi,
+                        'user_input': model.mekanik,
+                        'kpool': model.kpool,
+                        'last_service': model.lastService,
+                        'now_km': model.nowKm,
+                        'next_km': model.nextService,
+                        'jenis_mobil': model.jenisKen,
+                        'merk_mobil': model.merkKen,
+                        'type_mobil': model.typeKen,
+                        'driver': model.driver,
+                        'no_buntut': model.noBuntut
+                      });
 
                       if (result == true) {
                         if (controller.typeUser.value == 'mekanik') {

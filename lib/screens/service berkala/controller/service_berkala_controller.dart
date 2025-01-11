@@ -20,10 +20,11 @@ class ServiceBerkalaController extends GetxController {
   final TextEditingController kondisiFisikBagusC = TextEditingController();
   final TextEditingController kondisiFisikJelekC = TextEditingController();
   final TextEditingController qtyC = TextEditingController();
+  final TextEditingController satuanQtyC = TextEditingController();
 
   final diomultipart.Dio _dio = diomultipart.Dio(
     diomultipart.BaseOptions(
-      baseUrl: 'http://192.168.1.4:8080',
+      baseUrl: 'http://10.3.80.4:8080',
       connectTimeout: const Duration(seconds: 10),
       receiveTimeout: const Duration(seconds: 10),
     ),
@@ -86,6 +87,7 @@ class ServiceBerkalaController extends GetxController {
         'physical_condition_jelek':
             kondisiFisikJelekC.text.trim().toLowerCase(),
         'quantity': qtyC.text.trim().toLowerCase(),
+        'satuan': satuanQtyC.text.trim().toLowerCase(),
       });
 
       final response = await _dio.post('/detail-service', data: formData);
@@ -99,6 +101,7 @@ class ServiceBerkalaController extends GetxController {
         kondisiFisikBagusC.clear();
         kondisiFisikJelekC.clear();
         qtyC.clear();
+        satuanQtyC.clear();
         SnackbarLoader.successSnackBar(
             title: 'Berhasil', message: 'Data berhasil ditambahkan');
       }

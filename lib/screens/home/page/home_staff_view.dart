@@ -319,6 +319,36 @@ class HomeStaffView extends GetView<HomeStaffController> {
                                   ?.copyWith(fontWeight: FontWeight.bold),
                             ))),
                     GridColumn(
+                        columnName: 'Tgl Dibuat',
+                        label: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              color: Colors.lightBlue.shade100,
+                            ),
+                            child: Text(
+                              'Tgl Dibuat',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(fontWeight: FontWeight.bold),
+                            ))),
+                    GridColumn(
+                        columnName: 'No Polisi',
+                        label: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              color: Colors.lightBlue.shade100,
+                            ),
+                            child: Text(
+                              'No Polisi',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(fontWeight: FontWeight.bold),
+                            ))),
+                    GridColumn(
                         columnName: 'Mekanik',
                         label: Container(
                             alignment: Alignment.center,
@@ -343,21 +373,6 @@ class HomeStaffView extends GetView<HomeStaffController> {
                             ),
                             child: Text(
                               'K.Pool',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(fontWeight: FontWeight.bold),
-                            ))),
-                    GridColumn(
-                        columnName: 'No Polisi',
-                        label: Container(
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              color: Colors.lightBlue.shade100,
-                            ),
-                            child: Text(
-                              'No Polisi',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium

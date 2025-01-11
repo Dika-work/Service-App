@@ -351,8 +351,22 @@ class HomeSuperAdmin extends GetView<HomeSuperAdminController> {
                   model: controller.mtcModel,
                   onServis: (MtcModel model) async {
                     if (model.status == '0') {
-                      final result = await Get.toNamed(Routes.SERVICE_BERKALA,
-                          arguments: {'id_mtc': model.id});
+                      final result =
+                          await Get.toNamed(Routes.SERVICE_BERKALA, arguments: {
+                        'id_mtc': model.id,
+                        'tgl_dibuat': model.createAt,
+                        'no_polisi': model.noPolisi,
+                        'user_input': model.mekanik,
+                        'kpool': model.kpool,
+                        'last_service': model.lastService,
+                        'now_km': model.nowKm,
+                        'next_km': model.nextService,
+                        'jenis_mobil': model.jenisKen,
+                        'merk_mobil': model.merkKen,
+                        'type_mobil': model.typeKen,
+                        'driver': model.driver,
+                        'no_buntut': model.noBuntut,
+                      });
 
                       if (result == true) {
                         controller.getData();
@@ -439,7 +453,7 @@ class HomeSuperAdmin extends GetView<HomeSuperAdminController> {
                                   ?.copyWith(fontWeight: FontWeight.bold),
                             ))),
                     GridColumn(
-                        columnName: 'Mekanik',
+                        columnName: 'Mekanik/User Input',
                         label: Container(
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
@@ -447,7 +461,7 @@ class HomeSuperAdmin extends GetView<HomeSuperAdminController> {
                               color: Colors.lightBlue.shade100,
                             ),
                             child: Text(
-                              'Mekanik',
+                              'Mekanik/User Input',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium
@@ -523,6 +537,21 @@ class HomeSuperAdmin extends GetView<HomeSuperAdminController> {
                             ),
                             child: Text(
                               'Jenis Mobil',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(fontWeight: FontWeight.bold),
+                            ))),
+                    GridColumn(
+                        columnName: 'Merk Mobil',
+                        label: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              color: Colors.lightBlue.shade100,
+                            ),
+                            child: Text(
+                              'Merk Mobil',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium

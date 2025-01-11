@@ -16,13 +16,14 @@ class MtcController extends GetxController {
   final TextEditingController nowKmServiceC = TextEditingController();
   final TextEditingController nextKmServiceC = TextEditingController();
   final TextEditingController jenisKenC = TextEditingController();
+  final TextEditingController merkKenC = TextEditingController();
   final TextEditingController typeKenC = TextEditingController();
   final TextEditingController driverC = TextEditingController();
   final TextEditingController noBuntutC = TextEditingController();
 
   final diomultipart.Dio _dio = diomultipart.Dio(
     diomultipart.BaseOptions(
-      baseUrl: 'http://192.168.1.4:8080',
+      baseUrl: 'http://10.3.80.4:8080',
       connectTimeout: const Duration(seconds: 10),
       receiveTimeout: const Duration(seconds: 10),
     ),
@@ -47,6 +48,7 @@ class MtcController extends GetxController {
         'now_km': nowKmServiceC.text.trim(),
         'next_service': nextKmServiceC.text.trim(),
         'jenis_ken': jenisKenC.text.trim(),
+        'merk_ken': merkKenC.text.trim(),
         'type_ken': typeKenC.text.trim(),
         'driver': driverC.text.trim(),
         'no_buntut': noBuntutC.text.trim(),
@@ -62,6 +64,7 @@ class MtcController extends GetxController {
         nowKmServiceC.clear();
         nextKmServiceC.clear();
         jenisKenC.clear();
+        merkKenC.clear();
         typeKenC.clear();
         driverC.clear();
         noBuntutC.clear();

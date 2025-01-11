@@ -103,6 +103,7 @@ class MasterKeteranganView extends GetView<MasterKeteranganController> {
                             );
                           }),
                         ),
+                        const SizedBox(height: CustomSize.sm),
                         TextFormField(
                           controller: controller.keteranganC,
                           keyboardType: TextInputType.text,

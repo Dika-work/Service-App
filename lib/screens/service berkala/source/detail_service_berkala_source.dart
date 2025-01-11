@@ -162,7 +162,7 @@ class DetailServiceBerkalaSource extends DataGridSource {
                   .toUpperCase()), // Ganti dengan field yang sesuai
           DataGridCell<String>(
               columnName: 'QTY\nDI KENDARAAN',
-              value: data.quantity
+              value: '${data.quantity} ${data.satuan}'
                   .toUpperCase()), // Ganti dengan field yang sesuai
         ];
 

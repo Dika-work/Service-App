@@ -4,6 +4,7 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../constant/custom_size.dart';
 import '../../../utils/theme/app_colors.dart';
+import '../../../utils/widget/dialogs.dart';
 import '../controller/master_satuan_controller.dart';
 import '../source/satuan_source.dart';
 
@@ -24,7 +25,63 @@ class MasterSatuan extends GetView<MasterSatuanController> {
         ),
         actions: [
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+              CustomDialogs.defaultDialog(
+                  context: context,
+                  confirmText: 'Tambah',
+                  cancelText: 'Kembali',
+                  onCancel: () {
+                    controller.namaSatuanC.clear();
+                    controller.singkatanC.clear();
+                    Navigator.of(Get.overlayContext!).pop();
+                  },
+                  onConfirm: () => controller.createPart(),
+                  titleWidget: Center(
+                    child: Text(
+                      'Tambah Satuan',
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w400, color: Colors.black),
+                    ),
+                  ),
+                  contentWidget: Form(
+                      key: controller.formKey,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          TextFormField(
+                            controller: controller.namaSatuanC,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return '* Nama satuan tidak boleh kosong';
+                              }
+                              return null;
+                            },
+                            keyboardType: TextInputType.text,
+                            decoration: InputDecoration(
+                              label: Text('Nama Item',
+                                  style:
+                                      Theme.of(context).textTheme.labelMedium),
+                            ),
+                          ),
+                          const SizedBox(height: CustomSize.sm),
+                          TextFormField(
+                            controller: controller.singkatanC,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return '* Bagian ini tidak boleh kosong';
+                              }
+                              return null;
+                            },
+                            keyboardType: TextInputType.text,
+                            decoration: InputDecoration(
+                              label: Text('Singkatan',
+                                  style:
+                                      Theme.of(context).textTheme.labelMedium),
+                            ),
+                          ),
+                        ],
+                      )));
+            },
             child: Container(
               padding: const EdgeInsets.all(CustomSize.xs),
               margin: const EdgeInsets.fromLTRB(

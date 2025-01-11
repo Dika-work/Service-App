@@ -16,7 +16,7 @@ class MasterKendaraanController extends GetxController {
 
   final diomultipart.Dio _dio = diomultipart.Dio(
     diomultipart.BaseOptions(
-      baseUrl: 'http://192.168.1.4:8080',
+      baseUrl: 'http://10.3.80.4:8080',
       connectTimeout: const Duration(seconds: 10),
       receiveTimeout: const Duration(seconds: 10),
     ),
@@ -49,7 +49,8 @@ class MasterKendaraanController extends GetxController {
     } on diomultipart.DioException catch (e) {
       SnackbarLoader.warningSnackBar(
         title: 'Error',
-        message: e.response?.data['message'] ?? 'Terjadi kesalahan',
+        message: e.response?.data['message'] ??
+            'Terjadi kesalahan pada master jenis kendaraan',
       );
       print(
           'Error getData: ${e.response?.data['message'] ?? 'Terjadi kesalahan'}');

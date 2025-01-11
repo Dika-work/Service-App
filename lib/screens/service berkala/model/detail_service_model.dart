@@ -8,6 +8,7 @@ class DetailServiceModel {
   String kondisiFisikBagus;
   String kondisiFisikJelek;
   String quantity;
+  String satuan;
   String keterangan;
   String selectedOption; // 'cek', 'repair', atau 'ganti'
 
@@ -21,6 +22,7 @@ class DetailServiceModel {
     required this.kondisiFisikBagus,
     required this.kondisiFisikJelek,
     required this.quantity,
+    required this.satuan,
     required this.keterangan,
     this.selectedOption = '0', // Default kosong
   });
@@ -36,6 +38,7 @@ class DetailServiceModel {
       kondisiFisikBagus: json['physical_condition_bagus'],
       kondisiFisikJelek: json['physical_condition_jelek'],
       quantity: json['quantity'],
+      satuan: json['satuan'],
       keterangan: json['keterangan'],
     );
   }

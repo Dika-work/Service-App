@@ -72,8 +72,9 @@ class SatuanSource extends DataGridSource {
         List<DataGridCell> cells = [
           DataGridCell<int>(columnName: 'No', value: index),
           DataGridCell<String>(
-              columnName: 'Nama Satuan', value: data.namaSatuan),
-          DataGridCell<String>(columnName: 'Singkatan', value: data.singkatan),
+              columnName: 'Nama Satuan', value: data.namaSatuan.toUpperCase()),
+          DataGridCell<String>(
+              columnName: 'Singkatan', value: data.singkatan.toUpperCase()),
         ];
 
         return DataGridRow(cells: cells);

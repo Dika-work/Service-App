@@ -1,3 +1,4 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:service/utils/widget/dialogs.dart';
@@ -38,11 +39,11 @@ class PartMaster extends GetView<PartController> {
                   cancelText: 'Kembali',
                   onCancel: () {
                     controller.namaItemC.clear();
+                    controller.typeItemC.clear();
                     Navigator.of(Get.overlayContext!).pop();
                   },
                   onConfirm: () {
-                    controller.createPart(
-                        masterTypeItemController.selectedTypeItem.value);
+                    controller.createPart();
                   },
                   titleWidget: Center(
                     child: Text(
@@ -51,106 +52,141 @@ class PartMaster extends GetView<PartController> {
                           fontWeight: FontWeight.w400, color: Colors.black),
                     ),
                   ),
-                  contentWidget: Form(
-                      key: controller.formKey,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          TextFormField(
-                            controller: controller.namaItemC,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return '* Nama item tidak boleh kosong';
-                              }
-                              return null;
-                            },
-                            keyboardType: TextInputType.text,
-                            decoration: InputDecoration(
-                              label: Text('Nama Item',
-                                  style:
-                                      Theme.of(context).textTheme.labelMedium),
-                            ),
-                          ),
-                          const SizedBox(height: CustomSize.sm),
-                          Container(
-                            padding: const EdgeInsets.only(
-                                left: CustomSize.sm, right: 12),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(
-                                  CustomSize.inputFieldRadius),
-                              border: Border.all(
-                                  width: 1, color: AppColors.borderPrimary),
-                            ),
-                            child: Obx(() {
-                              if (masterTypeItemController.isLoading.value) {
-                                return const Center(
-                                    child: CircularProgressIndicator());
-                              }
+                  contentWidget: Obx(() {
+                    if (masterTypeItemController.isLoading.value) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
 
-                              if (masterTypeItemController
-                                  .masterTypeItemModel.isEmpty) {
-                                return const Text('No type items available');
-                              }
+                    if (masterTypeItemController.masterTypeItemModel.isEmpty) {
+                      return const Center(
+                        child: Text('Data type kategori tidak tersedia'),
+                      );
+                    }
 
-                              return DropdownButton<String>(
-                                value: masterTypeItemController
-                                        .selectedTypeItem.value.isEmpty
-                                    ? null
-                                    : masterTypeItemController
-                                        .selectedTypeItem.value,
-                                underline: const SizedBox.shrink(),
-                                hint: Text(
-                                  'Select Type Item',
-                                  style: const TextStyle().copyWith(
-                                    fontSize: CustomSize.fontSizeSm,
-                                    color: AppColors.textPrimary,
-                                    fontFamily: 'Urbanist',
+                    return Form(
+                        key: controller.formKey,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            TextFormField(
+                              controller: controller.namaItemC,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return '* Nama item tidak boleh kosong';
+                                }
+                                return null;
+                              },
+                              keyboardType: TextInputType.text,
+                              decoration: InputDecoration(
+                                label: Text('Nama Item',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelMedium),
+                              ),
+                            ),
+                            const SizedBox(height: CustomSize.sm),
+                            DropdownSearch<MasterTypeItemModel>(
+                              popupProps: const PopupProps.menu(
+                                showSearchBox: true,
+                                constraints: BoxConstraints(
+                                  maxHeight: 200,
+                                ),
+                                searchFieldProps: TextFieldProps(
+                                  decoration: InputDecoration(
+                                    labelText: "Type Kategori",
                                   ),
                                 ),
-                                isExpanded: true,
-                                onChanged: (String? newValue) {
-                                  masterTypeItemController
-                                      .selectedTypeItem.value = newValue!;
-                                  print(
-                                      'Selected ID: ${masterTypeItemController.selectedTypeItem.value}');
-                                },
-                                items: masterTypeItemController
-                                    .masterTypeItemModel
-                                    .map<DropdownMenuItem<String>>(
-                                        (MasterTypeItemModel item) {
-                                  return DropdownMenuItem<String>(
-                                    value: item.id, // Simpan ID di sini
-                                    child: Text(
-                                      item.typeItem, // Tampilkan type_item
-                                      style: const TextStyle().copyWith(
-                                        fontSize: CustomSize.fontSizeSm,
-                                        color: AppColors.textPrimary,
-                                        fontFamily: 'Urbanist',
-                                      ),
-                                    ),
-                                  );
-                                }).toList(),
-                              );
-                            }),
-                          ),
+                              ),
+                              items: (_, __) =>
+                                  masterTypeItemController.masterTypeItemModel,
+                              itemAsString: (MasterTypeItemModel item) =>
+                                  item.typeItem,
+                              compareFn: (MasterTypeItemModel a,
+                                      MasterTypeItemModel b) =>
+                                  a.typeItem == b.typeItem, // Fungsi pembanding
+                              decoratorProps: const DropDownDecoratorProps(
+                                decoration: InputDecoration(
+                                  labelText: "Pilih type kategori",
+                                ),
+                              ),
 
-                          // TextFormField(
-                          //   controller: controller.typeC,
-                          //   validator: (value) {
-                          //     if (value == null || value.isEmpty) {
-                          //       return '* Type part tidak boleh kosong';
-                          //     }
-                          //     return null;
-                          //   },
-                          //   keyboardType: TextInputType.text,
-                          //   decoration: InputDecoration(
-                          //     label: Text('Type Part',
-                          //         style:
-                          //             Theme.of(context).textTheme.labelMedium),
-                          //   ),
-                          // ),
-                        ],
-                      )));
+                              onChanged: (value) {
+                                controller.typeItemC.text = value?.id ?? "";
+                                print(
+                                    'ini yang di pilih jenis kendaraan pada tambah MTC :${controller.typeItemC.text}');
+                              },
+                              validator: (value) {
+                                if (value == null) {
+                                  return "Type kategori harus dipilih";
+                                }
+                                return null;
+                              },
+                            ),
+                            // Container(
+                            //   padding: const EdgeInsets.only(
+                            //       left: CustomSize.sm, right: 12),
+                            //   decoration: BoxDecoration(
+                            //     borderRadius: BorderRadius.circular(
+                            //         CustomSize.inputFieldRadius),
+                            //     border: Border.all(
+                            //         width: 1, color: AppColors.borderPrimary),
+                            //   ),
+                            //   child: Obx(() {
+                            //     if (masterTypeItemController.isLoading.value) {
+                            //       return const Center(
+                            //           child: CircularProgressIndicator());
+                            //     }
+
+                            //     if (masterTypeItemController
+                            //         .masterTypeItemModel.isEmpty) {
+                            //       return const Text('No type items available');
+                            //     }
+
+                            //     return DropdownButton<String>(
+                            //       value: masterTypeItemController
+                            //               .selectedTypeItem.value.isEmpty
+                            //           ? null
+                            //           : masterTypeItemController
+                            //               .selectedTypeItem.value,
+                            //       underline: const SizedBox.shrink(),
+                            //       hint: Text(
+                            //         'Select Type Item',
+                            //         style: const TextStyle().copyWith(
+                            //           fontSize: CustomSize.fontSizeSm,
+                            //           color: AppColors.textPrimary,
+                            //           fontFamily: 'Urbanist',
+                            //         ),
+                            //       ),
+                            //       isExpanded: true,
+                            //       onChanged: (String? newValue) {
+                            //         controller.typeItemC.text = newValue!;
+                            //         print(
+                            //             'Selected ID: ${controller.typeItemC.text}');
+                            //       },
+                            //       items: masterTypeItemController
+                            //           .masterTypeItemModel
+                            //           .map<DropdownMenuItem<String>>(
+                            //               (MasterTypeItemModel item) {
+                            //         return DropdownMenuItem<String>(
+                            //           value: item.id, // Simpan ID di sini
+                            //           child: Text(
+                            //             item.typeItem, // Tampilkan type_item
+                            //             style: const TextStyle().copyWith(
+                            //               fontSize: CustomSize.fontSizeSm,
+                            //               color: AppColors.textPrimary,
+                            //               fontFamily: 'Urbanist',
+                            //             ),
+                            //           ),
+                            //         );
+                            //       }).toList(),
+                            //     );
+                            //   }),
+                            // ),
+                          ],
+                        ));
+                  }));
             },
             child: Container(
               padding: const EdgeInsets.all(CustomSize.xs),
