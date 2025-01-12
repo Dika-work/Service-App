@@ -50,7 +50,8 @@ class AddMtcView extends GetView<MtcController> {
           ],
         ),
         body: Obx(() {
-          if (masterJenisKen.isLoading.value) {
+          if (masterJenisKen.isLoading.value ||
+              masterJenisKen.isLoadingKendaraanEksternal.value) {
             // Tampilkan loading indikator
             return const Center(
               child: CircularProgressIndicator(),
@@ -58,9 +59,14 @@ class AddMtcView extends GetView<MtcController> {
           }
 
           if (masterJenisKen.masterKendaraanModel.isEmpty) {
-            // Tampilkan pesan jika data kosong
             return const Center(
               child: Text("Data master kendaraan tidak tersedia."),
+            );
+          }
+
+          if (masterJenisKen.kendaraanEksternalModel.isEmpty) {
+            return const Center(
+              child: Text("Data kendaraan eksternal tidak tersedia."),
             );
           }
 
@@ -91,51 +97,80 @@ class AddMtcView extends GetView<MtcController> {
                     ),
                   ),
                   const SizedBox(height: CustomSize.sm),
-                  TextFormField(
-                    controller: controller.noPolisiC,
+                  DropdownSearch<KendaraanModelEksternal>(
+                    popupProps: const PopupProps.menu(
+                      showSearchBox: true,
+                      searchFieldProps: TextFieldProps(
+                        decoration: InputDecoration(
+                          labelText: "Cari Nomor Polisi",
+                        ),
+                      ),
+                    ),
+                    items: (_, __) => masterJenisKen.kendaraanEksternalModel,
+                    itemAsString: (KendaraanModelEksternal item) =>
+                        item.noPolisi,
+                    compareFn: (KendaraanModelEksternal a,
+                            KendaraanModelEksternal b) =>
+                        a.noPolisi == b.noPolisi, // Fungsi pembanding
+                    decoratorProps: const DropDownDecoratorProps(
+                      decoration: InputDecoration(
+                        labelText: "Pilih nomor polisi",
+                      ),
+                    ),
+
+                    onChanged: (value) {
+                      controller.noPolisiC.text = value?.noPolisi ?? "";
+                      controller.driverC.text = value?.supir ?? "";
+                      controller.nowKmServiceC.text = value?.kmNow ?? "";
+                      controller.lastKmServiceC.text =
+                          value?.lastKmService ?? "";
+                      print(
+                          'ini yang di pilih jenis kendaraan pada tambah MTC :${controller.jenisKenC.text}');
+                    },
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return '* No Polisi tidak boleh kosong';
+                      if (value == null) {
+                        return "Jenis Kendaraan harus dipilih";
                       }
                       return null;
                     },
-                    keyboardType: TextInputType.text,
-                    decoration: InputDecoration(
-                      label: Text('No Polisi',
-                          style: Theme.of(context).textTheme.labelMedium),
+                  ),
+                  const SizedBox(height: CustomSize.sm),
+                  Text('KM Terakhir Service',
+                      style: Theme.of(context).textTheme.labelMedium),
+                  TextFormField(
+                    controller: controller.lastKmServiceC,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return '* Harap memilih nomor polisi dulu, KM Terakhir Service tidak dapat di lanjutkan sebelum memilih nomor polisi';
+                      }
+                      return null;
+                    },
+                    readOnly: true,
+                    decoration: const InputDecoration(
+                      filled: true,
+                      fillColor: AppColors.buttonDisabled,
                     ),
                   ),
                   const SizedBox(height: CustomSize.sm),
-                  TextFormField(
-                    controller: controller.lastKmServiceC,
-                    keyboardType: TextInputType.number,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return '* Bagian ini tidak boleh kosong';
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                        label: Text('KM Terakhir Service',
-                            style: Theme.of(context).textTheme.labelMedium),
-                        suffixText: 'KM'),
-                  ),
-                  const SizedBox(height: CustomSize.sm),
+                  Text('KM Saat Ini',
+                      style: Theme.of(context).textTheme.labelMedium),
                   TextFormField(
                     controller: controller.nowKmServiceC,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return '* Bagian ini tidak boleh kosong';
+                        return '* Harap memilih nomor polisi dulu, KM Saat Ini tidak dapat di lanjutkan sebelum memilih nomor polisi';
                       }
                       return null;
                     },
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                        label: Text('KM Saat Ini',
-                            style: Theme.of(context).textTheme.labelMedium),
-                        suffixText: 'KM'),
+                    readOnly: true,
+                    decoration: const InputDecoration(
+                      filled: true,
+                      fillColor: AppColors.buttonDisabled,
+                    ),
                   ),
                   const SizedBox(height: CustomSize.sm),
+                  Text('KM Service Selanjutnya',
+                      style: Theme.of(context).textTheme.labelMedium),
                   TextFormField(
                     controller: controller.nextKmServiceC,
                     validator: (value) {
@@ -204,7 +239,7 @@ class AddMtcView extends GetView<MtcController> {
                     ),
                   ),
                   const SizedBox(height: CustomSize.sm),
-                  Text('Type Mobil',
+                  Text('Merk Mobil',
                       style: Theme.of(context).textTheme.labelMedium),
                   TextFormField(
                     controller: controller.merkKenC,
@@ -221,18 +256,19 @@ class AddMtcView extends GetView<MtcController> {
                     ),
                   ),
                   const SizedBox(height: CustomSize.sm),
+                  Text('Supir', style: Theme.of(context).textTheme.labelMedium),
                   TextFormField(
                     controller: controller.driverC,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return '* Nama Driver harus diisi';
+                        return '* Harap memilih nomor polisi dulu, supir tidak dapat di lanjutkan sebelum memilih nomor polisi';
                       }
                       return null;
                     },
-                    keyboardType: TextInputType.text,
-                    decoration: InputDecoration(
-                      label: Text('Driver',
-                          style: Theme.of(context).textTheme.labelMedium),
+                    readOnly: true,
+                    decoration: const InputDecoration(
+                      filled: true,
+                      fillColor: AppColors.buttonDisabled,
                     ),
                   ),
                   const SizedBox(height: CustomSize.sm),

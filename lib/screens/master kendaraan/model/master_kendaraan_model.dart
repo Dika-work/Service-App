@@ -20,3 +20,26 @@ class MasterKendaraanModel {
     );
   }
 }
+
+class KendaraanModelEksternal {
+  String noPolisi;
+  String supir;
+  String kmNow;
+  String lastKmService;
+
+  KendaraanModelEksternal({
+    required this.noPolisi,
+    required this.supir,
+    required this.kmNow,
+    required this.lastKmService,
+  });
+
+  factory KendaraanModelEksternal.fromJson(Map<String, dynamic> json) {
+    return KendaraanModelEksternal(
+      noPolisi: json['no_polisi'],
+      supir: json['supir'],
+      kmNow: json['km'],
+      lastKmService: json['km_sebelumnya'],
+    );
+  }
+}

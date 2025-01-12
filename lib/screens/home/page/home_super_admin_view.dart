@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:intl/intl.dart';
 import 'package:service/constant/custom_size.dart';
 import 'package:service/routes/app_pages.dart';
 import 'package:service/screens/home/controller/home_super_admin_controller.dart';
@@ -12,6 +13,7 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../utils/widget/dialogs.dart';
 import '../../../utils/widget/expandable_container.dart';
+import '../../../utils/widget/pdf_preview.dart';
 import '../../data real/page/input_data_real.dart';
 import '../../service berkala/model/mtc_model.dart';
 import '../../service berkala/page/acc_staff_view.dart';
@@ -391,6 +393,31 @@ class HomeSuperAdmin extends GetView<HomeSuperAdminController> {
                           await Get.to(() => AccStaffView(idMtc: model.id));
                       if (result == true) {
                         controller.getData();
+                      }
+                    } else if (model.status == '3') {
+                      print('Start generating PDF with header...');
+                      final startTime = DateTime.now();
+                      final pdfBytesWithHeader =
+                          await controller.generatePDF(model, withHeader: true);
+
+                      final pdfBytesWithoutHeader = await controller
+                          .generatePDF(model, withHeader: false);
+
+                      final endTime = DateTime.now();
+                      print(
+                          'PDF generated in ${endTime.difference(startTime).inMilliseconds} ms');
+
+                      // Navigasi ke layar preview PDF
+                      if (pdfBytesWithHeader.isNotEmpty &&
+                          pdfBytesWithoutHeader.isNotEmpty) {
+                        Get.to(
+                          () => PdfPreviewScreen(
+                            pdfBytesWithHeader: pdfBytesWithHeader,
+                            pdfBytesWithoutHeader: pdfBytesWithoutHeader,
+                            fileName:
+                                'Acc-Service-Berkala-${DateFormat('dd MMM yyyy').format(DateTime.now())}.pdf',
+                          ),
+                        );
                       }
                     }
                   },

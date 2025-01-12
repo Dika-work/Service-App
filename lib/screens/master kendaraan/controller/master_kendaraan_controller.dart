@@ -7,8 +7,11 @@ import '../model/master_kendaraan_model.dart';
 
 class MasterKendaraanController extends GetxController {
   RxBool isLoading = false.obs;
+  RxBool isLoadingKendaraanEksternal = false.obs;
   RxList<MasterKendaraanModel> masterKendaraanModel =
       <MasterKendaraanModel>[].obs;
+  RxList<KendaraanModelEksternal> kendaraanEksternalModel =
+      <KendaraanModelEksternal>[].obs;
   final formKey = GlobalKey<FormState>();
   TextEditingController jenisKenC = TextEditingController();
   TextEditingController merkC = TextEditingController();
@@ -26,6 +29,7 @@ class MasterKendaraanController extends GetxController {
   void onInit() {
     super.onInit();
     getData();
+    getDataKendaraanEksternal();
   }
 
   getData() async {
@@ -56,6 +60,63 @@ class MasterKendaraanController extends GetxController {
           'Error getData: ${e.response?.data['message'] ?? 'Terjadi kesalahan'}');
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  getDataKendaraanEksternal() async {
+    isLoadingKendaraanEksternal.value = true;
+
+    try {
+      // Membuat instance Dio
+      final dio = diomultipart.Dio(
+        diomultipart.BaseOptions(
+          baseUrl: 'http://langgeng.dyndns.biz/testing_mtc/',
+          connectTimeout: const Duration(seconds: 10),
+          receiveTimeout: const Duration(seconds: 10),
+        ),
+      );
+
+      // Memanggil endpoint
+      final response = await dio.get('/Api/Analisa.php?action=getData');
+
+      if (response.statusCode == 200) {
+        // Parsing data langsung dari response karena berupa array JSON
+        final data = response.data;
+        if (data is List) {
+          kendaraanEksternalModel.value = data
+              .map((e) =>
+                  KendaraanModelEksternal.fromJson(e as Map<String, dynamic>))
+              .toList();
+        } else {
+          SnackbarLoader.errorSnackBar(
+            title: 'Error',
+            message: 'Format data tidak valid.',
+          );
+        }
+      } else {
+        SnackbarLoader.errorSnackBar(
+          title: 'Gagal',
+          message: 'Gagal mengambil data kendaraan eksternal.',
+        );
+      }
+    } on diomultipart.DioException catch (e) {
+      // Menangani kesalahan dari DioException
+      SnackbarLoader.warningSnackBar(
+        title: 'Error',
+        message: e.response?.data['message'] ??
+            'Terjadi kesalahan pada master jenis kendaraan',
+      );
+      print(
+          'Error getDataKendaraanEksternal: ${e.response?.data['message'] ?? 'Terjadi kesalahan'}');
+    } catch (e) {
+      // Menangani kesalahan umum lainnya
+      SnackbarLoader.errorSnackBar(
+        title: 'Error',
+        message: 'Terjadi kesalahan yang tidak terduga.',
+      );
+      print('Error getDataKendaraanEksternal: $e');
+    } finally {
+      isLoadingKendaraanEksternal.value = false;
     }
   }
 
