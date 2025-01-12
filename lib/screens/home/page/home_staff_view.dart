@@ -13,8 +13,8 @@ import '../../../routes/app_pages.dart';
 import '../../../utils/theme/app_colors.dart';
 import '../../../utils/widget/expandable_container.dart';
 import '../../../utils/widget/pdf_preview.dart';
-// import '../../data real/page/input_data_real.dart';
 import '../../service berkala/model/mtc_model.dart';
+import '../../service berkala/page/acc_staff_view.dart';
 import '../../service berkala/page/edit_service_berkala.dart';
 import '../../service berkala/source/mtc_source.dart';
 
@@ -166,9 +166,72 @@ class HomeStaffView extends GetView<HomeStaffController> {
                               ?.copyWith(color: AppColors.black),
                         ),
                       ),
+                      ListTile(
+                        onTap: () => Get.toNamed(Routes.MASTER_TYPE_ITEM),
+                        leading: const Icon(
+                          Iconsax.record,
+                          color: AppColors.black,
+                        ),
+                        title: Text(
+                          'Type Kategori',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleSmall
+                              ?.copyWith(color: AppColors.black),
+                        ),
+                      ),
                     ],
                   ),
                 ),
+                ExpandableContainer(
+                    icon: Iconsax.support,
+                    textTitle: 'Master Lainnya',
+                    content: Column(
+                      children: [
+                        ListTile(
+                          onTap: () => Get.toNamed(Routes.MASTER_KENDARAAN),
+                          leading: const Icon(
+                            Iconsax.record,
+                            color: AppColors.black,
+                          ),
+                          title: Text(
+                            'Master Jenis Kendaraan',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall
+                                ?.copyWith(color: AppColors.black),
+                          ),
+                        ),
+                        ListTile(
+                          onTap: () => Get.toNamed(Routes.MASTER_KETERANGAN),
+                          leading: const Icon(
+                            Iconsax.record,
+                            color: AppColors.black,
+                          ),
+                          title: Text(
+                            'Master Keterangan',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall
+                                ?.copyWith(color: AppColors.black),
+                          ),
+                        ),
+                        ListTile(
+                          onTap: () => Get.toNamed(Routes.MASTER_SATUAN),
+                          leading: const Icon(
+                            Iconsax.record,
+                            color: AppColors.black,
+                          ),
+                          title: Text(
+                            'Master Satuan',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall
+                                ?.copyWith(color: AppColors.black),
+                          ),
+                        ),
+                      ],
+                    )),
                 ListTile(
                   onTap: () => controller.logout(),
                   leading: const Icon(
@@ -215,6 +278,15 @@ class HomeStaffView extends GetView<HomeStaffController> {
               final dataSource = MtcSource(
                   model: controller.mtcModel,
                   onServis: (MtcModel model) async {
+                    if (model.status == '2') {
+                      print(
+                          'INI AKAN DI ACC OLEH STAFF DAN MERUBAH STATUS NYA MENJADI 3');
+                      final result =
+                          await Get.to(() => AccStaffView(idMtc: model.id));
+                      if (result == true) {
+                        controller.getData();
+                      }
+                    }
                     if (model.status == '3') {
                       // Generate dua jenis PDF
                       print('Start generating PDF with header...');
@@ -349,7 +421,7 @@ class HomeStaffView extends GetView<HomeStaffController> {
                                   ?.copyWith(fontWeight: FontWeight.bold),
                             ))),
                     GridColumn(
-                        columnName: 'Mekanik',
+                        columnName: 'Mekanik/User Input',
                         label: Container(
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
@@ -357,7 +429,7 @@ class HomeStaffView extends GetView<HomeStaffController> {
                               color: Colors.lightBlue.shade100,
                             ),
                             child: Text(
-                              'Mekanik',
+                              'Mekanik/User Input',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium
@@ -433,6 +505,21 @@ class HomeStaffView extends GetView<HomeStaffController> {
                             ),
                             child: Text(
                               'Jenis Mobil',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(fontWeight: FontWeight.bold),
+                            ))),
+                    GridColumn(
+                        columnName: 'Merk Mobil',
+                        label: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              color: Colors.lightBlue.shade100,
+                            ),
+                            child: Text(
+                              'Merk Mobil',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium

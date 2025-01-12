@@ -10,6 +10,7 @@ class DataRealModel {
   String kondisiFisikJelek;
   String quantity;
   String statusService;
+  String keteranganService;
 
   DataRealModel({
     required this.idTransaksi,
@@ -23,6 +24,7 @@ class DataRealModel {
     required this.kondisiFisikJelek,
     required this.quantity,
     required this.statusService,
+    required this.keteranganService,
   });
 
   factory DataRealModel.fromJson(Map<String, dynamic> json) {
@@ -38,6 +40,7 @@ class DataRealModel {
       kondisiFisikJelek: json['kondisi_fisik_jelek'],
       quantity: json['quantity'],
       statusService: json['status_service'],
+      keteranganService: json['keterangan_service'],
     );
   }
 }

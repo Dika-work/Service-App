@@ -7,12 +7,12 @@ import '../model/mtc_model.dart';
 
 class KpoolServiceSource extends DataGridSource {
   final List<MtcModel> model;
-  final void Function(MtcModel)? onAcc;
+  final void Function(MtcModel)? onLiat;
   int startIndex = 0;
 
   KpoolServiceSource({
     required this.model,
-    required this.onAcc,
+    required this.onLiat,
   }) {
     _updateDataPager(model, startIndex);
   }
@@ -52,8 +52,8 @@ class KpoolServiceSource extends DataGridSource {
             width: 100,
             child: ElevatedButton(
               onPressed: () {
-                if (onAcc != null) {
-                  onAcc!(model[rowIndex]);
+                if (onLiat != null) {
+                  onLiat!(model[rowIndex]);
                 }
               },
               style: ElevatedButton.styleFrom(

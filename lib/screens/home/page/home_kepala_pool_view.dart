@@ -10,7 +10,6 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../constant/custom_size.dart';
 import '../../../utils/theme/app_colors.dart';
-import '../../../utils/widget/dialogs.dart';
 import '../../service berkala/model/mtc_model.dart';
 import '../../service berkala/source/kpool_service_source.dart';
 
@@ -196,16 +195,17 @@ class HomeKepalaPoolView extends GetView<HomeKepalaPoolController> {
               } else {
                 final dataSource = KpoolServiceSource(
                     model: controller.mtcModel,
-                    onAcc: (MtcModel model) {
-                      CustomDialogs.defaultDialog(
-                          context: context,
-                          onConfirm: () {
-                            controller.changeStatus(id: model.id);
-                            Navigator.of(context).pop();
-                          },
-                          titleWidget: const Text('Konfirmasi'),
-                          contentWidget: const Text(
-                              'Anda akan menkonfirmasi data yang terkait. Apakah anda yakin?'));
+                    onLiat: (MtcModel model) {
+                      print('KPOOL HANYA BISA MELIHAT HASIL PEKERJAAN MEKANIK');
+                      // CustomDialogs.defaultDialog(
+                      //     context: context,
+                      //     onConfirm: () {
+                      //       // controller.changeStatus(id: model.id);
+                      //       // Navigator.of(context).pop();
+                      //     },
+                      //     titleWidget: const Text('Konfirmasi'),
+                      //     contentWidget: const Text(
+                      //         'Anda akan menkonfirmasi data yang terkait. Apakah anda yakin?'));
                     });
 
                 return RefreshIndicator(

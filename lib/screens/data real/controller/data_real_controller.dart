@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:dio/dio.dart' as diomultipart;
+import 'package:get_storage/get_storage.dart';
 
 import '../../../utils/loadings/snackbar.dart';
 import '../model/data_real_model.dart';
 
 class DataRealController extends GetxController {
   RxBool isLoading = false.obs;
+  final localStorage = GetStorage();
   RxList<DataRealModel> realModel = <DataRealModel>[].obs;
 
   List<TextEditingController> kmRealControllers = [];
@@ -17,7 +19,7 @@ class DataRealController extends GetxController {
 
   final diomultipart.Dio _dio = diomultipart.Dio(
     diomultipart.BaseOptions(
-      baseUrl: 'http://10.3.80.4:8080',
+      baseUrl: 'http://192.168.1.4:8080',
       connectTimeout: const Duration(seconds: 10),
       receiveTimeout: const Duration(seconds: 10),
     ),
@@ -70,13 +72,15 @@ class DataRealController extends GetxController {
         final data = realModel[i];
 
         // Validasi input hanya jika statusService != '1'
-        if (data.statusService == '4') {
+        if (data.statusService == '2' || data.statusService == '4') {
           if (kmRealControllers[i].text.isEmpty ||
               waktuBulanRealControllers[i].text.isEmpty ||
               kondisiFisikRealControllers[i].text.isEmpty ||
               qtyRealControllers[i].text.isEmpty ||
               keteranganControllers[i].text.isEmpty) {
-            Get.snackbar('Error', 'Semua field yang diperlukan harus diisi.');
+            SnackbarLoader.warningSnackBar(
+                title: 'Oops😪',
+                message: 'Semua field yang diperlukan harus diisi.');
             return; // Hentikan eksekusi jika ada field yang kosong
           }
         }
@@ -191,6 +195,50 @@ class DataRealController extends GetxController {
           title: 'Error',
           message:
               e.response?.data['message'] ?? 'Gagal memperbarui transaksi');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  accServiceBerkala({required String id}) async {
+    print('Mengubah status menjadi 3 untuk id_mtc: $id');
+    isLoading.value = true;
+    String userAcc = localStorage.read('username');
+    print('INI USER YANG ACC SERVICE BERKALA $userAcc');
+    try {
+      final data = {
+        'id_mtc': id,
+        'user_acc': userAcc,
+      };
+
+      final response = await _dio.put(
+        '/acc-service-berkala',
+        data: data,
+        options: diomultipart.Options(
+          headers: {'Content-Type': 'application/json'},
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        Get.back(result: true);
+        SnackbarLoader.successSnackBar(
+          title: 'Sukses',
+          message:
+              response.data['message'] ?? 'Service berkala telah dikonfirmasi',
+        );
+      } else {
+        SnackbarLoader.errorSnackBar(
+          title: 'Error',
+          message:
+              response.data['message'] ?? 'Service berkala gagal dikonfirmasi',
+        );
+      }
+    } catch (e) {
+      SnackbarLoader.errorSnackBar(
+        title: 'Error',
+        message: 'Terjadi kesalahan: $e',
+      );
+      print('Error changeStatus: $e');
     } finally {
       isLoading.value = false;
     }

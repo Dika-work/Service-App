@@ -14,6 +14,7 @@ import '../../../utils/widget/dialogs.dart';
 import '../../../utils/widget/expandable_container.dart';
 import '../../data real/page/input_data_real.dart';
 import '../../service berkala/model/mtc_model.dart';
+import '../../service berkala/page/acc_staff_view.dart';
 import '../../service berkala/page/edit_sb.dart';
 import '../../service berkala/page/edit_service_berkala.dart';
 import '../../service berkala/source/mtc_source.dart';
@@ -237,7 +238,7 @@ class HomeSuperAdmin extends GetView<HomeSuperAdminController> {
                         color: AppColors.black,
                       ),
                       title: Text(
-                        'Master Type Kategori',
+                        'Type Kategori',
                         style: Theme.of(context)
                             .textTheme
                             .titleSmall
@@ -247,6 +248,55 @@ class HomeSuperAdmin extends GetView<HomeSuperAdminController> {
                   ],
                 ),
               ),
+              ExpandableContainer(
+                  icon: Iconsax.support,
+                  textTitle: 'Master Lainnya',
+                  content: Column(
+                    children: [
+                      ListTile(
+                        onTap: () => Get.toNamed(Routes.MASTER_KENDARAAN),
+                        leading: const Icon(
+                          Iconsax.record,
+                          color: AppColors.black,
+                        ),
+                        title: Text(
+                          'Master Jenis Kendaraan',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleSmall
+                              ?.copyWith(color: AppColors.black),
+                        ),
+                      ),
+                      ListTile(
+                        onTap: () => Get.toNamed(Routes.MASTER_KETERANGAN),
+                        leading: const Icon(
+                          Iconsax.record,
+                          color: AppColors.black,
+                        ),
+                        title: Text(
+                          'Master Keterangan',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleSmall
+                              ?.copyWith(color: AppColors.black),
+                        ),
+                      ),
+                      ListTile(
+                        onTap: () => Get.toNamed(Routes.MASTER_SATUAN),
+                        leading: const Icon(
+                          Iconsax.record,
+                          color: AppColors.black,
+                        ),
+                        title: Text(
+                          'Master Satuan',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleSmall
+                              ?.copyWith(color: AppColors.black),
+                        ),
+                      ),
+                    ],
+                  )),
               ListTile(
                 onTap: () => Get.toNamed(Routes.ALL_MTC),
                 leading: const Icon(
@@ -255,48 +305,6 @@ class HomeSuperAdmin extends GetView<HomeSuperAdminController> {
                 ),
                 title: Text(
                   'Seluruh MTC',
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleSmall
-                      ?.copyWith(color: AppColors.black),
-                ),
-              ),
-              ListTile(
-                onTap: () => Get.toNamed(Routes.MASTER_KENDARAAN),
-                leading: const Icon(
-                  Iconsax.record,
-                  color: AppColors.black,
-                ),
-                title: Text(
-                  'Master Jenis Kendaraan',
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleSmall
-                      ?.copyWith(color: AppColors.black),
-                ),
-              ),
-              ListTile(
-                onTap: () => Get.toNamed(Routes.MASTER_KETERANGAN),
-                leading: const Icon(
-                  Iconsax.record,
-                  color: AppColors.black,
-                ),
-                title: Text(
-                  'Master Keterangan',
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleSmall
-                      ?.copyWith(color: AppColors.black),
-                ),
-              ),
-              ListTile(
-                onTap: () => Get.toNamed(Routes.MASTER_SATUAN),
-                leading: const Icon(
-                  Iconsax.record,
-                  color: AppColors.black,
-                ),
-                title: Text(
-                  'Master Satuan',
                   style: Theme.of(context)
                       .textTheme
                       .titleSmall
@@ -372,7 +380,18 @@ class HomeSuperAdmin extends GetView<HomeSuperAdminController> {
                         controller.getData();
                       }
                     } else if (model.status == '1') {
-                      Get.to(() => InputDataReal(idMtc: model.id));
+                      final result =
+                          await Get.to(() => InputDataReal(idMtc: model.id));
+
+                      if (result == true) {
+                        controller.getData();
+                      }
+                    } else if (model.status == '2') {
+                      final result =
+                          await Get.to(() => AccStaffView(idMtc: model.id));
+                      if (result == true) {
+                        controller.getData();
+                      }
                     }
                   },
                   onEdit: (MtcModel model) async {

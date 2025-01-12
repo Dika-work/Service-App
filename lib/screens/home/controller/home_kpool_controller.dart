@@ -15,7 +15,7 @@ class HomeKepalaPoolController extends GetxController {
 
   final diomultipart.Dio _dio = diomultipart.Dio(
     diomultipart.BaseOptions(
-      baseUrl: 'http://10.3.80.4:8080',
+      baseUrl: 'http://192.168.1.4:8080',
       connectTimeout: const Duration(seconds: 10),
       receiveTimeout: const Duration(seconds: 10),
     ),
@@ -48,46 +48,6 @@ class HomeKepalaPoolController extends GetxController {
 
       print(
           'Error getAllUser: ${e.response?.data['message'] ?? 'Terjadi kesalahan'}');
-    } finally {
-      isLoading.value = false;
-    }
-  }
-
-  changeStatus({required String id}) async {
-    print('Mengubah status menjadi 3 untuk id_mtc: $id');
-    isLoading.value = true;
-
-    try {
-      final data = {
-        'id_mtc': id,
-      };
-
-      final response = await _dio.put(
-        '/change-status',
-        data: data,
-        options: diomultipart.Options(
-          headers: {'Content-Type': 'application/json'},
-        ),
-      );
-
-      if (response.statusCode == 200) {
-        await getData(); // Refresh data setelah status diubah
-        SnackbarLoader.successSnackBar(
-          title: 'Sukses',
-          message: response.data['message'] ?? 'Status berhasil diperbarui',
-        );
-      } else {
-        SnackbarLoader.errorSnackBar(
-          title: 'Error',
-          message: response.data['message'] ?? 'Gagal memperbarui status',
-        );
-      }
-    } catch (e) {
-      SnackbarLoader.errorSnackBar(
-        title: 'Error',
-        message: 'Terjadi kesalahan: $e',
-      );
-      print('Error changeStatus: $e');
     } finally {
       isLoading.value = false;
     }

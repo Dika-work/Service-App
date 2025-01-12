@@ -24,7 +24,7 @@ class DetailServiceModel {
     required this.quantity,
     required this.satuan,
     required this.keterangan,
-    this.selectedOption = '0', // Default kosong
+    this.selectedOption = '1', // Default kosong
   });
 
   factory DetailServiceModel.fromJson(Map<String, dynamic> json) {

@@ -103,7 +103,7 @@ class MtcSource extends DataGridSource {
             if (model[rowIndex].status == '2' &&
                 (typeUser == 'mekanik' || typeUser == 'pic'))
               const Icon(Icons.check),
-            if (model[rowIndex].status == '3' &&
+            if (model[rowIndex].status == '2' &&
                 (typeUser == 'admin' || typeUser == 'staff'))
               SizedBox(
                 height: 60,
@@ -120,6 +120,27 @@ class MtcSource extends DataGridSource {
                   ),
                   child: const Text(
                     'ACC',
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            if (model[rowIndex].status == '3' &&
+                (typeUser == 'admin' || typeUser == 'staff'))
+              SizedBox(
+                height: 60,
+                width: 100,
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (onServis != null) {
+                      onServis!(model[rowIndex]);
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.success,
+                    padding: const EdgeInsets.all(8.0),
+                  ),
+                  child: const Text(
+                    'PDF',
                     textAlign: TextAlign.center,
                   ),
                 ),

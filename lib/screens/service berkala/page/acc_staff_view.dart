@@ -5,18 +5,18 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import '../../../constant/custom_size.dart';
 import '../../../utils/theme/app_colors.dart';
 import '../../data real/controller/data_real_controller.dart';
-import '../source/edit_sb_source.dart';
+import '../source/acc_staff_sb_source.dart';
 
-class EditDetailSB extends StatefulWidget {
-  const EditDetailSB({super.key, required this.idMtc});
+class AccStaffView extends StatefulWidget {
+  const AccStaffView({super.key, required this.idMtc});
 
   final String idMtc;
 
   @override
-  State<EditDetailSB> createState() => _EditDetailSBState();
+  State<AccStaffView> createState() => _AccStaffViewState();
 }
 
-class _EditDetailSBState extends State<EditDetailSB> {
+class _AccStaffViewState extends State<AccStaffView> {
   late DataRealController controller;
 
   @override
@@ -33,7 +33,7 @@ class _EditDetailSBState extends State<EditDetailSB> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text(
-          'Edit Status Service Berkala',
+          'Konfirmasi Data SB',
           style: Theme.of(context)
               .textTheme
               .titleMedium
@@ -41,7 +41,10 @@ class _EditDetailSBState extends State<EditDetailSB> {
         ),
         actions: [
           GestureDetector(
-            onTap: () => controller.updateTransaksiDetailSb(widget.idMtc),
+            onTap: () {
+              print('INI AKAN MENGUBAH STATUS MENJADI 3 SAAT DI ACC STAFF');
+              controller.accServiceBerkala(id: widget.idMtc);
+            },
             child: Container(
               padding: const EdgeInsets.all(CustomSize.xs),
               margin: const EdgeInsets.fromLTRB(
@@ -52,7 +55,7 @@ class _EditDetailSBState extends State<EditDetailSB> {
                 color: AppColors.buttonPrimary,
               ),
               child: Text(
-                'UBAH DATA',
+                'ACC DATA',
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
@@ -82,7 +85,7 @@ class _EditDetailSBState extends State<EditDetailSB> {
             ),
           );
         } else {
-          final dataSource = EditSbSource(model: controller.realModel);
+          final dataSource = AccStaffSbSource(model: controller.realModel);
           return RefreshIndicator(
             onRefresh: () async {
               await controller.getData(widget.idMtc);
@@ -322,6 +325,21 @@ class _EditDetailSBState extends State<EditDetailSB> {
                         ),
                         child: Text(
                           'Ganti',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.copyWith(fontWeight: FontWeight.bold),
+                        ))),
+                GridColumn(
+                    columnName: 'KETERANGAN',
+                    label: Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          color: Colors.lightBlue.shade100,
+                        ),
+                        child: Text(
+                          'KETERANGAN',
                           style: Theme.of(context)
                               .textTheme
                               .bodyMedium

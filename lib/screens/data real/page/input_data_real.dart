@@ -282,11 +282,11 @@ class _InputDataRealState extends State<InputDataReal> {
                         )),
                       ],
                     ),
-                    if (data.statusService == '4')
+                    if (data.statusService == '2' || data.statusService == '4')
                       const SizedBox(height: CustomSize.sm),
-                    if (data.statusService == '4')
+                    if (data.statusService == '2' || data.statusService == '4')
                       Text(
-                        'STANDART SERVICE',
+                        'DATA SAAT SERVICE',
                         style: Theme.of(context)
                             .textTheme
                             .titleMedium
@@ -295,7 +295,7 @@ class _InputDataRealState extends State<InputDataReal> {
                                 color: Colors.black),
                       ),
                     const Divider(height: CustomSize.dividerHeight),
-                    if (data.statusService == '4')
+                    if (data.statusService == '2' || data.statusService == '4')
                       Padding(
                         padding: const EdgeInsets.only(top: CustomSize.sm),
                         child: Row(
@@ -317,7 +317,7 @@ class _InputDataRealState extends State<InputDataReal> {
                                       }
                                       return null;
                                     },
-                                    keyboardType: TextInputType.text,
+                                    keyboardType: TextInputType.number,
                                   ),
                                 ],
                               ),
@@ -340,7 +340,7 @@ class _InputDataRealState extends State<InputDataReal> {
                                       }
                                       return null;
                                     },
-                                    keyboardType: TextInputType.text,
+                                    keyboardType: TextInputType.number,
                                   ),
                                 ],
                               ),
@@ -348,15 +348,15 @@ class _InputDataRealState extends State<InputDataReal> {
                           ],
                         ),
                       ),
-                    if (data.statusService == '4')
+                    if (data.statusService == '2' || data.statusService == '4')
                       const SizedBox(height: CustomSize.sm),
-                    if (data.statusService == '4')
+                    if (data.statusService == '2' || data.statusService == '4')
                       Align(
                         alignment: Alignment.centerLeft,
-                        child: Text('FISIK (CIRI KHUSUS)',
+                        child: Text('FISIK (CIRI KHUSUS) SAAT DI SERVICE',
                             style: Theme.of(context).textTheme.labelMedium),
                       ),
-                    if (data.statusService == '4')
+                    if (data.statusService == '2' || data.statusService == '4')
                       TextFormField(
                         controller:
                             controller.kondisiFisikRealControllers[index],
@@ -370,26 +370,45 @@ class _InputDataRealState extends State<InputDataReal> {
                         },
                         keyboardType: TextInputType.text,
                       ),
-                    if (data.statusService == '4')
+                    if (data.statusService == '2' || data.statusService == '4')
                       const SizedBox(height: CustomSize.sm),
-                    if (data.statusService == '4')
+                    if (data.statusService == '2' || data.statusService == '4')
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Text('QTY',
                             style: Theme.of(context).textTheme.labelMedium),
                       ),
-                    if (data.statusService == '4')
+                    if (data.statusService == '2' || data.statusService == '4')
                       TextFormField(
                         controller: controller.qtyRealControllers[index],
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return '* Bagian ini tidak boleh kosong';
                           }
+                          final inputValue = int.tryParse(value);
+                          if (inputValue == null ||
+                              inputValue > int.parse(data.quantity)) {
+                            return '* Nilai tidak boleh lebih dari ${data.quantity}';
+                          }
                           return null;
                         },
-                        keyboardType: TextInputType.text,
+                        onChanged: (value) {
+                          final inputValue = int.tryParse(value);
+                          if (inputValue != null &&
+                              inputValue > int.parse(data.quantity)) {
+                            controller.qtyRealControllers[index].text =
+                                data.quantity;
+                            controller.qtyRealControllers[index].selection =
+                                TextSelection.fromPosition(
+                              TextPosition(
+                                  offset: controller
+                                      .qtyRealControllers[index].text.length),
+                            );
+                          }
+                        },
+                        keyboardType: TextInputType.number,
                       ),
-                    if (data.statusService == '4')
+                    if (data.statusService == '2' || data.statusService == '4')
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Text('** qty <= standart',
@@ -398,15 +417,15 @@ class _InputDataRealState extends State<InputDataReal> {
                                 .labelMedium
                                 ?.apply(color: Colors.red)),
                       ),
-                    if (data.statusService == '4')
+                    if (data.statusService == '2' || data.statusService == '4')
                       const SizedBox(height: CustomSize.sm),
-                    if (data.statusService == '4')
+                    if (data.statusService == '2' || data.statusService == '4')
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Text('KETERANGAN',
                             style: Theme.of(context).textTheme.labelMedium),
                       ),
-                    if (data.statusService == '4')
+                    if (data.statusService == '2' || data.statusService == '4')
                       TextFormField(
                         controller: controller.keteranganControllers[index],
                         validator: (value) {

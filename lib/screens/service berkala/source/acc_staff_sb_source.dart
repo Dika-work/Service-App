@@ -4,13 +4,11 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import '../../../constant/custom_size.dart';
 import '../../data real/model/data_real_model.dart';
 
-class EditSbSource extends DataGridSource {
+class AccStaffSbSource extends DataGridSource {
   final List<DataRealModel> model;
   int startIndex = 0;
 
-  EditSbSource({
-    required this.model,
-  }) {
+  AccStaffSbSource({required this.model}) {
     _updateDataPager(model, startIndex);
   }
 
@@ -40,58 +38,33 @@ class EditSbSource extends DataGridSource {
             ),
           );
         }),
-        // Radio button for Cek
-        Container(
-          alignment: Alignment.center,
-          child: Radio<String?>(
-            value: '1',
-            groupValue: currentModel.statusService,
-            onChanged: (value) {
-              _updateSelectedOption(rowIndex, value!);
-            },
-          ),
-        ),
-        // Radio button for Bongkar
-        Container(
-          alignment: Alignment.center,
-          child: Radio<String?>(
-            value: '2',
-            groupValue: currentModel.statusService,
-            onChanged: (value) {
-              _updateSelectedOption(rowIndex, value!);
-            },
-          ),
-        ),
-        // Radio button for Repair
-        Container(
-          alignment: Alignment.center,
-          child: Radio<String?>(
-            value: '3',
-            groupValue: currentModel.statusService,
-            onChanged: (value) {
-              _updateSelectedOption(rowIndex, value!);
-            },
-          ),
-        ),
-        // Radio button for Ganti
-        Container(
-          alignment: Alignment.center,
-          child: Radio<String?>(
-            value: '4',
-            groupValue: currentModel.statusService,
-            onChanged: (value) {
-              _updateSelectedOption(rowIndex, value!);
-            },
-          ),
-        ),
+        ...row.getCells().sublist(8).map<Widget>((e) {
+          if (e.columnName == 'Cek' ||
+              e.columnName == 'Bongkar' ||
+              e.columnName == 'Repair' ||
+              e.columnName == 'Ganti') {
+            // Radio button logic
+            return Container(
+              alignment: Alignment.center,
+              child: Radio<String?>(
+                value: e.value.toString(),
+                groupValue: currentModel.statusService,
+                onChanged: (value) {},
+              ),
+            );
+          } else {
+            // Default untuk kolom lain seperti 'KETERANGAN'
+            return Center(
+              child: Text(
+                e.value.toString(),
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: CustomSize.fontSizeXm),
+              ),
+            );
+          }
+        }),
       ],
     );
-  }
-
-  void _updateSelectedOption(int rowIndex, String selectedOption) {
-    model[rowIndex].statusService = selectedOption;
-    print('Row $rowIndex updated: selectedValue = $selectedOption');
-    notifyListeners(); // Memperbarui tampilan DataGrid
   }
 
   List<DataGridRow> _generateEmptyRows(int count) {
@@ -111,6 +84,7 @@ class EditSbSource extends DataGridSource {
           DataGridCell<String>(columnName: 'Bongkar', value: '-'),
           DataGridCell<String>(columnName: 'Repair', value: '-'),
           DataGridCell<String>(columnName: 'Ganti', value: '-'),
+          DataGridCell<String>(columnName: 'KETERANGAN', value: '-'),
         ]);
       },
     );
@@ -149,6 +123,9 @@ class EditSbSource extends DataGridSource {
           const DataGridCell<String>(columnName: 'Bongkar', value: '2'),
           const DataGridCell<String>(columnName: 'Repair', value: '3'),
           const DataGridCell<String>(columnName: 'Ganti', value: '4'),
+          DataGridCell<String>(
+              columnName: 'KETERANGAN',
+              value: data.keteranganService.toUpperCase()),
         ];
 
         return DataGridRow(cells: cells);
